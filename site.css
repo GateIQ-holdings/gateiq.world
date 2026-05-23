@@ -1,6 +1,6 @@
 /* Gate IQ landing site — luxury invite signup
    Light-first (paper canvas) with dark-grey dark-mode support. */
-@import url("../../colors_and_type.css");
+@import url("colors_and_type.css");
 
 html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg-1); font-family: var(--font-body); }
 * { box-sizing: border-box; }

@@ -1,0 +1,259 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Gate IQ Design System — colors_and_type.css
+   Light-first (paper background) with dark-grey dark-mode support.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Limelight&display=swap");
+
+:root {
+  /* ── Brand palette ─────────────────────────────────────────────
+     These are *colors*, not surfaces. They remain stable across themes.
+     Surfaces and text use semantic tokens below, which switch with theme. */
+  --navy:         #15233F;
+  --navy-deep:    #0E1830;
+  --navy-soft:    #1E2D4A;
+  --sky:  #CADCEC;   /* the "pass / document" surface — stable in both modes */
+  --sky-deep: #A8BFD4;
+  --brass:        #B89968;
+  --brass-deep:   #95794D;
+  --brass-light:  #C9AB7A;   /* slightly brighter brass for dark-mode contrast */
+  --ivory:        #F2ECDD;
+  --paper:        #FCF9F0;
+  --cream:        #FAF7EE;
+
+  /* ── Semantic surface tokens (LIGHT MODE DEFAULT) ─────────────
+     These flip in dark mode. Always prefer these over raw brand colors. */
+  --bg:           #FCF9F0;   /* page background — warm paper */
+  --bg-deep:      #F4EEDC;   /* alt section background, ~6% darker than --bg */
+  --surface-1:    #FFFFFF;   /* lifted cards on the page */
+  --surface-2:    #F2ECDD;   /* secondary lift / pill backgrounds */
+  --surface-grey: #CADCEC;   /* the boarding-pass / passport "document" surface */
+  --surface-dark: #15233F;   /* used when a NAVY card sits on a light page (e.g. CTA cards) */
+
+  /* ── Semantic foreground (LIGHT MODE) ─────────────────────── */
+  --fg-1:         #15233F;                       /* primary text */
+  --fg-2:         rgba(21, 35, 63, 0.66);        /* secondary text */
+  --fg-3:         rgba(21, 35, 63, 0.42);        /* tertiary text */
+  --fg-on-dark:   #F2ECDD;                       /* text on --surface-dark */
+  --fg-on-dark-2: rgba(242, 236, 221, 0.66);
+  --fg-on-grey:   #15233F;                       /* text on --surface-grey (stays the same in both themes) */
+  --fg-on-grey-2: rgba(21, 35, 63, 0.62);
+
+  /* ── Accent / lines ───────────────────────────────────────── */
+  --accent:       #B89968;
+  --accent-deep:  #95794D;
+  --hairline:     rgba(21, 35, 63, 0.10);
+  --hairline-strong: rgba(21, 35, 63, 0.18);
+
+  /* ── Type families ──────────────────────────────────────────
+     Display: geometric grotesque (Sora subbing for likely Cabinet Grotesk).
+     Mono: JetBrains Mono. Deco: Limelight — monogram only. */
+  --font-display: "Sora", "Cabinet Grotesk", "PP Neue Montreal", "Inter", system-ui, sans-serif;
+  --font-body:    "Sora", "Inter", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-deco:    "Limelight", "Bodoni Moda", "Playfair Display", Georgia, serif;
+
+  /* ── Type scale ─────────────────────────────────────────────
+     Heavy bias to extremes — display giants and tiny helpers. */
+  --t-hero:    88px;
+  --t-display: 56px;
+  --t-title:   36px;
+  --t-h2:      28px;
+  --t-h3:      20px;
+  --t-body:    16px;
+  --t-small:   14px;
+  --t-meta:    11px;
+
+  --lh-tight:   0.92;
+  --lh-display: 1.02;
+  --lh-title:   1.08;
+  --lh-body:    1.45;
+  --lh-meta:    1.25;
+
+  --ls-tight:  -0.025em;
+  --ls-snug:   -0.012em;
+  --ls-body:    0em;
+  --ls-meta:    0.08em;
+
+  /* ── Spacing scale (4px base) ──────────────────────────────── */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-7:  32px;
+  --sp-8:  40px;
+  --sp-9:  56px;
+  --sp-10: 72px;
+
+  /* ── Radii ─────────────────────────────────────────────────── */
+  --r-xs:    8px;
+  --r-sm:    16px;
+  --r-md:    20px;
+  --r-lg:    28px;
+  --r-xl:    36px;
+  --r-pill:  999px;
+
+  --shadow-none: none;
+  --shadow-soft: 0 1px 0 rgba(11, 16, 31, 0.06);
+}
+
+/* ── DARK MODE — opt-in via [data-theme="dark"] on <html> ───────
+   Pure dark grey (not navy) per brief. Navy stays as a separate
+   colour for the "deep card" surface that contrasts even in dark. */
+[data-theme="dark"] {
+  --bg:           #1A1A1C;   /* dark grey canvas */
+  --bg-deep:      #131315;
+  --surface-1:    #25252A;   /* lifted card on dark canvas */
+  --surface-2:    #2E2E33;   /* secondary lift */
+  --surface-grey: #CADCEC;   /* pass surface — UNCHANGED, it's a "document" */
+  --surface-dark: #0E1830;   /* navy stays as the deep contrast card */
+
+  --fg-1:         #F2ECDD;
+  --fg-2:         rgba(242, 236, 221, 0.66);
+  --fg-3:         rgba(242, 236, 221, 0.42);
+  --fg-on-dark:   #F2ECDD;
+  --fg-on-dark-2: rgba(242, 236, 221, 0.66);
+  --fg-on-grey:   #15233F;   /* french-grey is always light, so its text stays navy */
+  --fg-on-grey-2: rgba(21, 35, 63, 0.62);
+
+  --accent:       #C9AB7A;   /* brass lifted ~8% for dark-mode contrast */
+  --accent-deep:  #B89968;
+  --hairline:     rgba(242, 236, 221, 0.10);
+  --hairline-strong: rgba(242, 236, 221, 0.18);
+}
+
+/* If the user hasn't opted in via [data-theme="dark"], the page stays in
+   light mode regardless of OS preference — light IS the brand default. */
+
+/* ─── Element base ─────────────────────────────────────────────── */
+html, body {
+  background: var(--bg);
+  color: var(--fg-1);
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Semantic type classes ────────────────────────────────────── */
+.t-hero, h1.hero {
+  font-family: var(--font-display);
+  font-size: var(--t-hero);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+}
+.t-display {
+  font-family: var(--font-display);
+  font-size: var(--t-display);
+  font-weight: 700;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-tight);
+}
+.t-title, h2 {
+  font-family: var(--font-display);
+  font-size: var(--t-title);
+  font-weight: 700;
+  line-height: var(--lh-title);
+  letter-spacing: var(--ls-snug);
+}
+.t-h2 { font-family: var(--font-display); font-size: var(--t-h2); font-weight: 600; line-height: 1.15; letter-spacing: var(--ls-snug); }
+.t-h3, h3 { font-family: var(--font-display); font-size: var(--t-h3); font-weight: 600; line-height: 1.2; letter-spacing: var(--ls-snug); }
+.t-body, p { font-family: var(--font-body); font-size: var(--t-body); font-weight: 400; line-height: var(--lh-body); }
+.t-small { font-size: var(--t-small); font-weight: 400; line-height: 1.4; }
+.t-meta {
+  font-size: var(--t-meta);
+  font-weight: 500;
+  line-height: var(--lh-meta);
+  letter-spacing: var(--ls-meta);
+  text-transform: uppercase;
+}
+.t-mono { font-family: var(--font-mono); font-weight: 500; letter-spacing: 0; }
+
+/* ─── Utility surfaces ─────────────────────────────────────────── */
+.surface-bg           { background: var(--bg); color: var(--fg-1); }
+.surface-1            { background: var(--surface-1); color: var(--fg-1); }
+.surface-grey         { background: var(--surface-grey); color: var(--fg-on-grey); }
+.surface-dark         { background: var(--surface-dark); color: var(--fg-on-dark); }
+.surface-brass        { background: var(--accent); color: var(--surface-dark); }
+
+/* ─── Capsule (pill button / tag) ──────────────────────────────── */
+.capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 10px 18px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--t-small);
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  transition: background-color 160ms ease-out, transform 120ms ease-out, color 160ms ease-out;
+}
+.capsule:active { transform: scale(0.97); }
+
+.capsule--dark  { background: var(--surface-dark); color: var(--fg-on-dark); }
+.capsule--dark:hover  { background: var(--navy-soft); }
+.capsule--light { background: var(--surface-1); color: var(--fg-1); box-shadow: inset 0 0 0 1px var(--hairline); }
+.capsule--light:hover { background: var(--surface-2); }
+.capsule--brass { background: var(--accent); color: var(--surface-dark); }
+.capsule--brass:hover { background: var(--accent-deep); color: var(--fg-on-dark); }
+.capsule--ghost { background: transparent; color: var(--fg-1); box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+
+/* ─── Card primitives ──────────────────────────────────────────── */
+.card {
+  border-radius: var(--r-lg);
+  padding: var(--sp-7);
+  position: relative;
+  overflow: hidden;
+}
+.card--grey  { background: var(--surface-grey); color: var(--fg-on-grey); }
+.card--dark  { background: var(--surface-dark); color: var(--fg-on-dark); }
+.card--lift  { background: var(--surface-1); color: var(--fg-1); box-shadow: inset 0 0 0 1px var(--hairline); }
+.card--brass { background: var(--accent); color: var(--surface-dark); }
+
+/* The bottom-right circular icon-tile that sits on a card. */
+.icon-tile {
+  position: absolute;
+  right: var(--sp-6);
+  bottom: var(--sp-6);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--surface-dark);
+  display: grid;
+  place-items: center;
+}
+.icon-tile--light { background: var(--surface-1); color: var(--surface-dark); box-shadow: inset 0 0 0 1px var(--hairline); }
+.icon-tile--dark  { background: var(--surface-dark); color: var(--fg-on-dark); }
+
+/* ─── Theme toggle button ──────────────────────────────────────── */
+.theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface-1);
+  color: var(--fg-1);
+  border: 1px solid var(--hairline);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 160ms ease-out, background 160ms ease-out;
+  box-shadow: 0 4px 14px rgba(21, 35, 63, 0.06);
+}
+.theme-toggle:hover { transform: translateY(-2px); }
+.theme-toggle__icon { width: 20px; height: 20px; }
+[data-theme="dark"] .theme-toggle {
+  background: var(--surface-1);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+}
