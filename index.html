@@ -312,42 +312,41 @@
   </div><!-- /.site -->
 
   <script>
-    // ── Waitlist form ──────────────────────────────────────────────────────
-    // To go live: replace the stub below with one of:
-    //   A) Formspree:  fetch("https://formspree.io/f/YOUR_FORM_ID", ...)
-    //   B) Your API:   fetch("https://api.gateiq.world/waitlist", ...)
-    // GitHub Pages is static — the endpoint URL lives here, not in env vars.
+    // ── Waitlist endpoint ─────────────────────────────────────────────────
+    // Formspree: paste your 8-character form ID below (e.g. "xpwzabcd")
+    // Get it at formspree.io → New Form → copy the ID from the endpoint URL.
+    //
+    // Later, swap for your own API:
+    //   const WAITLIST_ENDPOINT = "https://api.gateiq.world/waitlist";
 
-    const WAITLIST_ENDPOINT = null; // set to your endpoint URL when ready
+    const WAITLIST_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
 
     async function submitInvite(e) {
       e.preventDefault();
       const form = e.target;
       const btn  = form.querySelector(".signup__cta");
       const data = {
-        email:        form.querySelector('[name="email"]').value,
-        homeAirport:  form.querySelector('[name="homeAirport"]').value,
-        travelerType: form.querySelector('[name="travelerType"]').value,
+        email:        form.querySelector(‘[name="email"]’).value,
+        homeAirport:  form.querySelector(‘[name="homeAirport"]’).value,
+        travelerType: form.querySelector(‘[name="travelerType"]’).value,
       };
 
       btn.textContent = "Sending…";
       btn.disabled = true;
 
-      if (WAITLIST_ENDPOINT) {
-        try {
-          await fetch(WAITLIST_ENDPOINT, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-          });
-        } catch (_) { /* fail silently — still show confirmation */ }
-      }
+      try {
+        await fetch(WAITLIST_ENDPOINT, {
+          method: "POST",
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+      } catch (_) { /* fail silently — confirmation shows regardless */ }
 
       btn.textContent = "On the list";
       btn.style.background = "#B89968";
       btn.style.color = "#15233F";
       form.querySelector(".signup__strip").innerHTML =
-        '<span><strong>You’re on the list.</strong> Launch box reserved.</span><span>BNA pilot</span>';
+        ‘<span><strong>You’re on the list.</strong> Launch box reserved.</span><span>BNA pilot</span>’;
       return false;
     }
   </script>
