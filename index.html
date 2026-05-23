@@ -4,26 +4,28 @@
   <meta charset="utf-8">
   <title>Gate IQ · The premium airport command layer</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Gate IQ Black is the premium airport command layer. When travel gets complicated, Gate IQ tells you exactly what to do next.">
   <link rel="stylesheet" href="site.css">
   <script src="theme-toggle.js" defer></script>
 </head>
 <body>
   <div class="site">
+
     <!-- ─── Nav ─────────────────────────────────────── -->
-    <nav class="site-nav" data-screen-label="Landing · Nav">
+    <nav class="site-nav">
       <div class="site-nav__brand">
         Gate<span class="iq">IQ</span><span class="dot"></span>
       </div>
       <div class="site-nav__links">
         <a href="#how">How it works</a>
+        <a href="#concierge">AI Concierge</a>
         <a href="#black">Black</a>
-        <a href="#pilot">Nashville pilot</a>
         <a href="#signup">Request invite</a>
       </div>
     </nav>
 
     <!-- ─── Hero ────────────────────────────────────── -->
-    <section class="hero" data-screen-label="Landing · Hero">
+    <section class="hero" id="signup">
       <div>
         <div class="hero__eyebrow">Private launch list · Nashville pilot</div>
         <h1 class="hero__title">
@@ -36,11 +38,26 @@
         </p>
       </div>
 
-      <form id="signup" class="signup" onsubmit="return submitInvite(event)">
+      <!-- SIGNUP FORM
+           To connect a real waitlist backend, replace FORMSPREE_ID below with
+           your Formspree form ID (formspree.io), or swap the fetch URL for
+           your deployed NestJS API endpoint (e.g. https://api.gateiq.world/waitlist).
+           GitHub Pages is static — no server-side env vars. The API URL lives here. -->
+      <form id="waitlist-form" class="signup" onsubmit="return submitInvite(event)">
         <div class="signup__label">Request your invite</div>
         <div class="signup__title">Join the first 5,000.<br>Receive the launch box.</div>
-        <div class="signup__row">
-          <input class="signup__input" type="email" placeholder="you@youremail.com" required>
+        <div class="signup__fields">
+          <input class="signup__input" type="email" name="email" placeholder="you@youremail.com" required>
+          <div class="signup__row2">
+            <input class="signup__input signup__input--half" type="text" name="homeAirport" placeholder="Home airport (BNA)" maxlength="3">
+            <select class="signup__input signup__input--half signup__select" name="travelerType">
+              <option value="" disabled selected>Traveler type</option>
+              <option value="road_warrior">Road warrior</option>
+              <option value="premium_leisure">Premium leisure</option>
+              <option value="family">Family traveler</option>
+              <option value="corporate">Corporate</option>
+            </select>
+          </div>
           <button class="signup__cta" type="submit">Request invite →</button>
         </div>
         <div class="signup__fine">
@@ -48,78 +65,193 @@
           Private launch list. No newsletter. No selling your location data, ever.
         </div>
         <div class="signup__strip">
-          <span><strong>4,217</strong> joined</span>
-          <span><strong>783</strong> launch boxes left</span>
+          <span><strong>47</strong> joined</span>
+          <span><strong>4,953</strong> launch boxes left</span>
         </div>
       </form>
     </section>
 
     <!-- ─── Pillars ─────────────────────────────────── -->
-    <section class="pillars" id="how" data-screen-label="Landing · Pillars">
+    <section class="pillars" id="how">
       <article class="pillar">
         <div class="pillar__icon">
+          <!-- Airplane -->
           <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M 16 3 C 17 3 17.5 3.7 17.5 4.5 V 12 L 28.5 16.5 V 18.7 L 17.5 17 V 22.2 L 20 24.5 V 26.2 L 16 25 L 12 26.2 V 24.5 L 14.5 22.2 V 17 L 3.5 18.7 V 16.5 L 14.5 12 V 4.5 C 14.5 3.7 15 3 16 3 Z"/>
+            <path d="M16 3c1 0 1.5.7 1.5 1.5V12l11 4.5v2.2L17.5 17v5.2l2.5 2.3v1.7L16 25l-4 1.2v-1.7l2.5-2.3V17L3.5 18.7v-2.2L14.5 12V4.5C14.5 3.7 15 3 16 3Z"/>
           </svg>
         </div>
         <div>
           <div class="pillar__title">Smart Airport<br>Timeline</div>
           <p class="pillar__body">
-            When to leave, when to clear security, when to walk. Gate IQ is timing-aware and never asks
-            you to guess.
+            When to leave, when to clear security, when to walk. Boarding countdown,
+            gate change alerts, and safe windows for food and lounge — all timed to your flight.
           </p>
         </div>
       </article>
 
       <article class="pillar">
         <div class="pillar__icon">
+          <!-- Clock -->
           <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="16" cy="16" r="11"/>
-            <path d="M16 9 V 17 L 21 19"/>
+            <path d="M16 9V17L21 19"/>
           </svg>
         </div>
         <div>
           <div class="pillar__title">Disruption<br>Concierge</div>
           <p class="pillar__body">
-            When your flight changes, you'll see three ranked recoveries — rebook, hotel + morning,
-            or private alternative — in under eight minutes.
+            When your flight changes, three ranked recoveries appear in under eight minutes —
+            rebook, hotel hold plus morning flight, or private alternative. One tap to act.
           </p>
         </div>
       </article>
 
       <article class="pillar">
         <div class="pillar__icon">
+          <!-- Bag -->
           <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <rect x="6" y="10" width="20" height="14" rx="3"/>
-            <path d="M11 10 V 7 H 21 V 10"/>
+            <path d="M11 10V7H21V10"/>
             <circle cx="16" cy="17" r="2.5"/>
           </svg>
         </div>
         <div>
           <div class="pillar__title">Baggage IQ</div>
           <p class="pillar__body">
-            If a bag doesn't load, Gate IQ drafts your claim before you reach the carousel and arranges
-            courier delivery to your hotel.
+            If a bag misses your flight, Gate IQ knows before you reach the carousel. The claim
+            is drafted, the next inbound flight is tracked, and courier delivery to your hotel is arranged.
+          </p>
+        </div>
+      </article>
+
+      <article class="pillar">
+        <div class="pillar__icon">
+          <!-- Shield / identity -->
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 3L5 7v9c0 6 5 10 11 11 6-1 11-5 11-11V7L16 3Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="pillar__title">Identity-Aware<br>Routing</div>
+          <p class="pillar__body">
+            TSA PreCheck, CLEAR, airline elite status, and lounge eligibility are built into every
+            recommendation. The timeline is yours — not a generic traveler's.
+          </p>
+        </div>
+      </article>
+
+      <article class="pillar">
+        <div class="pillar__icon">
+          <!-- Private jet -->
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 20l5-5 3 1 8-8 2 2-8 8 1 3-5 5-1-3-3-1Z"/>
+            <path d="M20 6l4 2-2 2"/>
+            <path d="M6 26l4-4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="pillar__title">Premium<br>Recovery</div>
+          <p class="pillar__body">
+            When commercial options are weak, Gate IQ surfaces semi-private and charter alternatives
+            through vetted partners. A quote arrives in minutes, with no automatic commitment.
+          </p>
+        </div>
+      </article>
+
+      <article class="pillar">
+        <div class="pillar__icon">
+          <!-- Marketplace / store -->
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 6h20l-2 8H8L6 6Z"/>
+            <circle cx="11" cy="26" r="2"/>
+            <circle cx="21" cy="26" r="2"/>
+            <path d="M8 14v6h16v-6"/>
+          </svg>
+        </div>
+        <div>
+          <div class="pillar__title">Airport<br>Marketplace</div>
+          <p class="pillar__body">
+            Cafe pre-orders, lounge access, work pods, and gate-side delivery — filtered to what
+            makes sense for your time, gate, and party before you even think to look.
           </p>
         </div>
       </article>
     </section>
 
+    <!-- ─── Concierge AI spotlight ───────────────────── -->
+    <section class="concierge" id="concierge">
+      <div class="concierge__copy">
+        <div class="concierge__eyebrow">Concierge AI</div>
+        <h2 class="concierge__title">Your trip context.<br>Not the internet.</h2>
+        <p class="concierge__body">
+          The Gate IQ concierge knows your flight, your status, your party, and your preferences.
+          When you ask a question, the answer is grounded in your actual travel day — not a
+          generic web search.
+        </p>
+        <ul class="concierge__list">
+          <li>Disruption options ranked by your profile and time of day</li>
+          <li>Lounge eligibility checked against your actual card and status</li>
+          <li>Connection risk scored against your specific itinerary</li>
+          <li>Baggage claims drafted with your flight and bag details pre-filled</li>
+        </ul>
+      </div>
+
+      <div class="concierge__chat">
+        <div class="chat__header">
+          <div class="chat__status-dot"></div>
+          <span>Gate IQ · Active</span>
+          <span class="chat__flight">WN 443 · BNA → ORD</span>
+        </div>
+
+        <div class="chat__log">
+          <div class="chat__event">
+            <span class="chat__event-label">9:47 PM · Flight alert</span>
+            <span>WN 443 cancelled. Next departure 7:12 AM.</span>
+          </div>
+
+          <div class="chat__bubble chat__bubble--ai">
+            Your flight has been cancelled. It is late and hotel inventory near BNA is tightening.
+            Three options, ranked for you:
+            <ol class="chat__options">
+              <li><strong>Rebook AA 2341</strong> — departs 7:12 AM, 4 seats in Main Cabin Extra.</li>
+              <li><strong>Hold at Marriott Courtyard BNA</strong> + rebook morning — 2 stops from your gate.</li>
+              <li><strong>Semi-private via Wheels Up</strong> — quote in 8 minutes, no commitment.</li>
+            </ol>
+            Option 2 recommended given the hour and your preference for direct flights.
+          </div>
+
+          <div class="chat__bubble chat__bubble--user">
+            Book the hotel and the morning flight.
+          </div>
+
+          <div class="chat__bubble chat__bubble--ai">
+            Holding room 412 at Marriott Courtyard BNA. Booking AA 2341 for 7:12 AM.
+            Confirmation and a 5:45 AM wake-up will follow.
+          </div>
+
+          <div class="chat__event">
+            <span class="chat__event-label">9:51 PM · Confirmed</span>
+            <span>Hotel held. AA 2341 booked. 4 minutes total.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ─── Promise band ────────────────────────────── -->
-    <section class="promise" data-screen-label="Landing · Promise">
+    <section class="promise">
       <div>
         <div class="promise__quote">
           When your flight changes,<br>
           Gate IQ tells you exactly<br>
           what to do next.
         </div>
-        <div class="promise__attr">Core promise · v0.4</div>
+        <div class="promise__attr">Core promise · v0.5</div>
       </div>
       <div class="promise__num">8<small style="font-size:60px;letter-spacing:-0.02em;">min</small></div>
     </section>
 
     <!-- ─── Black membership ───────────────────────── -->
-    <section class="black" id="black" data-screen-label="Landing · Black">
+    <section class="black" id="black">
       <div>
         <div class="black__tag">
           <span style="width:6px;height:6px;border-radius:999px;background:#B89968;"></span>
@@ -128,11 +260,13 @@
         <h2 class="black__title">A membership<br>for travelers<br>who can't afford<br>a bad day.</h2>
         <div class="black__price">$50<small>/month · annual coming soon</small></div>
         <ul class="black__list">
+          <li>Smart Timeline — departure to gate, always accurate to your status.</li>
           <li>Delay Mode — three ranked recoveries when the airline can't help.</li>
           <li>Concierge AI — answers grounded in your trip, not the internet.</li>
-          <li>Premium recovery — semi-private &amp; charter alternatives, no commitment.</li>
-          <li>Family sharing &amp; status-aware routing for everyone in your party.</li>
-          <li>First 5,000 members ship with the limited launch box.</li>
+          <li>Baggage IQ — claims drafted and tracked before you reach the carousel.</li>
+          <li>Premium recovery — semi-private and charter alternatives, no commitment.</li>
+          <li>Family sharing and status-aware routing for everyone in your party.</li>
+          <li>First 5,000 members receive the limited launch box.</li>
         </ul>
       </div>
 
@@ -153,30 +287,68 @@
       </div>
     </section>
 
+    <!-- ─── Nashville pilot band ─────────────────────── -->
+    <section class="pilot" id="pilot">
+      <div class="pilot__inner">
+        <div class="pilot__label">Phase 1 pilot market</div>
+        <div class="pilot__city">Nashville, TN</div>
+        <p class="pilot__body">
+          Gate IQ launches at BNA. Nashville's passenger growth has outpaced its infrastructure —
+          making it the ideal proving ground for everything Gate IQ does best.
+          Founding members from BNA are first in line.
+        </p>
+      </div>
+    </section>
+
     <!-- ─── Footer ──────────────────────────────────── -->
     <div class="foot">
       <div>© 2026 Gate IQ · Nashville</div>
       <div style="display:flex;gap:24px;">
-        <span>Privacy</span>
-        <span>Press</span>
-        <span>Careers</span>
+        <a href="#" class="foot__link">Privacy</a>
+        <a href="#" class="foot__link">Press</a>
+        <a href="#" class="foot__link">Careers</a>
       </div>
     </div>
-  </div>
+
+  </div><!-- /.site -->
 
   <script>
-    function submitInvite(e) {
+    // ── Waitlist form ──────────────────────────────────────────────────────
+    // To go live: replace the stub below with one of:
+    //   A) Formspree:  fetch("https://formspree.io/f/YOUR_FORM_ID", ...)
+    //   B) Your API:   fetch("https://api.gateiq.world/waitlist", ...)
+    // GitHub Pages is static — the endpoint URL lives here, not in env vars.
+
+    const WAITLIST_ENDPOINT = null; // set to your endpoint URL when ready
+
+    async function submitInvite(e) {
       e.preventDefault();
       const form = e.target;
-      const email = form.querySelector("input").value;
-      const btn = form.querySelector(".signup__cta");
-      btn.textContent = "On the list ✓";
+      const btn  = form.querySelector(".signup__cta");
+      const data = {
+        email:        form.querySelector('[name="email"]').value,
+        homeAirport:  form.querySelector('[name="homeAirport"]').value,
+        travelerType: form.querySelector('[name="travelerType"]').value,
+      };
+
+      btn.textContent = "Sending…";
       btn.disabled = true;
+
+      if (WAITLIST_ENDPOINT) {
+        try {
+          await fetch(WAITLIST_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+        } catch (_) { /* fail silently — still show confirmation */ }
+      }
+
+      btn.textContent = "On the list";
       btn.style.background = "#B89968";
       btn.style.color = "#15233F";
-      // Replace strip with confirmation
       form.querySelector(".signup__strip").innerHTML =
-        '<span><strong>You\u2019re #4,218.</strong> Launch box reserved.</span><span>BNA pilot</span>';
+        '<span><strong>You’re on the list.</strong> Launch box reserved.</span><span>BNA pilot</span>';
       return false;
     }
   </script>
