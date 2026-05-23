@@ -43,13 +43,14 @@
            your Formspree form ID (formspree.io), or swap the fetch URL for
            your deployed NestJS API endpoint (e.g. https://api.gateiq.world/waitlist).
            GitHub Pages is static — no server-side env vars. The API URL lives here. -->
-      <form id="waitlist-form" class="signup" onsubmit="return submitInvite(event)">
+      <form id="waitlist-form" class="signup" onsubmit="submitInvite(event)">
         <div class="signup__label">Request your invite</div>
         <div class="signup__title">Join the first 5,000.<br>Receive the launch box.</div>
         <div class="signup__fields">
           <input class="signup__input" type="email" name="email" placeholder="you@youremail.com" required>
           <div class="signup__row2">
-            <input class="signup__input signup__input--half" type="text" name="homeAirport" placeholder="Home airport (BNA)" maxlength="3">
+            <input class="signup__input signup__input--half" type="text" name="homeAirport" placeholder="Home airport (BNA)" maxlength="4" list="airport-list" autocomplete="off">
+            <datalist id="airport-list"></datalist>
             <select class="signup__input signup__input--half signup__select" name="travelerType">
               <option value="" disabled selected>Traveler type</option>
               <option value="road_warrior">Road warrior</option>
@@ -346,9 +347,119 @@
       btn.style.background = "#B89968";
       btn.style.color = "#15233F";
       form.querySelector(".signup__strip").innerHTML =
-        ‘<span><strong>You’re on the list.</strong> Launch box reserved.</span><span>BNA pilot</span>’;
-      return false;
+        "<span><strong>You’re on the list.</strong> Launch box reserved.</span><span>BNA pilot</span>";
     }
+
+    // ── Airport autocomplete ───────────────────────────────────────────────
+    const AIRPORTS = [
+      "ATL — Atlanta Hartsfield-Jackson","LAX — Los Angeles International",
+      "ORD — Chicago O’Hare","DFW — Dallas/Fort Worth","DEN — Denver International",
+      "JFK — New York John F. Kennedy","SFO — San Francisco International",
+      "SEA — Seattle-Tacoma","LAS — Las Vegas Harry Reid",
+      "MCO — Orlando International","EWR — Newark Liberty",
+      "CLT — Charlotte Douglas","PHX — Phoenix Sky Harbor",
+      "MIA — Miami International","IAH — Houston George Bush",
+      "BOS — Boston Logan","MSP — Minneapolis-Saint Paul",
+      "DTW — Detroit Metropolitan","FLL — Fort Lauderdale-Hollywood",
+      "PHL — Philadelphia International","LGA — New York LaGuardia",
+      "BWI — Baltimore/Washington","SLC — Salt Lake City",
+      "DCA — Washington Reagan","IAD — Washington Dulles",
+      "MDW — Chicago Midway","HNL — Honolulu Daniel K. Inouye",
+      "SAN — San Diego International","TPA — Tampa International",
+      "PDX — Portland International","STL — St. Louis Lambert",
+      "BNA — Nashville International","AUS — Austin-Bergstrom",
+      "MCI — Kansas City International","RDU — Raleigh-Durham",
+      "OAK — Oakland International","MSY — New Orleans Louis Armstrong",
+      "SJC — San Jose Mineta","SMF — Sacramento International",
+      "RSW — Fort Myers Southwest Florida","BDL — Hartford Bradley",
+      "PIT — Pittsburgh International","MKE — Milwaukee Mitchell",
+      "BUF — Buffalo Niagara","OMA — Omaha Eppley",
+      "CLE — Cleveland Hopkins","CMH — Columbus John Glenn",
+      "IND — Indianapolis International","JAX — Jacksonville International",
+      "SAT — San Antonio International","ABQ — Albuquerque International",
+      "OKC — Oklahoma City Will Rogers","TUL — Tulsa International",
+      "LIT — Little Rock Clinton","MEM — Memphis International",
+      "BHM — Birmingham-Shuttlesworth","GSP — Greenville-Spartanburg",
+      "CHS — Charleston International","SAV — Savannah/Hilton Head",
+      "ROC — Rochester Greater","SYR — Syracuse Hancock",
+      "ALB — Albany International","RIC — Richmond International",
+      "ORF — Norfolk International","GSO — Greensboro Piedmont Triad",
+      "DAY — Dayton International","GRR — Grand Rapids Gerald R. Ford",
+      "DSM — Des Moines International","OGG — Maui Kahului",
+      "KOA — Kona International","LIH — Kauai Lihue",
+      "ANC — Anchorage Ted Stevens","FAI — Fairbanks International",
+      "BOI — Boise Airport","GEG — Spokane International",
+      "BZN — Bozeman Yellowstone","MSO — Missoula Montana",
+      "SBN — South Bend International","TYS — Knoxville McGhee Tyson",
+      "CHA — Chattanooga Metropolitan","HSV — Huntsville International",
+      "MOB — Mobile Regional","PNS — Pensacola International",
+      "VPS — Destin-Fort Walton Beach","TLH — Tallahassee International",
+      "SRQ — Sarasota Bradenton","PIE — St. Pete-Clearwater",
+      "DAB — Daytona Beach International","MLB — Melbourne Orlando",
+      "PBI — Palm Beach International","EYW — Key West International",
+      "LBB — Lubbock Preston Smith","MAF — Midland International",
+      "ELP — El Paso International","HOU — Houston Hobby",
+      "CRP — Corpus Christi International","MFE — McAllen Miller",
+      "XNA — Fayetteville/Springdale Northwest Arkansas",
+      "TXK — Texarkana Regional","SHV — Shreveport Regional",
+      "BTR — Baton Rouge Metropolitan","LFT — Lafayette Regional",
+      "GPT — Gulfport-Biloxi","JAN — Jackson Medgar Wiley Evers",
+      "FSD — Sioux Falls Regional","RAP — Rapid City Regional",
+      "BIS — Bismarck Municipal","FAR — Fargo Hector",
+      "GFK — Grand Forks International","MSN — Madison Dane County",
+      "ATW — Appleton International","LSE — La Crosse Regional",
+      "DBQ — Dubuque Regional","CID — Cedar Rapids Eastern Iowa",
+      "MLI — Moline Quad City","BMI — Bloomington-Normal",
+      "SPI — Springfield Abraham Lincoln","MHK — Manhattan Regional",
+      "ICT — Wichita Dwight D. Eisenhower","TUS — Tucson International",
+      "PHF — Newport News/Williamsburg","CHO — Charlottesville Albemarle",
+      "ROA — Roanoke-Blacksburg Regional","HTS — Huntington Tri-State",
+      "CRW — Charleston Yeager","BLI — Bellingham International",
+      "PSC — Pasco Tri-Cities","YKM — Yakima Air Terminal",
+      "RDM — Redmond Roberts Field","EUG — Eugene Airport",
+      "MFR — Medford Rogue Valley","STS — Santa Rosa Sonoma County",
+      "SBA — Santa Barbara Municipal","SNA — Orange County John Wayne",
+      "BUR — Burbank Bob Hope","LGB — Long Beach Daugherty Field",
+      "ONT — Ontario International","PSP — Palm Springs International",
+      "SBP — San Luis Obispo County","FAT — Fresno Yosemite",
+      "BFL — Bakersfield Meadows Field","RNO — Reno-Tahoe International",
+      "LAS — Las Vegas Harry Reid","IDA — Idaho Falls Regional",
+      "TWF — Twin Falls Magic Valley","PIH — Pocatello Regional",
+      "GJT — Grand Junction Walker Field","DRO — Durango La Plata County",
+      "ASE — Aspen Pitkin County","EGE — Eagle Vail",
+      "HDN — Steamboat Springs Yampa Valley","MTJ — Montrose Regional",
+      "PUB — Pueblo Memorial","COS — Colorado Springs Municipal",
+      "FNL — Northern Colorado Regional","CPR — Casper Natrona County",
+      "RKS — Rock Springs Southwest Wyoming","LAR — Laramie Regional",
+      "SHR — Sheridan County","GCC — Gillette Campbell County",
+      "LNK — Lincoln Airport","GRI — Grand Island Central Nebraska",
+      "LBF — North Platte Lee Bird Field",
+      // International hubs
+      "LHR — London Heathrow","CDG — Paris Charles de Gaulle",
+      "AMS — Amsterdam Schiphol","FRA — Frankfurt International",
+      "DXB — Dubai International","SIN — Singapore Changi",
+      "HND — Tokyo Haneda","NRT — Tokyo Narita",
+      "ICN — Seoul Incheon","PEK — Beijing Capital",
+      "PVG — Shanghai Pudong","HKG — Hong Kong International",
+      "SYD — Sydney Kingsford Smith","MEL — Melbourne Tullamarine",
+      "YYZ — Toronto Pearson","YVR — Vancouver International",
+      "YUL — Montreal Pierre Elliott Trudeau","CUN — Cancun International",
+      "GDL — Guadalajara Miguel Hidalгo","MEX — Mexico City Benito Juarez",
+      "GRU — Sao Paulo Guarulhos","EZE — Buenos Aires Ezeiza",
+      "BOG — Bogota El Dorado","LIM — Lima Jorge Chavez",
+      "SCL — Santiago Arturo Merino Benitez"
+    ];
+
+    (function populateAirports() {
+      const dl = document.getElementById("airport-list");
+      if (!dl) return;
+      AIRPORTS.forEach(function(a) {
+        const opt = document.createElement("option");
+        opt.value = a.split(" — ")[0]; // store just the IATA code as value
+        opt.label = a;                      // show "BNA — Nashville International"
+        dl.appendChild(opt);
+      });
+    })();
   </script>
 </body>
 </html>
