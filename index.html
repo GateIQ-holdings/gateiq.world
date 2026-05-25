@@ -49,8 +49,10 @@
         <div class="signup__fields">
           <input class="signup__input" type="email" name="email" placeholder="you@youremail.com" required>
           <div class="signup__row2">
-            <input class="signup__input signup__input--half" type="text" name="homeAirport" placeholder="Home airport (BNA)" maxlength="4" list="airport-list" autocomplete="off">
-            <datalist id="airport-list"></datalist>
+            <div class="airport-wrap">
+              <input class="signup__input signup__input--half" id="airport-input" type="text" name="homeAirport" placeholder="Home airport (BNA)" maxlength="4" autocomplete="off" spellcheck="false">
+              <div class="airport-dropdown" id="airport-dropdown" role="listbox" aria-label="Airport suggestions"></div>
+            </div>
             <select class="signup__input signup__input--half signup__select" name="travelerType">
               <option value="" disabled selected>Traveler type</option>
               <option value="road_warrior">Road warrior</option>
@@ -301,16 +303,26 @@
     </section>
 
     <!-- ─── Footer ──────────────────────────────────── -->
-    <div class="foot">
-      <div>© 2026 Gate IQ · Nashville</div>
-      <div style="display:flex;gap:24px;">
-        <a href="#" class="foot__link">Privacy</a>
-        <a href="#" class="foot__link">Press</a>
-        <a href="#" class="foot__link">Careers</a>
-      </div>
-    </div>
+    <div id="site-footer"></div>
 
   </div><!-- /.site -->
+
+  <script src="footer.js"></script>
+
+  <!-- ─── Cookie consent banner ────────────────────────── -->
+  <div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Cookie consent" aria-live="polite">
+    <div class="cookie-banner__inner">
+      <div class="cookie-banner__text">
+        <span class="cookie-banner__label">Cookie Notice</span>
+        We use analytics cookies to understand how visitors find Gate IQ and improve the experience.
+        <a href="cookies.html" class="cookie-banner__policy">Learn more →</a>
+      </div>
+      <div class="cookie-banner__actions">
+        <button class="cookie-banner__btn cookie-banner__btn--decline" onclick="cookieChoice('decline')">Decline</button>
+        <button class="cookie-banner__btn cookie-banner__btn--accept" onclick="cookieChoice('accept')">Accept cookies</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // ── Waitlist endpoint ─────────────────────────────────────────────────
@@ -327,9 +339,9 @@
       const form = e.target;
       const btn  = form.querySelector(".signup__cta");
       const data = {
-        email:        form.querySelector(‘[name="email"]’).value,
-        homeAirport:  form.querySelector(‘[name="homeAirport"]’).value,
-        travelerType: form.querySelector(‘[name="travelerType"]’).value,
+        email:        form.querySelector('[name="email"]').value,
+        homeAirport:  form.querySelector('[name="homeAirport"]').value,
+        travelerType: form.querySelector('[name="travelerType"]').value,
       };
 
       btn.textContent = "Sending…";
@@ -347,11 +359,11 @@
       btn.style.background = "#B89968";
       btn.style.color = "#15233F";
       form.querySelector(".signup__strip").innerHTML =
-        "<span><strong>You’re on the list.</strong> Launch box reserved.</span><span>BNA pilot</span>";
+        "<span><strong>You're on the list.</strong> Launch box reserved.</span><span>BNA pilot</span>";
     }
 
     // ── Airport autocomplete ───────────────────────────────────────────────
-    const AIRPORTS = [
+    var AIRPORTS = [
       "ATL — Atlanta Hartsfield-Jackson","LAX — Los Angeles International",
       "ORD — Chicago O’Hare","DFW — Dallas/Fort Worth","DEN — Denver International",
       "JFK — New York John F. Kennedy","SFO — San Francisco International",
@@ -450,15 +462,114 @@
       "SCL — Santiago Arturo Merino Benitez"
     ];
 
-    (function populateAirports() {
-      const dl = document.getElementById("airport-list");
-      if (!dl) return;
-      AIRPORTS.forEach(function(a) {
-        const opt = document.createElement("option");
-        opt.value = a.split(" — ")[0]; // store just the IATA code as value
-        opt.label = a;                      // show "BNA — Nashville International"
-        dl.appendChild(opt);
+    (function initAirportAutocomplete() {
+      const input    = document.getElementById("airport-input");
+      const dropdown = document.getElementById("airport-dropdown");
+      if (!input || !dropdown) return;
+
+      let activeIdx = -1;
+
+      function show(items) {
+        dropdown.innerHTML = "";
+        activeIdx = -1;
+        if (!items.length) { dropdown.classList.remove("airport-dropdown--open"); return; }
+        items.slice(0, 8).forEach(function(a, i) {
+          const code = a.split(" — ")[0];
+          const name = a.split(" — ")[1];
+          const opt  = document.createElement("div");
+          opt.className = "airport-option";
+          opt.setAttribute("role", "option");
+          opt.dataset.idx = i;
+          opt.innerHTML =
+            '<span class="airport-option__code">' + code + '</span>' +
+            '<span class="airport-option__name">' + name + '</span>';
+          opt.addEventListener("mousedown", function(e) {
+            e.preventDefault(); // keep focus on input
+            select(code);
+          });
+          dropdown.appendChild(opt);
+        });
+        dropdown.classList.add("airport-dropdown--open");
+      }
+
+      function select(code) {
+        input.value = code;
+        dropdown.classList.remove("airport-dropdown--open");
+        activeIdx = -1;
+      }
+
+      function setActive(idx) {
+        const opts = dropdown.querySelectorAll(".airport-option");
+        opts.forEach(function(o) { o.classList.remove("airport-option--active"); });
+        activeIdx = Math.max(-1, Math.min(opts.length - 1, idx));
+        if (activeIdx >= 0) opts[activeIdx].classList.add("airport-option--active");
+      }
+
+      input.addEventListener("input", function() {
+        const q = input.value.trim().toUpperCase();
+        if (!q) { dropdown.classList.remove("airport-dropdown--open"); return; }
+        const matches = AIRPORTS.filter(function(a) {
+          const upper = a.toUpperCase();
+          return upper.startsWith(q) || upper.split(" — ")[1].includes(q);
+        });
+        // code-prefix matches first
+        matches.sort(function(a, b) {
+          const ac = a.split(" — ")[0].startsWith(q) ? 0 : 1;
+          const bc = b.split(" — ")[0].startsWith(q) ? 0 : 1;
+          return ac - bc;
+        });
+        show(matches);
       });
+
+      input.addEventListener("keydown", function(e) {
+        const opts = dropdown.querySelectorAll(".airport-option");
+        if (!dropdown.classList.contains("airport-dropdown--open")) return;
+        if (e.key === "ArrowDown")  { e.preventDefault(); setActive(activeIdx + 1); }
+        else if (e.key === "ArrowUp")   { e.preventDefault(); setActive(activeIdx - 1); }
+        else if (e.key === "Enter" && activeIdx >= 0) {
+          e.preventDefault();
+          select(opts[activeIdx].querySelector(".airport-option__code").textContent);
+        }
+        else if (e.key === "Escape") { dropdown.classList.remove("airport-dropdown--open"); }
+      });
+
+      document.addEventListener("click", function(e) {
+        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.remove("airport-dropdown--open");
+        }
+      });
+    })();
+
+    // ── Cookie consent & analytics ────────────────────────────────────────
+    // Replace G-XXXXXXXXXX with your actual Google Analytics 4 Measurement ID.
+    const GA_ID = "G-XXXXXXXXXX";
+
+    function loadAnalytics() {
+      if (GA_ID === "G-XXXXXXXXXX") return; // placeholder — skip until real ID is set
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag("js", new Date());
+      gtag("config", GA_ID, { anonymize_ip: true });
+    }
+
+    function cookieChoice(choice) {
+      localStorage.setItem("gateiq_cookie_consent", choice);
+      var banner = document.getElementById("cookie-banner");
+      banner.classList.add("cookie-banner--dismissed");
+      if (choice === "accept") loadAnalytics();
+    }
+
+    (function initConsent() {
+      var stored = localStorage.getItem("gateiq_cookie_consent");
+      var banner = document.getElementById("cookie-banner");
+      if (stored === "accept") { loadAnalytics(); }
+      if (stored) { banner.classList.add("cookie-banner--hidden"); }
+      else { banner.classList.add("cookie-banner--visible"); }
     })();
   </script>
 </body>
