@@ -557,6 +557,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   grid-template-columns: 1fr 1fr;
   gap: 48px;
   align-items: center;
+  margin-bottom: 96px;
 }
 .black__tag {
   display: inline-flex;
@@ -759,9 +760,15 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   align-self: flex-start;
   border-bottom-left-radius: 4px;
 }
+/* Chat always sits on dark navy — restore light tokens regardless of mode */
+[data-theme="dark"] .concierge__chat {
+  --fg-1: #F2ECDD;
+  --fg-2: rgba(242, 236, 221, 0.66);
+  --fg-3: rgba(242, 236, 221, 0.42);
+}
 [data-theme="dark"] .chat__bubble--ai {
-  background: #25252A;
-  color: var(--fg-1);
+  background: #2E2E33;
+  color: #F2ECDD;
 }
 .chat__bubble--user {
   background: var(--accent);
@@ -998,7 +1005,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
 .side-nav__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 0 24px 28px;
   border-bottom: 1px solid var(--hairline);
   margin-bottom: 8px;
