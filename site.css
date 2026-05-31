@@ -637,15 +637,29 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
 .black__card-glyph { position: absolute; right: -30px; bottom: -36px; font-family: var(--font-deco); font-weight: 400; font-size: 220px; letter-spacing: -0.06em; color: rgba(184, 153, 104, 0.08); pointer-events: none; }
 
 /* ── Footer ────────────────────────────────────────────── */
+#site-footer {
+  margin: 64px -56px -80px;
+  background: #0E1830;
+}
 .foot {
   display: flex;
   justify-content: space-between;
-  margin-top: 64px;
+  align-items: flex-start;
+  padding: 40px 56px;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--fg-3);
+  color: rgba(242, 236, 221, 0.45);
+  gap: 32px;
+}
+.foot__left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.foot__line {
+  color: rgba(242, 236, 221, 0.45);
 }
 
 /* ── Concierge AI spotlight ─────────────────────────────── */
@@ -865,10 +879,15 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
 
 /* ── Footer links ──────────────────────────────────────── */
 .foot__link {
-  color: var(--fg-3);
+  color: rgba(242, 236, 221, 0.45);
   text-decoration: none;
 }
-.foot__link:hover { color: var(--fg-1); }
+.foot__link:hover { color: rgba(242, 236, 221, 0.85); }
+.foot__link--credit {
+  color: var(--accent);
+  text-decoration: none;
+}
+.foot__link--credit:hover { color: var(--brass-light); }
 
 /* ── Cookie consent banner ─────────────────────────────── */
 .cookie-banner {
@@ -1206,6 +1225,8 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
 
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 900px) {
+  #site-footer { margin: 64px -32px -64px; }
+  .foot { padding: 32px 32px; }
   .site { padding: 24px 32px 64px; }
   .hero, .black, .concierge { grid-template-columns: 1fr; }
   .pillars { grid-template-columns: repeat(2, 1fr); }
@@ -1227,6 +1248,8 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
 }
 
 @media (max-width: 640px) {
+  #site-footer { margin: 64px -20px -56px; }
+  .foot { padding: 28px 20px; flex-direction: column; gap: 20px; }
   .site { padding: 20px 20px 56px; }
   .site-nav { padding-bottom: 40px; }
   .hero__title { font-size: 56px; }
