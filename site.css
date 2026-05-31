@@ -666,7 +666,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 40px 56px;
+  padding: 40px 56px 88px;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
