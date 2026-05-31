@@ -1089,21 +1089,21 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   cursor: pointer;
 }
 .side-nav__step-dot {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 1.5px solid var(--hairline);
-  background: var(--bg);
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px rgba(21,35,63,0.10);
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
   font-size: 9px;
-  color: var(--fg-3);
+  color: var(--navy);
   letter-spacing: 0;
   z-index: 1;
-  transition: border-color 180ms, background 180ms, color 180ms;
+  transition: background 180ms, color 180ms, box-shadow 180ms;
 }
 .side-nav__step-label {
   font-family: var(--font-body);
@@ -1113,16 +1113,17 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   transition: color 180ms;
 }
 .side-nav__step:hover .side-nav__step-dot {
-  border-color: var(--accent);
-  color: var(--accent);
+  background: var(--accent);
+  color: var(--navy);
+  box-shadow: 0 2px 8px rgba(184,153,104,0.28);
 }
 .side-nav__step:hover .side-nav__step-label { color: var(--fg-1); }
 
 .side-nav__step--active .side-nav__step-dot {
-  border-color: var(--accent);
   background: var(--accent);
   color: var(--navy);
   font-weight: 700;
+  box-shadow: 0 2px 8px rgba(184,153,104,0.28);
 }
 .side-nav__step--active .side-nav__step-label {
   color: var(--fg-1);
@@ -1140,16 +1141,19 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 9px 10px;
-  border-radius: 10px;
+  padding: 9px 14px;
+  border-radius: 999px;
   text-decoration: none;
   font-family: var(--font-body);
   font-size: 13px;
   color: var(--fg-2);
-  transition: background 140ms, color 140ms;
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px rgba(21,35,63,0.08);
+  transition: background 140ms, color 140ms, box-shadow 140ms;
 }
 .side-nav__link:hover {
-  background: var(--surface-1);
+  background: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(21,35,63,0.14);
   color: var(--fg-1);
 }
 .side-nav__link--active {
