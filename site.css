@@ -547,10 +547,10 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   letter-spacing: -0.05em;
 }
 
-/* ── Black membership — always dark surface ──────────── */
+/* ── Black membership ────────────────────────────────── */
 .black {
-  background: var(--surface-dark);
-  color: var(--fg-on-dark);
+  background: var(--surface-grey);
+  color: var(--fg-on-grey);
   border-radius: 36px;
   padding: 48px;
   display: grid;
@@ -579,7 +579,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   letter-spacing: -0.03em;
   line-height: 1;
   margin-top: 16px;
-  color: var(--ivory);
+  color: var(--fg-on-grey);
 }
 .black__price {
   font-family: var(--font-display);
@@ -597,7 +597,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   display: flex;
   flex-direction: column;
   gap: 10px;
-  color: rgba(242, 236, 221, 0.78);
+  color: var(--fg-on-grey-2);
   font-family: var(--font-body);
   font-size: 14px;
 }
