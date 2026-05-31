@@ -783,11 +783,34 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
 
 /* ── Nashville pilot band ────────────────────────────────── */
 .pilot {
-  background: var(--surface-1);
-  border-radius: 28px;
-  padding: 48px 56px;
-  margin-bottom: 96px;
-  box-shadow: inset 0 0 0 1px var(--hairline);
+  position: relative;
+  min-height: 72vh;
+  background-image: url('Nashville-Tennessee-1244x700.jpg');
+  background-size: cover;
+  background-position: center 40%;
+  background-attachment: fixed;
+  margin: 0 -56px 96px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+.pilot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(14, 24, 48, 0.88) 0%,
+    rgba(14, 24, 48, 0.45) 45%,
+    rgba(14, 24, 48, 0.10) 100%
+  );
+  pointer-events: none;
+}
+.pilot__inner {
+  position: relative;
+  z-index: 1;
+  padding: 56px 72px;
+  max-width: 700px;
 }
 .pilot__label {
   font-family: var(--font-mono);
@@ -795,23 +818,23 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 .pilot__city {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 56px;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  color: var(--fg-1);
-  margin-bottom: 16px;
+  font-size: 72px;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: #F2ECDD;
+  margin-bottom: 20px;
 }
 .pilot__body {
   font-family: var(--font-body);
   font-size: 17px;
-  line-height: 1.55;
-  color: var(--fg-2);
-  max-width: 560px;
+  line-height: 1.6;
+  color: rgba(242, 236, 221, 0.78);
+  max-width: 480px;
   margin: 0;
 }
 
@@ -1163,8 +1186,9 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   .promise__num { font-size: 100px; }
   .black { padding: 36px; }
   .black__title { font-size: 44px; }
-  .pilot { padding: 32px 28px; }
-  .pilot__city { font-size: 40px; }
+  .pilot { margin: 0 -32px 64px; background-attachment: scroll; }
+  .pilot__city { font-size: 52px; }
+  .pilot__inner { padding: 40px 44px; }
   .signup__row2 { flex-direction: column; }
   .tl-step { grid-template-columns: 40px 1fr; gap: 24px; }
   .tl-img-placeholder { display: none; }
@@ -1186,8 +1210,9 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   .promise__num { font-size: 72px; }
   .black { padding: 28px 24px; gap: 36px; margin-bottom: 0; }
   .black__title { font-size: 36px; }
-  .pilot { padding: 28px 24px; margin-bottom: 72px; }
-  .pilot__city { font-size: 32px; }
+  .pilot { margin: 0 -20px 72px; min-height: 55vh; background-attachment: scroll; }
+  .pilot__city { font-size: 40px; }
+  .pilot__inner { padding: 32px 28px; }
   .signup { border-radius: 24px; padding: 28px 24px 24px; }
   .cookie-banner { padding: 0 12px 12px; }
   .cookie-banner__inner { flex-direction: column; align-items: flex-start; gap: 16px; padding: 18px 20px; }
