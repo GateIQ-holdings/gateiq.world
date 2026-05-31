@@ -9,25 +9,105 @@
   <script src="theme-toggle.js" defer></script>
 </head>
 <body>
-  <div class="site">
 
-    <!-- ─── Nav ─────────────────────────────────────── -->
+  <!-- ─── Side nav toggle ──────────────────────────────── -->
+  <button class="side-nav-toggle" id="side-nav-toggle" aria-label="Open navigation" style="display:none">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+
+  <!-- ─── Side nav overlay ───────────────────────────────── -->
+  <div class="side-nav-overlay" id="side-nav-overlay"></div>
+
+  <!-- ─── Side nav ──────────────────────────────────────── -->
+  <nav class="side-nav" id="side-nav" aria-label="Page navigation">
+    <div class="side-nav__header">
+      <div class="side-nav__brand">Gate<span class="iq">IQ</span><span class="dot"></span></div>
+      <button class="side-nav__close" id="side-nav-close" aria-label="Close navigation">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="side-nav__group">
+      <div class="side-nav__group-label">Your journey</div>
+      <div class="side-nav__track">
+        <a href="#step-1" class="side-nav__step" data-target="step-1">
+          <span class="side-nav__step-dot">01</span>
+          <span class="side-nav__step-label">Setup profile</span>
+        </a>
+        <a href="#step-2" class="side-nav__step" data-target="step-2">
+          <span class="side-nav__step-dot">02</span>
+          <span class="side-nav__step-label">Smart timeline</span>
+        </a>
+        <a href="#step-3" class="side-nav__step" data-target="step-3">
+          <span class="side-nav__step-dot">03</span>
+          <span class="side-nav__step-label">Disruption hits</span>
+        </a>
+        <a href="#step-4" class="side-nav__step" data-target="step-4">
+          <span class="side-nav__step-dot">04</span>
+          <span class="side-nav__step-label">Recovery options</span>
+        </a>
+        <a href="#step-5" class="side-nav__step" data-target="step-5">
+          <span class="side-nav__step-dot">05</span>
+          <span class="side-nav__step-label">One tap to act</span>
+        </a>
+        <a href="#step-6" class="side-nav__step" data-target="step-6">
+          <span class="side-nav__step-dot">06</span>
+          <span class="side-nav__step-label">Handled</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="side-nav__group">
+      <div class="side-nav__group-label">Explore</div>
+      <div class="side-nav__links">
+        <a href="#features" class="side-nav__link" data-target="features">Features</a>
+        <a href="#concierge" class="side-nav__link" data-target="concierge">AI Concierge</a>
+        <a href="#black" class="side-nav__link" data-target="black">Black membership</a>
+        <a href="#pilot" class="side-nav__link" data-target="pilot">Nashville pilot</a>
+        <a href="#signup" class="side-nav__link side-nav__link--cta" data-target="signup">Request invite →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ─── Password gate ─────────────────────────────────── -->
+  <div id="password-gate" class="password-gate">
+    <div>
+      <div class="password-gate__brand">
+        Gate<span class="iq">IQ</span><span class="dot"></span>
+      </div>
+    </div>
+    <div class="password-gate__label">Private preview · Enter access code</div>
+    <div class="password-gate__row">
+      <input
+        id="gate-password"
+        class="password-gate__input"
+        type="password"
+        placeholder="Access code"
+        autocomplete="off"
+      >
+      <button class="password-gate__btn" onclick="checkPassword()">Enter →</button>
+    </div>
+    <div class="password-gate__error" id="gate-error"></div>
+  </div>
+
+  <div class="site" id="site-content" style="display:none">
+
+    <!-- ─── Nav ─────────────────────────────────────────── -->
     <nav class="site-nav">
       <div class="site-nav__brand">
         Gate<span class="iq">IQ</span><span class="dot"></span>
       </div>
-      <div class="site-nav__links">
-        <a href="#how">How it works</a>
-        <a href="#concierge">AI Concierge</a>
-        <a href="#black">Black</a>
-        <a href="#signup">Request invite</a>
-      </div>
+      <a href="#signup" class="site-nav__cta">Request invite →</a>
     </nav>
 
-    <!-- ─── Hero ────────────────────────────────────── -->
-    <section class="hero" id="signup">
+    <!-- ─── Hero ──────────────────────────────────────────── -->
+    <section class="hero" id="hero">
       <div>
-        <div class="hero__eyebrow">Private launch list · Nashville pilot</div>
+        <div class="hero__eyebrow">Peace in Motion&#8482; · Private launch · Nashville pilot</div>
         <h1 class="hero__title">
           Travel<br>disruption,<br><span class="accent">handled.</span>
         </h1>
@@ -37,48 +117,167 @@
           — handled before you open the app.
         </p>
       </div>
-
-      <!-- SIGNUP FORM
-           To connect a real waitlist backend, replace FORMSPREE_ID below with
-           your Formspree form ID (formspree.io), or swap the fetch URL for
-           your deployed NestJS API endpoint (e.g. https://api.gateiq.world/waitlist).
-           GitHub Pages is static — no server-side env vars. The API URL lives here. -->
-      <form id="waitlist-form" class="signup" onsubmit="submitInvite(event)">
-        <div class="signup__label">Request your invite</div>
-        <div class="signup__title">Join the first 5,000.<br>Receive the launch box.</div>
-        <div class="signup__fields">
-          <input class="signup__input" type="email" name="email" placeholder="you@youremail.com" required>
-          <div class="signup__row2">
-            <div class="airport-wrap">
-              <input class="signup__input signup__input--half" id="airport-input" type="text" name="homeAirport" placeholder="Home airport (BNA)" maxlength="4" autocomplete="off" spellcheck="false">
-              <div class="airport-dropdown" id="airport-dropdown" role="listbox" aria-label="Airport suggestions"></div>
-            </div>
-            <select class="signup__input signup__input--half signup__select" name="travelerType">
-              <option value="" disabled selected>Traveler type</option>
-              <option value="road_warrior">Road warrior</option>
-              <option value="premium_leisure">Premium leisure</option>
-              <option value="family">Family traveler</option>
-              <option value="corporate">Corporate</option>
-            </select>
-          </div>
-          <button class="signup__cta" type="submit">Request invite →</button>
-        </div>
-        <div class="signup__fine">
-          <span class="dot"></span>
-          Private launch list. No newsletter. No selling your location data, ever.
-        </div>
-        <div class="signup__strip">
-          <span><strong>47</strong> joined</span>
-          <span><strong>4,953</strong> launch boxes left</span>
-        </div>
-      </form>
     </section>
 
-    <!-- ─── Pillars ─────────────────────────────────── -->
-    <section class="pillars" id="how">
+    <!-- ─── Promise band ────────────────────────────────── -->
+    <section class="promise">
+      <div>
+        <div class="promise__attr" style="margin-bottom:18px;">Peace in Motion&#8482;</div>
+        <div class="promise__quote">
+          When your flight changes,<br>
+          Gate IQ tells you exactly<br>
+          what to do next.
+        </div>
+      </div>
+      <div class="promise__num">8<small style="font-size:60px;letter-spacing:-0.02em;">min</small></div>
+    </section>
+
+    <!-- ─── User journey timeline ─────────────────────────── -->
+    <section class="timeline" id="how">
+      <div class="timeline__header">
+        <div class="timeline__eyebrow">How it works</div>
+        <h2 class="timeline__title">Your travel day,<br>end to end.</h2>
+      </div>
+
+      <div class="tl-steps">
+
+        <!-- Step 1 -->
+        <div class="tl-step" id="step-1">
+          <div class="tl-step__num">01</div>
+          <div class="tl-step__copy">
+            <div class="tl-step__tag">Setup · One time</div>
+            <h3 class="tl-step__title">Set up your traveler profile</h3>
+            <p class="tl-step__body">
+              Connect your airline status, TSA PreCheck or CLEAR, home airport, and card benefits.
+              Gate IQ learns who you are as a traveler — once, and it remembers.
+            </p>
+          </div>
+          <div class="tl-img-placeholder" aria-label="Mockup: Profile setup screen">
+            <div class="tl-img-placeholder__icon">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="16" cy="10" r="5"/>
+                <path d="M5 27c0-5 4.5-9 11-9s11 4 11 9"/>
+              </svg>
+            </div>
+            <div class="tl-img-placeholder__label">Profile screen mockup</div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="tl-step" id="step-2">
+          <div class="tl-step__num">02</div>
+          <div class="tl-step__copy">
+            <div class="tl-step__tag">Day of travel</div>
+            <h3 class="tl-step__title">Your smart airport timeline appears</h3>
+            <p class="tl-step__body">
+              When to leave home, when to clear security, safe windows for the lounge and food.
+              Every step is timed to your flight, your gate, and your status — not a generic traveler's.
+            </p>
+          </div>
+          <div class="tl-img-placeholder" aria-label="Mockup: Smart timeline screen">
+            <div class="tl-img-placeholder__icon">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="16" cy="16" r="11"/>
+                <path d="M16 9V17L21 19"/>
+              </svg>
+            </div>
+            <div class="tl-img-placeholder__label">Smart timeline mockup</div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="tl-step" id="step-3">
+          <div class="tl-step__num">03</div>
+          <div class="tl-step__copy">
+            <div class="tl-step__tag">Disruption hits</div>
+            <h3 class="tl-step__title">Gate IQ knows before you do</h3>
+            <p class="tl-step__body">
+              Flight cancelled, gate changed, bag delayed — an alert surfaces instantly.
+              No hunting through the airline app. No standing in line to find out what happened.
+            </p>
+          </div>
+          <div class="tl-img-placeholder" aria-label="Mockup: Disruption alert">
+            <div class="tl-img-placeholder__icon">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 4L3 26h26L16 4Z"/>
+                <path d="M16 14v6M16 23v1"/>
+              </svg>
+            </div>
+            <div class="tl-img-placeholder__label">Disruption alert mockup</div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="tl-step" id="step-4">
+          <div class="tl-step__num">04</div>
+          <div class="tl-step__copy">
+            <div class="tl-step__tag">Recovery options · Under 8 min</div>
+            <h3 class="tl-step__title">Three ranked options appear</h3>
+            <p class="tl-step__body">
+              Rebook on the next available flight, hold a hotel and take the morning departure,
+              or request a semi-private charter quote. All three ranked for your profile, the hour,
+              and what's actually available right now.
+            </p>
+          </div>
+          <div class="tl-img-placeholder" aria-label="Mockup: Recovery options screen">
+            <div class="tl-img-placeholder__icon">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 8h16M8 16h16M8 24h10"/>
+              </svg>
+            </div>
+            <div class="tl-img-placeholder__label">Recovery options mockup</div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="tl-step" id="step-5">
+          <div class="tl-step__num">05</div>
+          <div class="tl-step__copy">
+            <div class="tl-step__tag">One tap</div>
+            <h3 class="tl-step__title">Confirm. Gate IQ handles the rest.</h3>
+            <p class="tl-step__body">
+              Flight changed. Hotel held. Wake-up set for 5:45 AM.
+              Baggage claim drafted. Confirmation in your pocket in under four minutes.
+            </p>
+          </div>
+          <div class="tl-img-placeholder" aria-label="Mockup: Booking confirmation screen">
+            <div class="tl-img-placeholder__icon">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 16l7 7 13-13"/>
+              </svg>
+            </div>
+            <div class="tl-img-placeholder__label">Confirmation screen mockup</div>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="tl-step" id="step-6">
+          <div class="tl-step__num">06</div>
+          <div class="tl-step__copy">
+            <div class="tl-step__tag">Settled</div>
+            <h3 class="tl-step__title">Handled. While others wait in line.</h3>
+            <p class="tl-step__body">
+              You're in the hotel bar. Others are still at the gate agent counter.
+              This is what Gate IQ Black is for.
+            </p>
+          </div>
+          <div class="tl-img-placeholder" aria-label="Mockup: Settled state screen">
+            <div class="tl-img-placeholder__icon">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 3c1 0 1.5.7 1.5 1.5V12l11 4.5v2.2L17.5 17v5.2l2.5 2.3v1.7L16 25l-4 1.2v-1.7l2.5-2.3V17L3.5 18.7v-2.2L14.5 12V4.5C14.5 3.7 15 3 16 3Z"/>
+              </svg>
+            </div>
+            <div class="tl-img-placeholder__label">Settled confirmation mockup</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─── Pillars ─────────────────────────────────────── -->
+    <section class="pillars" id="features">
       <article class="pillar">
         <div class="pillar__icon">
-          <!-- Airplane -->
           <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 3c1 0 1.5.7 1.5 1.5V12l11 4.5v2.2L17.5 17v5.2l2.5 2.3v1.7L16 25l-4 1.2v-1.7l2.5-2.3V17L3.5 18.7v-2.2L14.5 12V4.5C14.5 3.7 15 3 16 3Z"/>
           </svg>
@@ -94,7 +293,6 @@
 
       <article class="pillar">
         <div class="pillar__icon">
-          <!-- Clock -->
           <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="16" cy="16" r="11"/>
             <path d="M16 9V17L21 19"/>
@@ -111,7 +309,6 @@
 
       <article class="pillar">
         <div class="pillar__icon">
-          <!-- Bag -->
           <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <rect x="6" y="10" width="20" height="14" rx="3"/>
             <path d="M11 10V7H21V10"/>
@@ -129,7 +326,6 @@
 
       <article class="pillar">
         <div class="pillar__icon">
-          <!-- Shield / identity -->
           <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 3L5 7v9c0 6 5 10 11 11 6-1 11-5 11-11V7L16 3Z"/>
           </svg>
@@ -145,7 +341,6 @@
 
       <article class="pillar">
         <div class="pillar__icon">
-          <!-- Private jet -->
           <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 20l5-5 3 1 8-8 2 2-8 8 1 3-5 5-1-3-3-1Z"/>
             <path d="M20 6l4 2-2 2"/>
@@ -163,7 +358,6 @@
 
       <article class="pillar">
         <div class="pillar__icon">
-          <!-- Marketplace / store -->
           <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 6h20l-2 8H8L6 6Z"/>
             <circle cx="11" cy="26" r="2"/>
@@ -181,7 +375,7 @@
       </article>
     </section>
 
-    <!-- ─── Concierge AI spotlight ───────────────────── -->
+    <!-- ─── Concierge AI spotlight ───────────────────────── -->
     <section class="concierge" id="concierge">
       <div class="concierge__copy">
         <div class="concierge__eyebrow">Concierge AI</div>
@@ -240,18 +434,6 @@
       </div>
     </section>
 
-    <!-- ─── Promise band ────────────────────────────── -->
-    <section class="promise">
-      <div>
-        <div class="promise__quote">
-          When your flight changes,<br>
-          Gate IQ tells you exactly<br>
-          what to do next.
-        </div>
-      </div>
-      <div class="promise__num">8<small style="font-size:60px;letter-spacing:-0.02em;">min</small></div>
-    </section>
-
     <!-- ─── Black membership ───────────────────────── -->
     <section class="black" id="black">
       <div>
@@ -259,7 +441,7 @@
           <span style="width:6px;height:6px;border-radius:999px;background:#B89968;"></span>
           Gate IQ Black
         </div>
-        <h2 class="black__title">A membership<br>for travelers<br>who can't afford<br>a bad day.</h2>
+        <h2 class="black__title">Peace in<br>Motion&#8482; —<br>for travelers<br>who can't afford<br>a bad day.</h2>
         <div class="black__price">$50<small>/month · annual coming soon</small></div>
         <ul class="black__list">
           <li>Smart Timeline — departure to gate, always accurate to your status.</li>
@@ -302,7 +484,42 @@
       </div>
     </section>
 
-    <!-- ─── Footer ──────────────────────────────────── -->
+    <!-- ─── Bottom signup CTA ────────────────────────────── -->
+    <section class="signup-bottom" id="signup">
+      <div class="signup-bottom__eyebrow">Private launch list</div>
+      <h2 class="signup-bottom__title">Join the first 5,000.<br>Receive the launch box.</h2>
+      <form id="waitlist-form" class="signup" onsubmit="submitInvite(event)">
+        <div class="signup__label">Request your invite</div>
+        <div class="signup__title">BNA founding member</div>
+        <div class="signup__fields">
+          <input class="signup__input" type="email" name="email" placeholder="you@youremail.com" required>
+          <div class="signup__row2">
+            <div class="airport-wrap">
+              <input class="signup__input signup__input--half" id="airport-input" type="text" name="homeAirport" placeholder="Home airport (BNA)" maxlength="4" autocomplete="off" spellcheck="false">
+              <div class="airport-dropdown" id="airport-dropdown" role="listbox" aria-label="Airport suggestions"></div>
+            </div>
+            <select class="signup__input signup__input--half signup__select" name="travelerType">
+              <option value="" disabled selected>Traveler type</option>
+              <option value="road_warrior">Road warrior</option>
+              <option value="premium_leisure">Premium leisure</option>
+              <option value="family">Family traveler</option>
+              <option value="corporate">Corporate</option>
+            </select>
+          </div>
+          <button class="signup__cta" type="submit">Request invite →</button>
+        </div>
+        <div class="signup__fine">
+          <span class="dot"></span>
+          Private launch list. No newsletter. No selling your location data, ever.
+        </div>
+        <div class="signup__strip">
+          <span><strong>47</strong> joined</span>
+          <span><strong>4,953</strong> launch boxes left</span>
+        </div>
+      </form>
+    </section>
+
+    <!-- ─── Footer ──────────────────────────────────────── -->
     <div id="site-footer"></div>
 
   </div><!-- /.site -->
@@ -325,13 +542,114 @@
   </div>
 
   <script>
-    // ── Waitlist endpoint ─────────────────────────────────────────────────
-    // Formspree: paste your 8-character form ID below (e.g. "xpwzabcd")
-    // Get it at formspree.io → New Form → copy the ID from the endpoint URL.
-    //
-    // Later, swap for your own API:
-    //   const WAITLIST_ENDPOINT = "https://api.gateiq.world/waitlist";
+    // ── Password gate ─────────────────────────────────────────────────────
+    (function initGate() {
+      var unlocked = sessionStorage.getItem("gateiq_unlocked");
+      if (unlocked === "1") {
+        document.getElementById("password-gate").classList.add("password-gate--hidden");
+        document.getElementById("site-content").style.display = "";
+      }
+      document.getElementById("gate-password").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") checkPassword();
+      });
+    })();
 
+    function checkPassword() {
+      var input = document.getElementById("gate-password").value;
+      var error = document.getElementById("gate-error");
+      if (input === "Nashville2026!") {
+        sessionStorage.setItem("gateiq_unlocked", "1");
+        document.getElementById("password-gate").classList.add("password-gate--hidden");
+        document.getElementById("site-content").style.display = "";
+        error.textContent = "";
+      } else {
+        error.textContent = "Incorrect access code.";
+        document.getElementById("gate-password").value = "";
+        document.getElementById("gate-password").focus();
+      }
+    }
+
+    // ── Side nav ─────────────────────────────────────────────────────────
+    (function initSideNav() {
+      var toggle   = document.getElementById("side-nav-toggle");
+      var nav      = document.getElementById("side-nav");
+      var overlay  = document.getElementById("side-nav-overlay");
+      var closeBtn = document.getElementById("side-nav-close");
+
+      function open() {
+        nav.classList.add("side-nav--open");
+        overlay.classList.add("side-nav-overlay--visible");
+        document.body.style.overflow = "hidden";
+      }
+      function close() {
+        nav.classList.remove("side-nav--open");
+        overlay.classList.remove("side-nav-overlay--visible");
+        document.body.style.overflow = "";
+      }
+
+      toggle.addEventListener("click", open);
+      closeBtn.addEventListener("click", close);
+      overlay.addEventListener("click", close);
+
+      // close on link click (mobile)
+      nav.querySelectorAll("a").forEach(function(a) {
+        a.addEventListener("click", function() {
+          if (window.innerWidth < 1100) close();
+        });
+      });
+
+      // show toggle only after password gate is cleared
+      function showToggle() {
+        if (window.innerWidth < 1100) toggle.style.display = "";
+      }
+
+      // observe password gate hiding
+      var observer = new MutationObserver(function() {
+        if (document.getElementById("password-gate").classList.contains("password-gate--hidden")) {
+          showToggle();
+        }
+      });
+      observer.observe(document.getElementById("password-gate"), { attributes: true });
+
+      // if already unlocked
+      if (sessionStorage.getItem("gateiq_unlocked") === "1") showToggle();
+
+      window.addEventListener("resize", function() {
+        if (window.innerWidth >= 1100) { close(); toggle.style.display = "none"; }
+        else if (sessionStorage.getItem("gateiq_unlocked") === "1") toggle.style.display = "";
+      });
+
+      // ── Scroll spy ───────────────────────────────────────────────────────
+      var targets = [
+        "step-1","step-2","step-3","step-4","step-5","step-6",
+        "features","concierge","black","pilot","signup"
+      ];
+
+      var stepLinks = nav.querySelectorAll(".side-nav__step");
+      var sectionLinks = nav.querySelectorAll(".side-nav__link");
+
+      function setActive(id) {
+        stepLinks.forEach(function(el) {
+          el.classList.toggle("side-nav__step--active", el.dataset.target === id);
+        });
+        sectionLinks.forEach(function(el) {
+          el.classList.toggle("side-nav__link--active", el.dataset.target === id);
+        });
+      }
+
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      }, { rootMargin: "-30% 0px -60% 0px", threshold: 0 });
+
+      targets.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) io.observe(el);
+      });
+    })();
+
+    // ── Waitlist endpoint ─────────────────────────────────────────────────
     const WAITLIST_ENDPOINT = "https://formspree.io/f/xojblngy";
 
     async function submitInvite(e) {
@@ -365,7 +683,7 @@
     // ── Airport autocomplete ───────────────────────────────────────────────
     var AIRPORTS = [
       "ATL — Atlanta Hartsfield-Jackson","LAX — Los Angeles International",
-      "ORD — Chicago O’Hare","DFW — Dallas/Fort Worth","DEN — Denver International",
+      "ORD — Chicago O'Hare","DFW — Dallas/Fort Worth","DEN — Denver International",
       "JFK — New York John F. Kennedy","SFO — San Francisco International",
       "SEA — Seattle-Tacoma","LAS — Las Vegas Harry Reid",
       "MCO — Orlando International","EWR — Newark Liberty",
@@ -435,18 +753,16 @@
       "ONT — Ontario International","PSP — Palm Springs International",
       "SBP — San Luis Obispo County","FAT — Fresno Yosemite",
       "BFL — Bakersfield Meadows Field","RNO — Reno-Tahoe International",
-      "LAS — Las Vegas Harry Reid","IDA — Idaho Falls Regional",
-      "TWF — Twin Falls Magic Valley","PIH — Pocatello Regional",
-      "GJT — Grand Junction Walker Field","DRO — Durango La Plata County",
-      "ASE — Aspen Pitkin County","EGE — Eagle Vail",
-      "HDN — Steamboat Springs Yampa Valley","MTJ — Montrose Regional",
-      "PUB — Pueblo Memorial","COS — Colorado Springs Municipal",
-      "FNL — Northern Colorado Regional","CPR — Casper Natrona County",
-      "RKS — Rock Springs Southwest Wyoming","LAR — Laramie Regional",
-      "SHR — Sheridan County","GCC — Gillette Campbell County",
-      "LNK — Lincoln Airport","GRI — Grand Island Central Nebraska",
-      "LBF — North Platte Lee Bird Field",
-      // International hubs
+      "IDA — Idaho Falls Regional","TWF — Twin Falls Magic Valley",
+      "PIH — Pocatello Regional","GJT — Grand Junction Walker Field",
+      "DRO — Durango La Plata County","ASE — Aspen Pitkin County",
+      "EGE — Eagle Vail","HDN — Steamboat Springs Yampa Valley",
+      "MTJ — Montrose Regional","PUB — Pueblo Memorial",
+      "COS — Colorado Springs Municipal","FNL — Northern Colorado Regional",
+      "CPR — Casper Natrona County","RKS — Rock Springs Southwest Wyoming",
+      "LAR — Laramie Regional","SHR — Sheridan County",
+      "GCC — Gillette Campbell County","LNK — Lincoln Airport",
+      "GRI — Grand Island Central Nebraska","LBF — North Platte Lee Bird Field",
       "LHR — London Heathrow","CDG — Paris Charles de Gaulle",
       "AMS — Amsterdam Schiphol","FRA — Frankfurt International",
       "DXB — Dubai International","SIN — Singapore Changi",
@@ -456,10 +772,9 @@
       "SYD — Sydney Kingsford Smith","MEL — Melbourne Tullamarine",
       "YYZ — Toronto Pearson","YVR — Vancouver International",
       "YUL — Montreal Pierre Elliott Trudeau","CUN — Cancun International",
-      "GDL — Guadalajara Miguel Hidalгo","MEX — Mexico City Benito Juarez",
-      "GRU — Sao Paulo Guarulhos","EZE — Buenos Aires Ezeiza",
-      "BOG — Bogota El Dorado","LIM — Lima Jorge Chavez",
-      "SCL — Santiago Arturo Merino Benitez"
+      "MEX — Mexico City Benito Juarez","GRU — Sao Paulo Guarulhos",
+      "EZE — Buenos Aires Ezeiza","BOG — Bogota El Dorado",
+      "LIM — Lima Jorge Chavez","SCL — Santiago Arturo Merino Benitez"
     ];
 
     (function initAirportAutocomplete() {
@@ -484,7 +799,7 @@
             '<span class="airport-option__code">' + code + '</span>' +
             '<span class="airport-option__name">' + name + '</span>';
           opt.addEventListener("mousedown", function(e) {
-            e.preventDefault(); // keep focus on input
+            e.preventDefault();
             select(code);
           });
           dropdown.appendChild(opt);
@@ -512,7 +827,6 @@
           const upper = a.toUpperCase();
           return upper.startsWith(q) || upper.split(" — ")[1].includes(q);
         });
-        // code-prefix matches first
         matches.sort(function(a, b) {
           const ac = a.split(" — ")[0].startsWith(q) ? 0 : 1;
           const bc = b.split(" — ")[0].startsWith(q) ? 0 : 1;
@@ -541,11 +855,10 @@
     })();
 
     // ── Cookie consent & analytics ────────────────────────────────────────
-    // Replace G-XXXXXXXXXX with your actual Google Analytics 4 Measurement ID.
     const GA_ID = "G-XXXXXXXXXX";
 
     function loadAnalytics() {
-      if (GA_ID === "G-XXXXXXXXXX") return; // placeholder — skip until real ID is set
+      if (GA_ID === "G-XXXXXXXXXX") return;
       var s = document.createElement("script");
       s.async = true;
       s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;

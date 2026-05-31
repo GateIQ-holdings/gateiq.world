@@ -3,7 +3,7 @@
   if (!el) return;
   el.innerHTML =
     '<div class="foot">' +
-      '<div>© 2026 Gate IQ · Nashville</div>' +
+      '<div>© 2026 Gate IQ &nbsp;·&nbsp; Peace in Motion&#8482; &nbsp;·&nbsp; Nashville</div>' +
       '<div style="display:flex;gap:24px;">' +
         '<a href="/privacy.html" class="foot__link">Privacy &amp; Terms</a>' +
         '<a href="/cookies.html" class="foot__link">Cookies</a>' +
