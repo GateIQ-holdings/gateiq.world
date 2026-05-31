@@ -576,15 +576,29 @@
       var overlay  = document.getElementById("side-nav-overlay");
       var closeBtn = document.getElementById("side-nav-close");
 
+      function isDesktop() { return window.innerWidth >= 1100; }
+
       function open() {
-        nav.classList.add("side-nav--open");
-        overlay.classList.add("side-nav-overlay--visible");
-        document.body.style.overflow = "hidden";
+        if (isDesktop()) {
+          nav.classList.remove("side-nav--collapsed");
+          document.body.classList.remove("nav-collapsed");
+          toggle.classList.remove("side-nav-toggle--show");
+        } else {
+          nav.classList.add("side-nav--open");
+          overlay.classList.add("side-nav-overlay--visible");
+          document.body.style.overflow = "hidden";
+        }
       }
       function close() {
-        nav.classList.remove("side-nav--open");
-        overlay.classList.remove("side-nav-overlay--visible");
-        document.body.style.overflow = "";
+        if (isDesktop()) {
+          nav.classList.add("side-nav--collapsed");
+          document.body.classList.add("nav-collapsed");
+          toggle.classList.add("side-nav-toggle--show");
+        } else {
+          nav.classList.remove("side-nav--open");
+          overlay.classList.remove("side-nav-overlay--visible");
+          document.body.style.overflow = "";
+        }
       }
 
       toggle.addEventListener("click", open);
@@ -615,8 +629,21 @@
       if (sessionStorage.getItem("gateiq_unlocked") === "1") showToggle();
 
       window.addEventListener("resize", function() {
-        if (window.innerWidth >= 1100) { close(); toggle.style.display = "none"; }
-        else if (sessionStorage.getItem("gateiq_unlocked") === "1") toggle.style.display = "";
+        if (isDesktop()) {
+          // restore desktop defaults if switching from mobile
+          overlay.classList.remove("side-nav-overlay--visible");
+          document.body.style.overflow = "";
+          if (!nav.classList.contains("side-nav--collapsed")) {
+            toggle.classList.remove("side-nav-toggle--show");
+          }
+        } else {
+          // switching to mobile: reset desktop state, show toggle if unlocked
+          nav.classList.remove("side-nav--collapsed");
+          document.body.classList.remove("nav-collapsed");
+          nav.classList.remove("side-nav--open");
+          toggle.classList.remove("side-nav-toggle--show");
+          if (sessionStorage.getItem("gateiq_unlocked") === "1") toggle.style.display = "";
+        }
       });
 
       // ── Scroll spy ───────────────────────────────────────────────────────

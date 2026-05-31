@@ -1091,16 +1091,24 @@ html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg-1); f
   color: var(--navy);
 }
 
-/* Desktop: always-visible sidebar */
+/* Desktop: always-visible sidebar, collapsible via X */
 @media (min-width: 1100px) {
   .side-nav-toggle { display: none; }
+  .side-nav-toggle--show { display: flex !important; }
   .side-nav-overlay { display: none; }
   .side-nav {
-    transform: none !important;
+    transform: translateX(0);
     width: 220px;
+  }
+  .side-nav--collapsed {
+    transform: translateX(-100%);
   }
   body {
     padding-left: 220px;
+    transition: padding-left 280ms cubic-bezier(0.32, 0, 0.15, 1);
+  }
+  body.nav-collapsed {
+    padding-left: 0;
   }
   .site {
     max-width: 1260px;
