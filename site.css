@@ -3,7 +3,32 @@
 @import url("colors_and_type.css");
 
 html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); font-family: var(--font-body); }
-[data-theme="dark"] body { background: #C4C8CE; }
+/* Dark mode: light grey body → dark text tokens */
+[data-theme="dark"] body {
+  background: #C4C8CE;
+  --fg-1: #15233F;
+  --fg-2: rgba(21, 35, 63, 0.66);
+  --fg-3: rgba(21, 35, 63, 0.42);
+  --hairline: rgba(21, 35, 63, 0.10);
+  --hairline-strong: rgba(21, 35, 63, 0.18);
+  --surface-1: #FFFFFF;
+  --surface-2: rgba(21, 35, 63, 0.06);
+}
+
+/* Side nav stays dark → restore light text */
+[data-theme="dark"] .side-nav {
+  --fg-1: #F2ECDD;
+  --fg-2: rgba(242, 236, 221, 0.66);
+  --fg-3: rgba(242, 236, 221, 0.42);
+  --hairline: rgba(242, 236, 221, 0.10);
+}
+
+/* Password gate stays dark → restore light text */
+[data-theme="dark"] .password-gate {
+  --fg-1: #F2ECDD;
+  --fg-2: rgba(242, 236, 221, 0.66);
+  --fg-3: rgba(242, 236, 221, 0.42);
+}
 * { box-sizing: border-box; }
 
 /* Side nav + password gate keep the warm beige (dark: dark canvas) */
