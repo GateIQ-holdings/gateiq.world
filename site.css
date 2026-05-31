@@ -563,8 +563,8 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(184,153,104,0.12);
-  color: var(--accent);
+  background: rgba(21,35,63,0.12);
+  color: var(--navy);
   border-radius: 999px;
   padding: 6px 12px;
   font-family: var(--font-mono);
@@ -589,7 +589,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   letter-spacing: -0.015em;
   margin-top: 14px;
 }
-.black__price small { color: rgba(242, 236, 221, 0.5); font-weight: 500; font-size: 14px; letter-spacing: 0; }
+.black__price small { color: var(--fg-on-grey-2); font-weight: 500; font-size: 14px; letter-spacing: 0; }
 .black__list {
   list-style: none;
   padding: 0;
