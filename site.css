@@ -836,6 +836,14 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   color: #F2ECDD;
   margin-bottom: 20px;
 }
+.pilot__airport {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(242, 236, 221, 0.55);
+  margin-bottom: 20px;
+}
 .pilot__body {
   font-family: var(--font-body);
   font-size: 17px;
