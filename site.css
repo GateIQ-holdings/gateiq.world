@@ -694,6 +694,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
 
 /* ── Footer ────────────────────────────────────────────── */
 #site-footer {
+  margin-left: -56px;
   margin-right: calc(-50vw + 50%);
   margin-top: 64px;
   margin-bottom: -80px;
@@ -891,6 +892,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   background-size: cover;
   background-position: center 40%;
   background-attachment: fixed;
+  margin-left: -56px;
   margin-right: calc(-50vw + 50%);
   margin-bottom: 96px;
   display: flex;
