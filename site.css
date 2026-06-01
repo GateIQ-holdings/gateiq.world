@@ -563,7 +563,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
 
 /* ── Promise band ──────────────────────────────────────── */
 .promise {
-  background: var(--accent);
+  background: var(--sky);
   color: var(--navy);
   border-radius: 36px;
   padding: 56px 56px 60px;
