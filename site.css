@@ -1281,7 +1281,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 20px rgba(184,153,104,0.3);
-  transition: background 160ms ease-out, box-shadow 160ms ease-out;
+  transition: background 160ms ease-out, box-shadow 160ms ease-out, color 160ms ease-out;
 }
 .theme-toggle:hover {
   background: var(--brass-light) !important;
@@ -1293,6 +1293,14 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
 .theme-toggle__icon {
   width: 20px;
   height: 20px;
+}
+
+html[data-theme="dark"] .theme-toggle {
+  color: #FFFFFF !important;
+}
+
+html[data-theme="light"] .theme-toggle {
+  color: var(--navy) !important;
 }
 
 /* Desktop: always-visible sidebar, collapsible via X */
