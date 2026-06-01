@@ -353,6 +353,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   line-height: 0.92;
   letter-spacing: -0.035em;
   color: var(--fg-1);
+  white-space: nowrap;
 }
 .hero__title .accent { color: var(--accent); }
 .hero__sub {
