@@ -2,6 +2,7 @@
    Light-first (paper canvas) with dark-grey dark-mode support. */
 @import url("colors_and_type.css");
 
+html { scroll-behavior: smooth; }
 html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); font-family: var(--font-body); }
 /* Dark mode: light grey body → dark text tokens */
 [data-theme="dark"] body {
@@ -23,12 +24,39 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   --hairline: rgba(242, 236, 221, 0.10);
 }
 
+/* Dark mode: button backgrounds stay dark and text stays light */
+[data-theme="dark"] .side-nav__link {
+  background: rgba(21,35,63,0.4);
+  color: var(--ivory);
+}
+
+[data-theme="dark"] .side-nav__link:hover {
+  background: rgba(21,35,63,0.6);
+  color: var(--ivory);
+}
+
+[data-theme="dark"] .side-nav__step-label {
+  color: var(--fg-2);
+}
+
+[data-theme="dark"] .side-nav__group-label {
+  color: var(--fg-3);
+}
+
 /* Password gate stays dark → restore light text */
 [data-theme="dark"] .password-gate {
   --fg-1: #F2ECDD;
   --fg-2: rgba(242, 236, 221, 0.66);
   --fg-3: rgba(242, 236, 221, 0.42);
 }
+
+/* Journey step number circles in dark mode */
+[data-theme="dark"] .side-nav__step-dot {
+  background: #8A8D92;
+  color: #F2ECDD;
+}
+
+
 * { box-sizing: border-box; }
 
 /* Side nav + password gate keep the warm beige (dark: dark canvas) */
@@ -1244,6 +1272,14 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   background: rgba(21,35,63,0.6);
   color: var(--ivory);
 }
+
+/* Light mode: lighter button backgrounds */
+.side-nav__link {
+  background: rgba(21,35,63,0.15);
+}
+.side-nav__link:hover {
+  background: rgba(21,35,63,0.25);
+}
 .side-nav__link--active {
   background: rgba(184,153,104,0.1);
   color: var(--accent);
@@ -1256,14 +1292,38 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   margin-top: 8px;
   justify-content: center;
   border-radius: 999px;
+  transition: all 160ms ease-out, box-shadow 160ms ease-out;
+  position: relative;
 }
 .side-nav__link--cta:hover {
   background: var(--navy-soft);
   color: var(--ivory);
 }
+.side-nav__link--cta:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.3);
+}
 .side-nav__link--cta.side-nav__link--active {
   background: var(--accent);
   color: var(--navy);
+}
+
+/* Light mode text colors for journey and explore menu */
+.side-nav__step-label {
+  color: #15233F;
+}
+
+.side-nav__group-label {
+  color: #15233F;
+}
+
+.side-nav__link {
+  color: #15233F;
+}
+
+/* Light mode: CTA button keeps light text */
+.side-nav__link--cta {
+  color: var(--ivory) !important;
 }
 
 .theme-toggle {
