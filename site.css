@@ -36,7 +36,6 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
 .password-gate { background: var(--bg); }
 
 .site {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 32px 56px 80px;
 }
@@ -694,10 +693,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
 
 /* ── Footer ────────────────────────────────────────────── */
 #site-footer {
-  margin-left: -56px;
-  margin-right: calc(-50vw + 50%);
-  margin-top: 64px;
-  margin-bottom: -80px;
+  margin: 64px -56px -80px;
   background: #0E1830;
 }
 .foot {
@@ -892,9 +888,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   background-size: cover;
   background-position: center 40%;
   background-attachment: fixed;
-  margin-left: -56px;
-  margin-right: calc(-50vw + 50%);
-  margin-bottom: 96px;
+  margin: 0 -56px 96px;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -1328,9 +1322,6 @@ html[data-theme="light"] .theme-toggle {
   }
   body.nav-collapsed {
     padding-left: 0;
-  }
-  .site {
-    max-width: 1260px;
   }
 }
 
