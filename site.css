@@ -2,7 +2,6 @@
    Light-first (paper canvas) with dark-grey dark-mode support. */
 @import url("colors_and_type.css");
 
-html { padding-bottom: 88px; }
 html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); font-family: var(--font-body); }
 /* Dark mode: light grey body → dark text tokens */
 [data-theme="dark"] body {
@@ -667,7 +666,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 40px 56px;
+  padding: 40px 56px 100px;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
