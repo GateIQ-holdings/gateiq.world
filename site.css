@@ -76,12 +76,30 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   gap: 10px;
   align-items: center;
 }
+.password-gate__input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.password-gate__eye {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fg-3);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 160ms ease-out;
+}
+.password-gate__eye:hover { color: var(--fg-1); }
 .password-gate__input {
   background: var(--surface-1);
   color: var(--fg-1);
   border: 1px solid var(--hairline);
   border-radius: 999px;
-  padding: 14px 20px;
+  padding: 14px 42px 14px 20px;
   font-family: var(--font-body);
   font-size: 15px;
   outline: none;
@@ -1026,7 +1044,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   height: 48px;
   border-radius: 50%;
   background: var(--navy);
-  color: var(--ivory);
+  color: var(--brass);
   border: none;
   cursor: pointer;
   display: flex;
@@ -1310,6 +1328,7 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
   .timeline__title { font-size: 32px; }
   .signup-bottom__title { font-size: 32px; }
   .password-gate__row { flex-direction: column; width: 100%; padding: 0 24px; }
+  .password-gate__input-wrap { width: 100%; }
   .password-gate__input { width: 100%; }
   .password-gate__btn { width: 100%; justify-content: center; }
 }
