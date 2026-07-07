@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Gate IQ · The premium airport command layer</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Gate IQ Black is the premium airport command layer. When travel gets complicated, Gate IQ tells you exactly what to do next.">
+  <link rel="stylesheet" href="site.css">
+  <script src="theme-toggle.js" defer></script>
+</head>
+<body>
+
+  <!-- ─── Side nav toggle ──────────────────────────────── -->
+  <button class="side-nav-toggle" id="side-nav-toggle" aria-label="Open navigation" style="display:none">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+
+  <!-- ─── Side nav overlay ───────────────────────────────── -->
+  <div class="side-nav-overlay" id="side-nav-overlay"></div>
+
+  <!-- ─── Side nav ──────────────────────────────────────── -->
+  <nav class="side-nav" id="side-nav" aria-label="Page navigation">
+    <div class="side-nav__header">
+      <button class="side-nav__close" id="side-nav-close" aria-label="Close navigation">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="side-nav__group">
+      <div class="side-nav__group-label">Your journey</div>
+      <div class="side-nav__track">
+        <a href="#step-1" class="side-nav__step" data-target="step-1">
+          <span class="side-nav__step-dot">01</span>
+          <span class="side-nav__step-label">Setup profile</span>
+        </a>
+        <a href="#step-2" class="side-nav__step" data-target="step-2">
+          <span class="side-nav__step-dot">02</span>
+          <span class="side-nav__step-label">Smart timeline</span>
+        </a>
+        <a href="#step-3" class="side-nav__step" data-target="step-3">
+          <span class="side-nav__step-dot">03</span>
+          <span class="side-nav__step-label">Disruption hits</span>
+        </a>
+        <a href="#step-4" class="side-nav__step" data-target="step-4">
+          <span class="side-nav__step-dot">04</span>
+          <span class="side-nav__step-label">Recovery options</span>
+        </a>
+        <a href="#step-5" class="side-nav__step" data-target="step-5">
+          <span class="side-nav__step-dot">05</span>
+          <span class="side-nav__step-label">One tap to act</span>
+        </a>
+        <a href="#step-6" class="side-nav__step" data-target="step-6">
+          <span class="side-nav__step-dot">06</span>
+          <span class="side-nav__step-label">Handled</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="side-nav__group">
+      <div class="side-nav__group-label">Explore</div>
+      <div class="side-nav__links">
+        <a href="#features" class="side-nav__link" data-target="features">Features</a>
+        <a href="#concierge" class="side-nav__link" data-target="concierge">AI Concierge</a>
+        <a href="#black" class="side-nav__link" data-target="black">Black membership</a>
+        <a href="#pilot" class="side-nav__link" data-target="pilot">Nashville pilot</a>
+        <a href="#signup" class="side-nav__link side-nav__link--cta" data-target="signup">Request invite →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ─── Password gate ─────────────────────────────────── -->
+  <div id="password-gate" class="password-gate">
+    <div>
+      <div class="password-gate__brand">
+        Gate<span class="iq">IQ</span><span class="dot"></span>
+      </div>
+    </div>
+    <div class="password-gate__label">Private preview · Enter access code</div>
+    <div class="password-gate__row">
+      <div class="password-gate__input-wrap">
+        <input
+          id="gate-password"
+          class="password-gate__input"
+          type="password"
+          placeholder="Access code"
+          autocomplete="off"
+        >
+        <button class="password-gate__eye" type="button" aria-label="Toggle visibility" onclick="(function(){var i=document.getElementById('gate-password');var b=document.querySelector('.password-gate__eye');i.type=i.type==='password'?'text':'password';b.innerHTML=i.type==='password'?'<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z\'/><circle cx=\'12\' cy=\'12\' r=\'3\'/></svg>':'<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24\'/><line x1=\'1\' y1=\'1\' x2=\'23\' y2=\'23\'/></svg>';})()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <button class="password-gate__btn" onclick="checkPassword()">Enter →</button>
+    </div>
+    <div class="password-gate__error" id="gate-error"></div>
+  </div>
+
+  <div class="site" id="site-content" style="display:none">
+
+    <!-- ─── Nav ─────────────────────────────────────────── -->
+    <nav class="site-nav">
+      <div class="site-nav__brand">
+        Gate<span class="iq">IQ</span><span class="dot"></span>
+      </div>
+      <a href="#signup" class="site-nav__cta">Request invite →</a>
+    </nav>
+
+    <!-- ─── Hero ──────────────────────────────────────────── -->
+    <section class="hero" id="hero">
+      <div>
+        <div class="hero__eyebrow">Private launch · Nashville pilot</div>
+        <h1 class="hero__title">
+          Peace in Motion&#8482;
+        </h1>
+        <p class="hero__sub">
+          Gate IQ Black is the premium airport command layer that tells you exactly what to do next
+          when your travel day changes. Cancellations, gate changes, lost bags, late-night recoveries
+          — handled before you open the app.
+        </p>
+      </div>
+    </section>
+
+    <!-- ─── Promise band ────────────────────────────────── -->
+    <section class="promise">
+      <div>
+        <div class="promise__quote">
+          When your flight changes,<br>
+          Gate IQ tells you exactly<br>
+          what to do next.
+        </div>
+      </div>
+      <div class="promise__num">8<small style="font-size:60px;letter-spacing:-0.02em;">min</small></div>
+    </section>
+
+    <!-- ─── User journey timeline ─────────────────────────── -->
+    <section class="timeline" id="how">
+      <div class="timeline__header">
+        <div class="timeline__eyebrow">How it works</div>
+        <h2 class="timeline__title">Your travel day, end to end.</h2>
+      </div>
+
+      <div class="tl-steps">
+
+        <!-- Step 1 -->
+        <div class="tl-step" id="step-1">
+          <div class="tl-step__num">01</div>
+          <div class="tl-step__copy">
+            <div class="tl-step__tag">Setup · One time</div>
+            <h3 class="tl-step__title">Set up your traveler profile</h3>
+            <p class="tl-step__body">
+              Connect your airline status, TSA PreCheck or CLEAR, home airport, and card benefits.
+              Gate IQ learns who you are as a traveler — once, and it remembers.
+            </p>
+          </div>
+          <div class="tl-img-placeholder" aria-label="Mockup: Profile setup screen">
+            <div class="tl-img-placeholder__icon">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="16" cy="10" r="5"/>
+                <path d="M5 27c0-5 4.5-9 11-9s11 4 11 9"/>
+              </svg>
+            </div>
+            <div class="tl-img-placeholder__label">Profile screen mockup</div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="tl-step" id="step-2">
+          <div class="tl-step__num">02</div>
+          <div class="tl-step__copy">
+            <div class="tl-step__tag">Day of travel</div>
+            <h3 class="tl-step__title">Your smart airport timeline appears</h3>
+            <p class="tl-step__body">
+              When to leave home, when to clear security, safe windows for the lounge and food.
+              Every step is timed to your flight, your gate, and your status — not a generic traveler's.
+            </p>
+          </div>
+          <div class="tl-img-placeholder" aria-label="Mockup: Smart timeline screen">
+            <div class="tl-img-placeholder__icon">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="16" cy="16" r="11"/>
+                <path d="M16 9V17L21 19"/>
+              </svg>
+            </div>
+            <div class="tl-img-placeholder__label">Smart timeline mockup</div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="tl-step" id="step-3">
+          <div class="tl-step__num">03</div>
+          <div class="tl-step__copy">
+            <div class="tl-step__tag">Disruption hits</div>
+            <h3 class="tl-step__title">Gate IQ knows before you do</h3>
+            <p class="tl-step__body">
+              Flight cancelled, gate changed, bag delayed — an alert surfaces instantly.
+              No hunting through the airline app. No standing in line to find out what happened.
+            </p>
+          </div>
+          <div class="tl-img-placeholder" aria-label="Mockup: Disruption alert">
+            <div class="tl-img-placeholder__icon">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 4L3 26h26L16 4Z"/>
+                <path d="M16 14v6M16 23v1"/>
+              </svg>
+            </div>
+            <div class="tl-img-placeholder__label">Disruption alert mockup</div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="tl-step" id="step-4">
+          <div class="tl-step__num">04</div>
+          <div class="tl-step__copy">
+            <div class="tl-step__tag">Recovery options · Under 8 min</div>
+            <h3 class="tl-step__title">Three ranked options appear</h3>
+            <p class="tl-step__body">
+              Rebook on the next available flight, hold a hotel and take the morning departure,
+              or request a semi-private charter quote. All three ranked for your profile, the hour,
+              and what's actually available right now.
+            </p>
+          </div>
+          <div class="tl-img-placeholder" aria-label="Mockup: Recovery options screen">
+            <div class="tl-img-placeholder__icon">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 8h16M8 16h16M8 24h10"/>
+              </svg>
+            </div>
+            <div class="tl-img-placeholder__label">Recovery options mockup</div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="tl-step" id="step-5">
+          <div class="tl-step__num">05</div>
+          <div class="tl-step__copy">
+            <div class="tl-step__tag">One tap</div>
+            <h3 class="tl-step__title">Confirm. Gate IQ handles the rest.</h3>
+            <p class="tl-step__body">
+              Flight changed. Hotel held. Wake-up set for 5:45 AM.
+              Baggage claim drafted. Confirmation in your pocket in under four minutes.
+            </p>
+          </div>
+          <div class="tl-img-placeholder" aria-label="Mockup: Booking confirmation screen">
+            <div class="tl-img-placeholder__icon">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 16l7 7 13-13"/>
+              </svg>
+            </div>
+            <div class="tl-img-placeholder__label">Confirmation screen mockup</div>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="tl-step" id="step-6">
+          <div class="tl-step__num">06</div>
+          <div class="tl-step__copy">
+            <div class="tl-step__tag">Settled</div>
+            <h3 class="tl-step__title">Handled. While others wait in line.</h3>
+            <p class="tl-step__body">
+              You're in the hotel bar. Others are still at the gate agent counter.
+              This is what Gate IQ Black is for.
+            </p>
+          </div>
+          <div class="tl-img-placeholder" aria-label="Mockup: Settled state screen">
+            <div class="tl-img-placeholder__icon">
+              <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 3c1 0 1.5.7 1.5 1.5V12l11 4.5v2.2L17.5 17v5.2l2.5 2.3v1.7L16 25l-4 1.2v-1.7l2.5-2.3V17L3.5 18.7v-2.2L14.5 12V4.5C14.5 3.7 15 3 16 3Z"/>
+              </svg>
+            </div>
+            <div class="tl-img-placeholder__label">Settled confirmation mockup</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─── Pillars ─────────────────────────────────────── -->
+    <section class="pillars" id="features">
+      <article class="pillar">
+        <div class="pillar__icon">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 3c1 0 1.5.7 1.5 1.5V12l11 4.5v2.2L17.5 17v5.2l2.5 2.3v1.7L16 25l-4 1.2v-1.7l2.5-2.3V17L3.5 18.7v-2.2L14.5 12V4.5C14.5 3.7 15 3 16 3Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="pillar__title">Smart Airport<br>Timeline</div>
+          <p class="pillar__body">
+            When to leave, when to clear security, when to walk. Boarding countdown,
+            gate change alerts, and safe windows for food and lounge — all timed to your flight.
+          </p>
+        </div>
+      </article>
+
+      <article class="pillar">
+        <div class="pillar__icon">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="16" cy="16" r="11"/>
+            <path d="M16 9V17L21 19"/>
+          </svg>
+        </div>
+        <div>
+          <div class="pillar__title">Disruption<br>Concierge</div>
+          <p class="pillar__body">
+            When your flight changes, three ranked recoveries appear in under eight minutes —
+            rebook, hotel hold plus morning flight, or private alternative. One tap to act.
+          </p>
+        </div>
+      </article>
+
+      <article class="pillar">
+        <div class="pillar__icon">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6" y="10" width="20" height="14" rx="3"/>
+            <path d="M11 10V7H21V10"/>
+            <circle cx="16" cy="17" r="2.5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="pillar__title">Baggage IQ</div>
+          <p class="pillar__body">
+            If a bag misses your flight, Gate IQ knows before you reach the carousel. The claim
+            is drafted, the next inbound flight is tracked, and courier delivery to your hotel is arranged.
+          </p>
+        </div>
+      </article>
+
+      <article class="pillar">
+        <div class="pillar__icon">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 3L5 7v9c0 6 5 10 11 11 6-1 11-5 11-11V7L16 3Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="pillar__title">Identity-Aware<br>Routing</div>
+          <p class="pillar__body">
+            TSA PreCheck, CLEAR, airline elite status, and lounge eligibility are built into every
+            recommendation. The timeline is yours — not a generic traveler's.
+          </p>
+        </div>
+      </article>
+
+      <article class="pillar">
+        <div class="pillar__icon">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 20l5-5 3 1 8-8 2 2-8 8 1 3-5 5-1-3-3-1Z"/>
+            <path d="M20 6l4 2-2 2"/>
+            <path d="M6 26l4-4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="pillar__title">Premium<br>Recovery</div>
+          <p class="pillar__body">
+            When commercial options are weak, Gate IQ surfaces semi-private and charter alternatives
+            through vetted partners. A quote arrives in minutes, with no automatic commitment.
+          </p>
+        </div>
+      </article>
+
+      <article class="pillar">
+        <div class="pillar__icon">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 6h20l-2 8H8L6 6Z"/>
+            <circle cx="11" cy="26" r="2"/>
+            <circle cx="21" cy="26" r="2"/>
+            <path d="M8 14v6h16v-6"/>
+          </svg>
+        </div>
+        <div>
+          <div class="pillar__title">Airport<br>Marketplace</div>
+          <p class="pillar__body">
+            Cafe pre-orders, lounge access, work pods, and gate-side delivery — filtered to what
+            makes sense for your time, gate, and party before you even think to look.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <!-- ─── Concierge AI spotlight ───────────────────────── -->
+    <section class="concierge" id="concierge">
+      <div class="concierge__copy">
+        <div class="concierge__eyebrow">Concierge AI</div>
+        <h2 class="concierge__title">Your trip context.<br>Not the internet.</h2>
+        <p class="concierge__body">
+          The Gate IQ concierge knows your flight, your status, your party, and your preferences.
+          When you ask a question, the answer is grounded in your actual travel day — not a
+          generic web search.
+        </p>
+        <ul class="concierge__list">
+          <li>Disruption options ranked by your profile and time of day</li>
+          <li>Lounge eligibility checked against your actual card and status</li>
+          <li>Connection risk scored against your specific itinerary</li>
+          <li>Baggage claims drafted with your flight and bag details pre-filled</li>
+        </ul>
+      </div>
+
+      <div class="concierge__chat">
+        <div class="chat__header">
+          <div class="chat__status-dot"></div>
+          <span>Gate IQ · Active</span>
+          <span class="chat__flight">WN 443 · BNA → ORD</span>
+        </div>
+
+        <div class="chat__log">
+          <div class="chat__event">
+            <span class="chat__event-label">9:47 PM · Flight alert</span>
+            <span>WN 443 cancelled. Next departure 7:12 AM.</span>
+          </div>
+
+          <div class="chat__bubble chat__bubble--ai">
+            Your flight has been cancelled. It is late and hotel inventory near BNA is tightening.
+            Three options, ranked for you:
+            <ol class="chat__options">
+              <li><strong>Rebook AA 2341</strong> — departs 7:12 AM, 4 seats in Main Cabin Extra.</li>
+              <li><strong>Hold at Marriott Courtyard BNA</strong> + rebook morning — 2 stops from your gate.</li>
+              <li><strong>Semi-private via Wheels Up</strong> — quote in 8 minutes, no commitment.</li>
+            </ol>
+            Option 2 recommended given the hour and your preference for direct flights.
+          </div>
+
+          <div class="chat__bubble chat__bubble--user">
+            Book the hotel and the morning flight.
+          </div>
+
+          <div class="chat__bubble chat__bubble--ai">
+            Holding room 412 at Marriott Courtyard BNA. Booking AA 2341 for 7:12 AM.
+            Confirmation and a 5:45 AM wake-up will follow.
+          </div>
+
+          <div class="chat__event">
+            <span class="chat__event-label">9:51 PM · Confirmed</span>
+            <span>Hotel held. AA 2341 booked. 4 minutes total.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Black membership ───────────────────────── -->
+    <section class="black" id="black">
+      <div>
+        <div class="black__tag">
+          <span style="width:6px;height:6px;border-radius:999px;background:#15233F;"></span>
+          Gate IQ Black
+        </div>
+        <h2 class="black__title">A membership<br>for travelers<br>who can't afford<br>a bad day.</h2>
+        <div class="black__price">$50<small>/month · annual coming soon</small></div>
+        <ul class="black__list">
+          <li>Smart Timeline — departure to gate, always accurate to your status.</li>
+          <li>Delay Mode — three ranked recoveries when the airline can't help.</li>
+          <li>Concierge AI — answers grounded in your trip, not the internet.</li>
+          <li>Baggage IQ — claims drafted and tracked before you reach the carousel.</li>
+          <li>Premium recovery — semi-private and charter alternatives, no commitment.</li>
+          <li>Family sharing and status-aware routing for everyone in your party.</li>
+          <li>First 5,000 members receive the limited launch box.</li>
+        </ul>
+      </div>
+
+      <div class="black__card" aria-label="Gate IQ Black card">
+        <div class="black__card-row">
+          <span>Gate IQ</span>
+          <span>Black</span>
+        </div>
+        <div class="black__card-chip"></div>
+        <div>
+          <div class="black__card-name">A. Patel</div>
+          <div class="black__card-row" style="margin-top:6px;">
+            <span>Member · 2026</span>
+            <span>BNA · Founding</span>
+          </div>
+        </div>
+        <div class="black__card-glyph">g</div>
+      </div>
+    </section>
+
+    <!-- ─── Nashville pilot band ─────────────────────── -->
+    <section class="pilot" id="pilot">
+      <div class="pilot__inner">
+        <div class="pilot__label">Phase 1 pilot market</div>
+        <div class="pilot__city">Nashville, Tennessee</div>
+        <div class="pilot__airport">Nashville International Airport (BNA)</div>
+        <p class="pilot__body">
+          Gate IQ launches at BNA. Nashville's passenger growth has outpaced its infrastructure —
+          making it the ideal proving ground for everything Gate IQ does best.
+          Founding members from BNA are first in line.
+        </p>
+      </div>
+    </section>
+
+    <!-- ─── Bottom signup CTA ────────────────────────────── -->
+    <section class="signup-bottom" id="signup">
+      <div class="signup-bottom__eyebrow">Private launch list</div>
+      <h2 class="signup-bottom__title">Join the first 5,000.<br>Receive the launch box.</h2>
+      <form id="waitlist-form" class="signup" onsubmit="submitInvite(event)">
+        <div class="signup__label">Request your invite</div>
+        <div class="signup__title">BNA founding member</div>
+        <div class="signup__fields">
+          <input class="signup__input" type="email" name="email" placeholder="you@youremail.com" required>
+          <div class="signup__row2">
+            <div class="airport-wrap">
+              <input class="signup__input signup__input--half" id="airport-input" type="text" name="homeAirport" placeholder="Home airport (BNA)" maxlength="4" autocomplete="off" spellcheck="false">
+              <div class="airport-dropdown" id="airport-dropdown" role="listbox" aria-label="Airport suggestions"></div>
+            </div>
+            <select class="signup__input signup__input--half signup__select" name="travelerType">
+              <option value="" disabled selected>Traveler type</option>
+              <option value="road_warrior">Road warrior</option>
+              <option value="premium_leisure">Premium leisure</option>
+              <option value="family">Family traveler</option>
+              <option value="corporate">Corporate</option>
+            </select>
+          </div>
+          <button class="signup__cta" type="submit">Request invite →</button>
+        </div>
+        <div class="signup__fine">
+          <span class="dot"></span>
+          Private launch list. No newsletter. No selling your location data, ever.
+        </div>
+        <div class="signup__strip">
+          <span><strong>47</strong> joined</span>
+          <span><strong>4,953</strong> launch boxes left</span>
+        </div>
+      </form>
+    </section>
+
+    <!-- ─── Footer ──────────────────────────────────────── -->
+    <div id="site-footer"></div>
+
+  </div><!-- /.site -->
+
+  <script src="footer.js"></script>
+
+  <!-- ─── Cookie consent banner ────────────────────────── -->
+  <div id="cookie-banner" class="cookie-banner" role="dialog" aria-label="Cookie consent" aria-live="polite">
+    <div class="cookie-banner__inner">
+      <div class="cookie-banner__text">
+        <span class="cookie-banner__label">Cookie Notice</span>
+        We use analytics cookies to understand how visitors find Gate IQ and improve the experience.
+        <a href="cookies.html" class="cookie-banner__policy">Learn more →</a>
+      </div>
+      <div class="cookie-banner__actions">
+        <button class="cookie-banner__btn cookie-banner__btn--decline" onclick="cookieChoice('decline')">Decline</button>
+        <button class="cookie-banner__btn cookie-banner__btn--accept" onclick="cookieChoice('accept')">Accept cookies</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── Password gate ─────────────────────────────────────────────────────
+    (function initGate() {
+      var unlocked = sessionStorage.getItem("gateiq_unlocked");
+      if (unlocked === "1") {
+        document.getElementById("password-gate").classList.add("password-gate--hidden");
+        document.getElementById("site-content").style.display = "";
+      }
+      document.getElementById("gate-password").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") checkPassword();
+      });
+    })();
+
+    function checkPassword() {
+      var input = document.getElementById("gate-password").value;
+      var error = document.getElementById("gate-error");
+      if (input === "Nashville2026!") {
+        sessionStorage.setItem("gateiq_unlocked", "1");
+        document.getElementById("password-gate").classList.add("password-gate--hidden");
+        document.getElementById("site-content").style.display = "";
+        error.textContent = "";
+      } else {
+        error.textContent = "Incorrect access code.";
+        document.getElementById("gate-password").value = "";
+        document.getElementById("gate-password").focus();
+      }
+    }
+
+    // ── Side nav ─────────────────────────────────────────────────────────
+    (function initSideNav() {
+      var toggle   = document.getElementById("side-nav-toggle");
+      var nav      = document.getElementById("side-nav");
+      var overlay  = document.getElementById("side-nav-overlay");
+      var closeBtn = document.getElementById("side-nav-close");
+
+      function isDesktop() { return window.innerWidth >= 1100; }
+
+      function open() {
+        if (isDesktop()) {
+          nav.classList.remove("side-nav--collapsed");
+          document.body.classList.remove("nav-collapsed");
+          toggle.classList.remove("side-nav-toggle--show");
+        } else {
+          nav.classList.add("side-nav--open");
+          overlay.classList.add("side-nav-overlay--visible");
+          document.body.style.overflow = "hidden";
+        }
+      }
+      function close() {
+        if (isDesktop()) {
+          nav.classList.add("side-nav--collapsed");
+          document.body.classList.add("nav-collapsed");
+          toggle.classList.add("side-nav-toggle--show");
+        } else {
+          nav.classList.remove("side-nav--open");
+          overlay.classList.remove("side-nav-overlay--visible");
+          document.body.style.overflow = "";
+        }
+      }
+
+      toggle.addEventListener("click", open);
+      closeBtn.addEventListener("click", close);
+      overlay.addEventListener("click", close);
+
+      // close on link click (mobile)
+      nav.querySelectorAll("a").forEach(function(a) {
+        a.addEventListener("click", function() {
+          if (window.innerWidth < 1100) close();
+        });
+      });
+
+      // show toggle only after password gate is cleared
+      function showToggle() {
+        if (window.innerWidth < 1100) toggle.style.display = "";
+      }
+
+      // observe password gate hiding
+      var observer = new MutationObserver(function() {
+        if (document.getElementById("password-gate").classList.contains("password-gate--hidden")) {
+          showToggle();
+        }
+      });
+      observer.observe(document.getElementById("password-gate"), { attributes: true });
+
+      // if already unlocked
+      if (sessionStorage.getItem("gateiq_unlocked") === "1") showToggle();
+
+      window.addEventListener("resize", function() {
+        if (isDesktop()) {
+          // restore desktop defaults if switching from mobile
+          overlay.classList.remove("side-nav-overlay--visible");
+          document.body.style.overflow = "";
+          if (!nav.classList.contains("side-nav--collapsed")) {
+            toggle.classList.remove("side-nav-toggle--show");
+          }
+        } else {
+          // switching to mobile: reset desktop state, show toggle if unlocked
+          nav.classList.remove("side-nav--collapsed");
+          document.body.classList.remove("nav-collapsed");
+          nav.classList.remove("side-nav--open");
+          toggle.classList.remove("side-nav-toggle--show");
+          if (sessionStorage.getItem("gateiq_unlocked") === "1") toggle.style.display = "";
+        }
+      });
+
+      // ── Scroll spy ───────────────────────────────────────────────────────
+      var targets = [
+        "step-1","step-2","step-3","step-4","step-5","step-6",
+        "features","concierge","black","pilot","signup"
+      ];
+
+      var stepLinks = nav.querySelectorAll(".side-nav__step");
+      var sectionLinks = nav.querySelectorAll(".side-nav__link");
+
+      function setActive(id) {
+        stepLinks.forEach(function(el) {
+          el.classList.toggle("side-nav__step--active", el.dataset.target === id);
+        });
+        sectionLinks.forEach(function(el) {
+          el.classList.toggle("side-nav__link--active", el.dataset.target === id);
+        });
+      }
+
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      }, { rootMargin: "-30% 0px -60% 0px", threshold: 0 });
+
+      targets.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) io.observe(el);
+      });
+    })();
+
+    // ── Waitlist endpoint ─────────────────────────────────────────────────
+    const WAITLIST_ENDPOINT = "https://formspree.io/f/xojblngy";
+
+    async function submitInvite(e) {
+      e.preventDefault();
+      const form = e.target;
+      const btn  = form.querySelector(".signup__cta");
+      const data = {
+        email:        form.querySelector('[name="email"]').value,
+        homeAirport:  form.querySelector('[name="homeAirport"]').value,
+        travelerType: form.querySelector('[name="travelerType"]').value,
+      };
+
+      btn.textContent = "Sending…";
+      btn.disabled = true;
+
+      try {
+        await fetch(WAITLIST_ENDPOINT, {
+          method: "POST",
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+      } catch (_) { /* fail silently — confirmation shows regardless */ }
+
+      btn.textContent = "On the list";
+      btn.style.background = "#B89968";
+      btn.style.color = "#15233F";
+      form.querySelector(".signup__strip").innerHTML =
+        "<span><strong>You're on the list.</strong> Launch box reserved.</span><span>BNA pilot</span>";
+    }
+
+    // ── Airport autocomplete ───────────────────────────────────────────────
+    var AIRPORTS = [
+      "ATL — Atlanta Hartsfield-Jackson","LAX — Los Angeles International",
+      "ORD — Chicago O'Hare","DFW — Dallas/Fort Worth","DEN — Denver International",
+      "JFK — New York John F. Kennedy","SFO — San Francisco International",
+      "SEA — Seattle-Tacoma","LAS — Las Vegas Harry Reid",
+      "MCO — Orlando International","EWR — Newark Liberty",
+      "CLT — Charlotte Douglas","PHX — Phoenix Sky Harbor",
+      "MIA — Miami International","IAH — Houston George Bush",
+      "BOS — Boston Logan","MSP — Minneapolis-Saint Paul",
+      "DTW — Detroit Metropolitan","FLL — Fort Lauderdale-Hollywood",
+      "PHL — Philadelphia International","LGA — New York LaGuardia",
+      "BWI — Baltimore/Washington","SLC — Salt Lake City",
+      "DCA — Washington Reagan","IAD — Washington Dulles",
+      "MDW — Chicago Midway","HNL — Honolulu Daniel K. Inouye",
+      "SAN — San Diego International","TPA — Tampa International",
+      "PDX — Portland International","STL — St. Louis Lambert",
+      "BNA — Nashville International","AUS — Austin-Bergstrom",
+      "MCI — Kansas City International","RDU — Raleigh-Durham",
+      "OAK — Oakland International","MSY — New Orleans Louis Armstrong",
+      "SJC — San Jose Mineta","SMF — Sacramento International",
+      "RSW — Fort Myers Southwest Florida","BDL — Hartford Bradley",
+      "PIT — Pittsburgh International","MKE — Milwaukee Mitchell",
+      "BUF — Buffalo Niagara","OMA — Omaha Eppley",
+      "CLE — Cleveland Hopkins","CMH — Columbus John Glenn",
+      "IND — Indianapolis International","JAX — Jacksonville International",
+      "SAT — San Antonio International","ABQ — Albuquerque International",
+      "OKC — Oklahoma City Will Rogers","TUL — Tulsa International",
+      "LIT — Little Rock Clinton","MEM — Memphis International",
+      "BHM — Birmingham-Shuttlesworth","GSP — Greenville-Spartanburg",
+      "CHS — Charleston International","SAV — Savannah/Hilton Head",
+      "ROC — Rochester Greater","SYR — Syracuse Hancock",
+      "ALB — Albany International","RIC — Richmond International",
+      "ORF — Norfolk International","GSO — Greensboro Piedmont Triad",
+      "DAY — Dayton International","GRR — Grand Rapids Gerald R. Ford",
+      "DSM — Des Moines International","OGG — Maui Kahului",
+      "KOA — Kona International","LIH — Kauai Lihue",
+      "ANC — Anchorage Ted Stevens","FAI — Fairbanks International",
+      "BOI — Boise Airport","GEG — Spokane International",
+      "BZN — Bozeman Yellowstone","MSO — Missoula Montana",
+      "SBN — South Bend International","TYS — Knoxville McGhee Tyson",
+      "CHA — Chattanooga Metropolitan","HSV — Huntsville International",
+      "MOB — Mobile Regional","PNS — Pensacola International",
+      "VPS — Destin-Fort Walton Beach","TLH — Tallahassee International",
+      "SRQ — Sarasota Bradenton","PIE — St. Pete-Clearwater",
+      "DAB — Daytona Beach International","MLB — Melbourne Orlando",
+      "PBI — Palm Beach International","EYW — Key West International",
+      "LBB — Lubbock Preston Smith","MAF — Midland International",
+      "ELP — El Paso International","HOU — Houston Hobby",
+      "CRP — Corpus Christi International","MFE — McAllen Miller",
+      "XNA — Fayetteville/Springdale Northwest Arkansas",
+      "TXK — Texarkana Regional","SHV — Shreveport Regional",
+      "BTR — Baton Rouge Metropolitan","LFT — Lafayette Regional",
+      "GPT — Gulfport-Biloxi","JAN — Jackson Medgar Wiley Evers",
+      "FSD — Sioux Falls Regional","RAP — Rapid City Regional",
+      "BIS — Bismarck Municipal","FAR — Fargo Hector",
+      "GFK — Grand Forks International","MSN — Madison Dane County",
+      "ATW — Appleton International","LSE — La Crosse Regional",
+      "DBQ — Dubuque Regional","CID — Cedar Rapids Eastern Iowa",
+      "MLI — Moline Quad City","BMI — Bloomington-Normal",
+      "SPI — Springfield Abraham Lincoln","MHK — Manhattan Regional",
+      "ICT — Wichita Dwight D. Eisenhower","TUS — Tucson International",
+      "PHF — Newport News/Williamsburg","CHO — Charlottesville Albemarle",
+      "ROA — Roanoke-Blacksburg Regional","HTS — Huntington Tri-State",
+      "CRW — Charleston Yeager","BLI — Bellingham International",
+      "PSC — Pasco Tri-Cities","YKM — Yakima Air Terminal",
+      "RDM — Redmond Roberts Field","EUG — Eugene Airport",
+      "MFR — Medford Rogue Valley","STS — Santa Rosa Sonoma County",
+      "SBA — Santa Barbara Municipal","SNA — Orange County John Wayne",
+      "BUR — Burbank Bob Hope","LGB — Long Beach Daugherty Field",
+      "ONT — Ontario International","PSP — Palm Springs International",
+      "SBP — San Luis Obispo County","FAT — Fresno Yosemite",
+      "BFL — Bakersfield Meadows Field","RNO — Reno-Tahoe International",
+      "IDA — Idaho Falls Regional","TWF — Twin Falls Magic Valley",
+      "PIH — Pocatello Regional","GJT — Grand Junction Walker Field",
+      "DRO — Durango La Plata County","ASE — Aspen Pitkin County",
+      "EGE — Eagle Vail","HDN — Steamboat Springs Yampa Valley",
+      "MTJ — Montrose Regional","PUB — Pueblo Memorial",
+      "COS — Colorado Springs Municipal","FNL — Northern Colorado Regional",
+      "CPR — Casper Natrona County","RKS — Rock Springs Southwest Wyoming",
+      "LAR — Laramie Regional","SHR — Sheridan County",
+      "GCC — Gillette Campbell County","LNK — Lincoln Airport",
+      "GRI — Grand Island Central Nebraska","LBF — North Platte Lee Bird Field",
+      "LHR — London Heathrow","CDG — Paris Charles de Gaulle",
+      "AMS — Amsterdam Schiphol","FRA — Frankfurt International",
+      "DXB — Dubai International","SIN — Singapore Changi",
+      "HND — Tokyo Haneda","NRT — Tokyo Narita",
+      "ICN — Seoul Incheon","PEK — Beijing Capital",
+      "PVG — Shanghai Pudong","HKG — Hong Kong International",
+      "SYD — Sydney Kingsford Smith","MEL — Melbourne Tullamarine",
+      "YYZ — Toronto Pearson","YVR — Vancouver International",
+      "YUL — Montreal Pierre Elliott Trudeau","CUN — Cancun International",
+      "MEX — Mexico City Benito Juarez","GRU — Sao Paulo Guarulhos",
+      "EZE — Buenos Aires Ezeiza","BOG — Bogota El Dorado",
+      "LIM — Lima Jorge Chavez","SCL — Santiago Arturo Merino Benitez"
+    ];
+
+    (function initAirportAutocomplete() {
+      const input    = document.getElementById("airport-input");
+      const dropdown = document.getElementById("airport-dropdown");
+      if (!input || !dropdown) return;
+
+      let activeIdx = -1;
+
+      function show(items) {
+        dropdown.innerHTML = "";
+        activeIdx = -1;
+        if (!items.length) { dropdown.classList.remove("airport-dropdown--open"); return; }
+        items.slice(0, 8).forEach(function(a, i) {
+          const code = a.split(" — ")[0];
+          const name = a.split(" — ")[1];
+          const opt  = document.createElement("div");
+          opt.className = "airport-option";
+          opt.setAttribute("role", "option");
+          opt.dataset.idx = i;
+          opt.innerHTML =
+            '<span class="airport-option__code">' + code + '</span>' +
+            '<span class="airport-option__name">' + name + '</span>';
+          opt.addEventListener("mousedown", function(e) {
+            e.preventDefault();
+            select(code);
+          });
+          dropdown.appendChild(opt);
+        });
+        dropdown.classList.add("airport-dropdown--open");
+      }
+
+      function select(code) {
+        input.value = code;
+        dropdown.classList.remove("airport-dropdown--open");
+        activeIdx = -1;
+      }
+
+      function setActive(idx) {
+        const opts = dropdown.querySelectorAll(".airport-option");
+        opts.forEach(function(o) { o.classList.remove("airport-option--active"); });
+        activeIdx = Math.max(-1, Math.min(opts.length - 1, idx));
+        if (activeIdx >= 0) opts[activeIdx].classList.add("airport-option--active");
+      }
+
+      input.addEventListener("input", function() {
+        const q = input.value.trim().toUpperCase();
+        if (!q) { dropdown.classList.remove("airport-dropdown--open"); return; }
+        const matches = AIRPORTS.filter(function(a) {
+          const upper = a.toUpperCase();
+          return upper.startsWith(q) || upper.split(" — ")[1].includes(q);
+        });
+        matches.sort(function(a, b) {
+          const ac = a.split(" — ")[0].startsWith(q) ? 0 : 1;
+          const bc = b.split(" — ")[0].startsWith(q) ? 0 : 1;
+          return ac - bc;
+        });
+        show(matches);
+      });
+
+      input.addEventListener("keydown", function(e) {
+        const opts = dropdown.querySelectorAll(".airport-option");
+        if (!dropdown.classList.contains("airport-dropdown--open")) return;
+        if (e.key === "ArrowDown")  { e.preventDefault(); setActive(activeIdx + 1); }
+        else if (e.key === "ArrowUp")   { e.preventDefault(); setActive(activeIdx - 1); }
+        else if (e.key === "Enter" && activeIdx >= 0) {
+          e.preventDefault();
+          select(opts[activeIdx].querySelector(".airport-option__code").textContent);
+        }
+        else if (e.key === "Escape") { dropdown.classList.remove("airport-dropdown--open"); }
+      });
+
+      document.addEventListener("click", function(e) {
+        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.remove("airport-dropdown--open");
+        }
+      });
+    })();
+
+    // ── Cookie consent & analytics ────────────────────────────────────────
+    const GA_ID = "G-XXXXXXXXXX";
+
+    function loadAnalytics() {
+      if (GA_ID === "G-XXXXXXXXXX") return;
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag("js", new Date());
+      gtag("config", GA_ID, { anonymize_ip: true });
+    }
+
+    function cookieChoice(choice) {
+      localStorage.setItem("gateiq_cookie_consent", choice);
+      var banner = document.getElementById("cookie-banner");
+      banner.classList.add("cookie-banner--dismissed");
+      if (choice === "accept") loadAnalytics();
+    }
+
+    (function initConsent() {
+      var stored = localStorage.getItem("gateiq_cookie_consent");
+      var banner = document.getElementById("cookie-banner");
+      if (stored === "accept") { loadAnalytics(); }
+      if (stored) { banner.classList.add("cookie-banner--hidden"); }
+      else { banner.classList.add("cookie-banner--visible"); }
+    })();
+  </script>
+</body>
+</html>
