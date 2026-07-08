@@ -496,14 +496,16 @@
         <div class="signup__label">Request your invite</div>
         <div class="signup__title">BNA founding member</div>
         <div class="signup__fields">
-          <input class="signup__input" type="email" name="email" placeholder="you@youremail.com" required>
+          <input class="signup__input" type="text" name="name" placeholder="Full name" required autocomplete="name">
+          <input class="signup__input" type="email" name="email" placeholder="you@youremail.com" required autocomplete="email">
+          <input class="signup__input" type="tel" name="phone" placeholder="Phone number" required autocomplete="tel">
           <div class="signup__row2">
             <div class="airport-wrap">
-              <input class="signup__input signup__input--half" id="airport-input" type="text" name="homeAirport" placeholder="Home airport (BNA)" maxlength="4" autocomplete="off" spellcheck="false">
+              <input class="signup__input signup__input--half" id="airport-input" type="text" name="homeAirport" placeholder="Home airport (optional)" maxlength="4" autocomplete="off" spellcheck="false">
               <div class="airport-dropdown" id="airport-dropdown" role="listbox" aria-label="Airport suggestions"></div>
             </div>
-            <select class="signup__input signup__input--half signup__select" name="travelerType">
-              <option value="" disabled selected>Traveler type</option>
+            <select class="signup__input signup__input--half signup__select" name="travelerType" aria-label="Traveler type (optional)">
+              <option value="" selected>Traveler type (optional)</option>
               <option value="road_warrior">Road warrior</option>
               <option value="premium_leisure">Premium leisure</option>
               <option value="family">Family traveler</option>
@@ -688,7 +690,9 @@
       const form = e.target;
       const btn  = form.querySelector(".signup__cta");
       const data = {
+        name:         form.querySelector('[name="name"]').value,
         email:        form.querySelector('[name="email"]').value,
+        phone:        form.querySelector('[name="phone"]').value,
         homeAirport:  form.querySelector('[name="homeAirport"]').value,
         travelerType: form.querySelector('[name="travelerType"]').value,
       };

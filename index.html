@@ -206,14 +206,16 @@
           <div class="signup-card__label">Founding list · No card required</div>
           <h3 class="signup-card__title" id="signup-title">Reserve your spot.<br>Take back your travel days.</h3>
           <div class="signup__fields">
+            <input class="signup__input" type="text" name="name" placeholder="Full name" required autocomplete="name">
             <input class="signup__input" type="email" name="email" placeholder="you@youremail.com" required autocomplete="email">
+            <input class="signup__input" type="tel" name="phone" placeholder="Phone number" required autocomplete="tel">
             <div class="signup__row2">
               <div class="airport-wrap">
-                <input class="signup__input" id="airport-input" type="text" name="homeAirport" placeholder="Home airport (BNA)" maxlength="4" autocomplete="off" spellcheck="false">
+                <input class="signup__input" id="airport-input" type="text" name="homeAirport" placeholder="Home airport (optional)" maxlength="4" autocomplete="off" spellcheck="false">
                 <div class="airport-dropdown" id="airport-dropdown" role="listbox" aria-label="Airport suggestions"></div>
               </div>
-              <select class="signup__input signup__select" name="travelerType" aria-label="Traveler type">
-                <option value="" disabled selected>Traveler type</option>
+              <select class="signup__input signup__select" name="travelerType" aria-label="Traveler type (optional)">
+                <option value="" selected>Traveler type (optional)</option>
                 <option value="premium_leisure">Vacation traveler</option>
                 <option value="family">Family traveler</option>
                 <option value="road_warrior">Road warrior</option>
@@ -555,7 +557,9 @@
     var form = e.target;
     var btn  = form.querySelector(".signup__cta");
     var data = {
+      name:         form.querySelector('[name="name"]').value,
       email:        form.querySelector('[name="email"]').value,
+      phone:        form.querySelector('[name="phone"]').value,
       homeAirport:  form.querySelector('[name="homeAirport"]').value,
       travelerType: form.querySelector('[name="travelerType"]').value,
       source:       "prelaunch"
@@ -574,9 +578,9 @@
 
     if (window.__gateiqCounter) window.__gateiqCounter.decrement();
     btn.textContent = "Founding spot reserved ✓";
-    document.getElementById("signup-title").innerHTML = "You're in.<br>Watch your inbox.";
+    document.getElementById("signup-title").innerHTML = "You're in.<br>Spot reserved.";
     document.getElementById("signup-fine").innerHTML =
-      '<span class="dot"></span><span>Your numbered launch box is reserved. We\'ll be in touch before the BNA pilot opens.</span>';
+      '<span class="dot"></span><span>Your numbered launch box is held. We\'ll reach out before the BNA pilot opens.</span>';
   }
   document.getElementById("waitlist-form").addEventListener("submit", submitInvite);
 
