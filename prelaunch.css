@@ -310,8 +310,8 @@ html, body {
 .manifesto__grid {
   margin-top: 72px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px 48px;
   border-top: 1px solid rgba(242, 236, 221, 0.14);
   padding-top: 48px;
 }
