@@ -8,7 +8,8 @@
   <meta property="og:title" content="Gate IQ · The airport bends to you">
   <meta property="og:description" content="More vacation. Less airport. Meet Glide, your personal AI travel agent. Founding list now open — first 5,000 only.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="prelaunch.css">
+  <link rel="stylesheet" href="prelaunch.css?v=10">
+  <script src="site-gate.js"></script>
   <script src="theme-toggle.js" defer></script>
 </head>
 <body>
@@ -29,18 +30,30 @@
     <div class="hero__glow" aria-hidden="true"></div>
 
     <svg class="hero__path hero__path--desktop" viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <path class="draw" d="M -60 600 C 240 530, 480 450, 760 340 C 900 280, 1040 230, 1180 188"/>
-      <g transform="translate(1180 188) rotate(10)">
-        <g class="plane" transform="scale(0.7) translate(-12 -12)">
+      <defs>
+        <mask id="hero-path-mask-desktop" maskUnits="userSpaceOnUse">
+          <rect width="1440" height="700" fill="black"/>
+          <path data-path-mask fill="none" stroke="white" stroke-width="44" stroke-linecap="butt" stroke-dasharray="0 9999" d="M -60 600 C 240 530, 480 450, 760 340 C 900 280, 1040 230, 1180 188"/>
+        </mask>
+      </defs>
+      <path class="draw draw--trail" data-path-trail mask="url(#hero-path-mask-desktop)" d="M -60 600 C 240 530, 480 450, 760 340 C 900 280, 1040 230, 1180 188"/>
+      <g class="plane-track" data-plane-track>
+        <g class="plane plane--desktop" data-plane transform="scale(0.7)">
           <path class="plane__body" d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
         </g>
       </g>
     </svg>
 
     <svg class="hero__path hero__path--mobile" viewBox="0 0 390 780" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <path class="draw" d="M -40 640 C 70 560, 150 460, 230 360 C 280 300, 320 250, 362 208"/>
-      <g transform="translate(362 208) rotate(10)">
-        <g class="plane" transform="scale(0.62) translate(-12 -12)">
+      <defs>
+        <mask id="hero-path-mask-mobile" maskUnits="userSpaceOnUse">
+          <rect width="390" height="780" fill="black"/>
+          <path data-path-mask fill="none" stroke="white" stroke-width="48" stroke-linecap="butt" stroke-dasharray="0 9999" d="M -40 640 C 70 560, 150 460, 230 360 C 280 300, 320 250, 362 208"/>
+        </mask>
+      </defs>
+      <path class="draw draw--trail" data-path-trail mask="url(#hero-path-mask-mobile)" d="M -40 640 C 70 560, 150 460, 230 360 C 280 300, 320 250, 362 208"/>
+      <g class="plane-track" data-plane-track>
+        <g class="plane plane--mobile" data-plane transform="scale(0.62)">
           <path class="plane__body" d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
         </g>
       </g>
@@ -79,24 +92,33 @@
             <span class="accent">Never off duty.</span>
           </h2>
           <p class="glide__body" data-reveal style="--reveal-delay: 160ms">
-            Glide knows your flight, your status, your family, and your plans — and moves the
-            airport around them. Ask anything. Or ask nothing: <strong>Glide acts before
-            you'd think to.</strong> Two mornings, one agent. Watch how each one goes.
+            Glide knows your flight, your status, your family, and your plans — and surfaces
+            the best options before anything gets booked. Ask anything. When it's time to
+            spend or commit, <strong>you choose — Glide handles the rest.</strong> Pick a
+            travel moment and see how it works.
           </p>
 
           <div class="glide__tabs" role="tablist" aria-label="Glide scenarios" data-reveal style="--reveal-delay: 240ms">
             <span class="glide__tab-indicator" aria-hidden="true"></span>
-            <button class="glide__tab is-active" id="tab-vacation" role="tab" aria-selected="true" data-scenario="vacation">
+            <button class="glide__tab" id="tab-vacation" role="tab" aria-selected="false" data-scenario="vacation">
               A vacation morning
               <span class="glide__tab-progress"></span>
             </button>
             <button class="glide__tab" id="tab-save" role="tab" aria-selected="false" data-scenario="save">
-              The 9:47 PM save
+              Overnight recovery
+              <span class="glide__tab-progress"></span>
+            </button>
+            <button class="glide__tab" id="tab-connection" role="tab" aria-selected="false" data-scenario="connection">
+              Tight connection
+              <span class="glide__tab-progress"></span>
+            </button>
+            <button class="glide__tab" id="tab-business" role="tab" aria-selected="false" data-scenario="business">
+              Meeting morning
               <span class="glide__tab-progress"></span>
             </button>
           </div>
 
-          <div class="glide__hint" data-reveal style="--reveal-delay: 320ms">Live demo · Plays automatically</div>
+          <div class="glide__hint" data-reveal style="--reveal-delay: 320ms">Interactive demo · Tap options to choose</div>
         </div>
 
         <div class="phone" data-reveal style="--reveal-delay: 160ms" aria-label="Glide chat demo">
@@ -123,7 +145,7 @@
           <div class="manifesto__cell-label">Frictionless</div>
           <p class="manifesto__cell-body">
             Front door to seat 4A without a single decision you didn't want to make.
-            Check-in, timing, gates, coffee — already handled.
+            Check-in, timing, gates, coffee — surfaced as options, never assumed.
           </p>
         </div>
         <div data-reveal style="--reveal-delay: 80ms">
@@ -334,6 +356,151 @@
     onScroll();
   })();
 
+  // ── Hero parallax flight path ───────────────────────────────────────────
+  (function () {
+    var hero = document.querySelector(".hero");
+    if (!hero) return;
+
+    var paths = Array.prototype.slice.call(hero.querySelectorAll(".hero__path"));
+    if (!paths.length) return;
+
+    function activeSvg() {
+      for (var i = 0; i < paths.length; i += 1) {
+        if (window.getComputedStyle(paths[i]).display !== "none") return paths[i];
+      }
+      return paths[0];
+    }
+
+    function clamp(n, min, max) {
+      return Math.min(max, Math.max(min, n));
+    }
+
+    // Icon nose bearing from pivot (12,12) → (21,3) is ~-43°.
+    var PLANE_ICON_BEARING = -43;
+    var PLANE_ANGLE_OFFSET = {
+      desktop: -PLANE_ICON_BEARING,
+      mobile: -PLANE_ICON_BEARING
+    };
+    var PLANE_PIVOT = { x: 12, y: 12 };
+    var PLANE_OFFSET_Y = { desktop: 10, mobile: 8 };
+    var DASH_CYCLE = 12; // 3px dash + 9px gap
+    var MASK_LEAD_TRIM = DASH_CYCLE * 2; // end trail before plane nose
+    var MASK_END_TRIM = DASH_CYCLE * 2; // trim trailing dashes only, not plane travel
+    function planeOffsetY(plane) {
+      if (!plane) return PLANE_OFFSET_Y.desktop;
+      if (plane.classList.contains("plane--mobile")) return PLANE_OFFSET_Y.mobile;
+      return PLANE_OFFSET_Y.desktop;
+    }
+
+    function planeScale(plane) {
+      if (!plane) return 1;
+      if (plane.classList.contains("plane--mobile")) return 0.62;
+      return 0.7;
+    }
+
+    function planeAngleOffset(plane) {
+      if (!plane) return PLANE_ANGLE_OFFSET.desktop;
+      if (plane.classList.contains("plane--mobile")) return PLANE_ANGLE_OFFSET.mobile;
+      return PLANE_ANGLE_OFFSET.desktop;
+    }
+
+    var PATH_START_PROGRESS = 0.12; // plane begins ~12% along the path at page load
+
+    function scrollProgress(rect, viewport) {
+      // 0 at page top, 1 after scrolling through the hero — then remap to start mid-path
+      var travelRange = Math.max(rect.height * 0.36, viewport * 0.45);
+      var raw = clamp(-rect.top / travelRange, 0, 1);
+      var eased = 1 - Math.pow(1 - raw, 2.4);
+      return PATH_START_PROGRESS + eased * (1 - PATH_START_PROGRESS);
+    }
+
+    var PATH_BASE_Y = 24; // subtle nudge down at rest
+
+    function pathParallaxY(heroRect) {
+      return PATH_BASE_Y + Math.max(0, -heroRect.top) * 0.22;
+    }
+
+    function pathTangentAngle(path, travel, length) {
+      var sample = Math.max(4, length * 0.004);
+      var ahead = path.getPointAtLength(Math.min(length, travel + sample));
+      var behind = path.getPointAtLength(Math.max(0, travel - sample));
+      return Math.atan2(ahead.y - behind.y, ahead.x - behind.x) * (180 / Math.PI);
+    }
+
+    function setPathReveal(pathTrail, pathMask, length, travel) {
+      if (pathTrail) {
+        pathTrail.setAttribute("stroke-dasharray", "3 9");
+        pathTrail.setAttribute("stroke-dashoffset", "0");
+      }
+      if (pathMask) {
+        var maskReveal = Math.max(0, Math.min(travel - MASK_LEAD_TRIM, length - MASK_END_TRIM));
+        pathMask.setAttribute("stroke-linecap", "butt");
+        pathMask.setAttribute("stroke-dasharray", maskReveal + " " + Math.max(length * 2, 1));
+        pathMask.setAttribute("stroke-dashoffset", "0");
+      }
+    }
+
+    function setPlane(progress) {
+      var svg = activeSvg();
+      if (!svg) return;
+
+      var pathTrail = svg.querySelector("[data-path-trail]");
+      var pathMask = svg.querySelector("[data-path-mask]");
+      var path = pathTrail;
+      var track = svg.querySelector("[data-plane-track]");
+      var plane = svg.querySelector("[data-plane]");
+      if (!path || !track || !plane || typeof path.getTotalLength !== "function") return;
+
+      var length = path.getTotalLength();
+      var travel = clamp(progress, 0, 1) * length;
+      var point = path.getPointAtLength(travel);
+      var angle = pathTangentAngle(path, travel, length) + planeAngleOffset(plane);
+      var scale = planeScale(plane);
+      var offsetY = planeOffsetY(plane);
+
+      setPathReveal(pathTrail, pathMask, length, travel);
+      track.setAttribute(
+        "transform",
+        "translate(" + point.x + " " + (point.y + offsetY) + ") rotate(" + angle + ") translate(" + (-PLANE_PIVOT.x) + " " + (-PLANE_PIVOT.y) + ")"
+      );
+      plane.setAttribute("transform", "scale(" + scale + ")");
+    }
+
+    function update() {
+      var rect = hero.getBoundingClientRect();
+      var viewport = window.innerHeight || document.documentElement.clientHeight || 1;
+      var progress = scrollProgress(rect, viewport);
+      var pathShift = pathParallaxY(rect);
+
+      hero.style.setProperty("--hero-scroll-progress", progress.toFixed(4));
+      hero.style.setProperty("--hero-copy-shift", (progress * -72).toFixed(1) + "px");
+      hero.style.setProperty("--hero-path-shift", pathShift.toFixed(1) + "px");
+      hero.style.setProperty("--hero-glow-shift", (progress * -56).toFixed(1) + "px");
+      setPlane(progress);
+    }
+
+    if (REDUCED_MOTION) {
+      hero.style.setProperty("--hero-scroll-progress", "1");
+      hero.style.setProperty("--hero-path-shift", pathParallaxY(hero.getBoundingClientRect()).toFixed(1) + "px");
+      setPlane(1);
+      return;
+    }
+
+    var ticking = false;
+    function requestUpdate() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        update();
+      });
+    }
+
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+    requestUpdate();
+  })();
+
   // ── Scroll reveal ──────────────────────────────────────────────────────
   (function () {
     var els = document.querySelectorAll("[data-reveal]");
@@ -414,9 +581,71 @@
       flight: "GIQ 001 · BNA → CUN",
       steps: [
         { type: "event", label: "6:02 AM · Trip day", text: "Cancun vacation begins." },
-        { type: "ai",   text: "Good morning. Leave at <strong>8:10</strong> — traffic is clear and BNA security is a 9-minute wait with your PreCheck. I checked all four of you in last night; boarding passes are already in your wallet." },
+        { type: "ai",   text: "Good morning — Cancun day. Traffic is clear and BNA security is a <strong>9-minute</strong> wait with your PreCheck." },
+        { type: "options", text: "Boarding passes aren't in your wallet yet. Check everyone in?", options: [
+          { label: "Check in all four now", detail: "Boarding passes land in Apple Wallet", recommended: true, userText: "Check us all in.", steps: [
+            { type: "ai", text: "All four checked in — boarding passes are in your wallet." }
+          ]},
+          { label: "Remind me at 8:00", detail: "I'll check in when you're closer to leaving", userText: "Remind me at 8.", steps: [
+            { type: "ai", text: "I'll check everyone in at <strong>8:00 AM</strong> and drop the passes in your wallet." }
+          ]},
+          { label: "I'll do it myself", detail: "No check-in until you ask", userText: "I'll handle check-in.", steps: [
+            { type: "ai", text: "Got it — I won't check in unless you ask." }
+          ]}
+        ]},
+        { type: "options", text: "Three leave times from home, ranked for your buffer at gate B7:", options: [
+          { label: "Leave at 8:10", detail: "25-minute cushion at the gate", recommended: true, userText: "8:10 works.", steps: [
+            { type: "ai", text: "Set for <strong>8:10</strong> — I'll nudge you at 8:05 if traffic shifts." }
+          ]},
+          { label: "Leave at 8:20", detail: "15-minute cushion — still comfortable", userText: "Let's do 8:20.", steps: [
+            { type: "ai", text: "Set for <strong>8:20</strong>. Tighter, but still workable — I'll watch security wait times." }
+          ]},
+          { label: "Leave at 8:30", detail: "8 minutes at the gate — only if you're packing now", userText: "8:30, we're almost ready.", steps: [
+            { type: "ai", text: "Set for <strong>8:30</strong>. I'll flag you if the cushion drops below 10 minutes." }
+          ]}
+        ]},
         { type: "user", text: "Can we stop for breakfast on the way?" },
-        { type: "ai",   text: "Easily — you have a 25-minute cushion. I placed your usual order at 8th &amp; Roast by gate B7 for <strong>8:55 pickup</strong>. Two lattes, two hot chocolates." },
+        { type: "options", text: "You have a 25-minute cushion. Three spots near gate B7, ranked:", options: [
+          { label: "8th &amp; Roast", detail: "Nearest to B7 — 3-minute walk, your usual spot", recommended: true, userText: "8th &amp; Roast.", steps: [
+            { type: "options", text: "8th &amp; Roast it is. Confirm this order?", options: [
+              { label: "Your usual", detail: "Two lattes, two hot chocolates — 8:55 pickup", recommended: true, userText: "Place the usual.", steps: [
+                { type: "ai", text: "Order placed for <strong>8:55 pickup</strong>. Two lattes, two hot chocolates — I'll remind you two minutes before." }
+              ]},
+              { label: "Build a different order", detail: "Tell me what to change before I place it", userText: "Different order.", steps: [
+                { type: "ai", text: "Got it — what should I change? Tell me the items and I'll confirm before placing." }
+              ]},
+              { label: "Skip — we'll order at the counter", detail: "No mobile order", userText: "We'll order in person.", steps: [
+                { type: "ai", text: "No order placed. I'll keep timing your walk to B7." }
+              ]}
+            ]}
+          ]},
+          { label: "Blue Bottle B7", detail: "At gate B7 — shorter line right now", userText: "Blue Bottle.", steps: [
+            { type: "options", text: "Blue Bottle at B7. Confirm this order?", options: [
+              { label: "Pastries for the kids", detail: "Assorted pastries — 8:50 pickup", recommended: true, userText: "Pastries for the kids.", steps: [
+                { type: "ai", text: "Order placed for <strong>8:50 pickup</strong>. Pastries for the kids — I'll remind you two minutes before." }
+              ]},
+              { label: "Build a different order", detail: "Tell me what to change before I place it", userText: "Different order.", steps: [
+                { type: "ai", text: "Got it — what should I change? Tell me the items and I'll confirm before placing." }
+              ]},
+              { label: "Skip — we'll order at the counter", detail: "No mobile order", userText: "We'll order in person.", steps: [
+                { type: "ai", text: "No order placed. Blue Bottle is a 2-minute walk from B7 whenever you're ready." }
+              ]}
+            ]}
+          ]},
+          { label: "Panera near B5", detail: "Gate area B5 — full breakfast menu", userText: "Panera.", steps: [
+            { type: "options", text: "Panera near B5. Confirm this order?", options: [
+              { label: "Kids' meals + coffees", detail: "Two kids' meals, two coffees — 8:52 pickup", recommended: true, userText: "Kids' meals and coffees.", steps: [
+                { type: "ai", text: "Order placed for <strong>8:52 pickup</strong>. Two kids' meals and two coffees — ready when you walk up." }
+              ]},
+              { label: "Build a different order", detail: "Tell me what to change before I place it", userText: "Different order.", steps: [
+                { type: "ai", text: "Got it — what should I change? Tell me the items and I'll confirm before placing." }
+              ]},
+              { label: "Skip — we'll order at the counter", detail: "No mobile order", userText: "We'll order in person.", steps: [
+                { type: "ai", text: "No order placed. Panera is on the way to B7 whenever you're ready." }
+              ]}
+            ]}
+          ]}
+        ]},
         { type: "event", label: "8:57 AM", text: "Coffee in hand. Zero lines. Kids happy." },
         { type: "ai",   text: "Boarding starts in 24 minutes, gate B7 — a 4-minute walk whenever you're ready. Nothing left to handle. Enjoy the calm." },
         { type: "event", label: "9:41 AM · Boarding", text: "Wheels up on time. The vacation started at your front door." }
@@ -426,11 +655,133 @@
       flight: "WN 443 · BNA → ORD",
       steps: [
         { type: "event", label: "9:47 PM · Alert", text: "WN 443 is cancelled." },
-        { type: "ai",   text: "Your flight was cancelled — I'm already on it. Best path home: <strong>7:12 AM direct</strong> tomorrow, two aisle seats together, plus a room at the Marriott two minutes from your gate. Want both?" },
-        { type: "user", text: "Yes. Handle it." },
-        { type: "ai",   text: "Done. Flight booked, room held under your name, wake-up call set for <strong>5:45</strong>, and your bags are re-tagged to the morning flight. Sleep well." },
+        { type: "ai",   text: "Your flight was cancelled. It's late and hotel inventory near BNA is tightening. Three options, ranked:" },
+        { type: "options", options: [
+          { label: "Hold Marriott + AA 2341", detail: "7:12 AM direct, two aisle seats — room 2 min from your gate", recommended: true, userText: "Book the hotel and morning flight.", steps: [
+            { type: "ai", text: "Holding room 412 at Marriott Courtyard BNA. Booking AA 2341 for <strong>7:12 AM</strong>. Wake-up call set for 5:45 and bags re-tagged. Sleep well." }
+          ]},
+          { label: "Rebook AA 2341 only", detail: "7:12 AM direct — you find your own hotel tonight", userText: "Just rebook the flight.", steps: [
+            { type: "ai", text: "Booking AA 2341 for <strong>7:12 AM</strong>, two aisle seats together. Bags re-tagged. I can surface hotel options whenever you're ready." }
+          ]},
+          { label: "Semi-private via Wheels Up", detail: "Quote in 8 minutes — no commitment until you approve", userText: "Get the Wheels Up quote.", steps: [
+            { type: "ai", text: "Quote requested — Wheels Up estimates <strong>$4,200</strong> for a semi-private at 6:30 AM. I'll hold it for 15 minutes if you want to review." }
+          ]}
+        ]},
         { type: "event", label: "9:51 PM · Handled", text: "4 minutes. No line. No hold music." },
-        { type: "ai",   text: "One more thing — you're owed compensation for tonight. The claim is drafted; approve it over coffee tomorrow." }
+        { type: "options", text: "You may be owed compensation for tonight. Want me to draft a claim?", options: [
+          { label: "Draft it for tomorrow", detail: "Pre-filled with tonight's cancellation — review over coffee", recommended: true, userText: "Draft the claim.", steps: [
+            { type: "ai", text: "Claim drafted with tonight's cancellation details. I'll surface it tomorrow morning for your approval before anything is filed." }
+          ]},
+          { label: "Walk me through it first", detail: "See what's owed before I draft anything", userText: "Walk me through it.", steps: [
+            { type: "ai", text: "Southwest owes a hotel/meals voucher plus rebooking costs. I can break down each line — say when you want the full draft." }
+          ]},
+          { label: "Skip for now", detail: "No claim until you ask", userText: "Skip for now.", steps: [
+            { type: "ai", text: "Got it — no claim drafted. I'll flag it again if the deadline gets close." }
+          ]}
+        ]}
+      ]
+    },
+    connection: {
+      flight: "DL 2811 · ATL → LGA",
+      steps: [
+        { type: "event", label: "4:18 PM · Connection risk", text: "Inbound lands 22 minutes late at gate B28." },
+        { type: "ai",   text: "Your original connection looks tight. I've mapped the fastest route to gate C14 and pulled your backup options:" },
+        { type: "options", options: [
+          { label: "Sprint for the 4:35 PM", detail: "22-minute walk — tight but possible if you leave now", userText: "Try for the original.", steps: [
+            { type: "ai", text: "On it — walking you gate to gate. I'll watch boarding and surface backup options if you don't make it in time." },
+            { type: "event", label: "4:41 PM · Gate change", text: "Original flight closes as you reach the podium." },
+            { type: "options", text: "You missed the original. Two backup options:", options: [
+              { label: "Confirm 5:26 PM backup", detail: "Seat 8C, lounge pass included — ready now", recommended: true, userText: "Confirm the backup.", steps: [
+                { type: "ai", text: "Confirmed on the <strong>5:26 PM</strong> backup, seat 8C, with a lounge pass loaded because of the delay." }
+              ]},
+              { label: "Hold for 6:10 PM", detail: "More seats open — 45-minute wait, lower risk of oversell", userText: "Hold for the 6:10.", steps: [
+                { type: "ai", text: "You're on standby for the <strong>6:10 PM</strong>. I'll confirm the moment a seat clears." }
+              ]}
+            ]}
+          ]},
+          { label: "Switch to 5:26 PM backup now", detail: "Confirmed seat 8C — skip the rush, lounge pass included", recommended: true, userText: "Switch to the backup now.", steps: [
+            { type: "ai", text: "Confirmed on the <strong>5:26 PM</strong> backup, seat 8C. No gate sprint needed — you've got 48 minutes." }
+          ]},
+          { label: "Try original — ask before backup", detail: "I'll surface backup options if boarding closes — nothing booked without you", userText: "Try original, ask me before backup.", steps: [
+            { type: "ai", text: "On it — walking you gate to gate. If boarding closes before you arrive, I'll surface backup options for you to choose." },
+            { type: "event", label: "4:41 PM · Gate change", text: "Original flight closes as you reach the podium." },
+            { type: "options", text: "You missed the original. Two backup options:", options: [
+              { label: "Confirm 5:26 PM backup", detail: "Seat 8C, lounge pass included — ready now", recommended: true, userText: "Confirm the backup.", steps: [
+                { type: "ai", text: "Confirmed on the <strong>5:26 PM</strong> backup, seat 8C, with a lounge pass loaded because of the delay." }
+              ]},
+              { label: "Hold for 6:10 PM", detail: "More seats open — 45-minute wait, lower risk of oversell", userText: "Hold for the 6:10.", steps: [
+                { type: "ai", text: "You're on standby for the <strong>6:10 PM</strong>. I'll confirm the moment a seat clears." }
+              ]}
+            ]}
+          ]}
+        ]}
+      ]
+    },
+    business: {
+      flight: "AA 1672 · DCA → ORD",
+      steps: [
+        { type: "event", label: "5:36 AM · Travel day", text: "Client meeting at 9:00 AM in Chicago." },
+        { type: "ai",   text: "Good morning. ORD weather is slowing inbound traffic. Two departure options:" },
+        { type: "options", options: [
+          { label: "Earlier 6:25 departure", detail: "42-minute buffer before your 9:00 meeting", recommended: true, userText: "Move me to the 6:25.", steps: [
+            { type: "ai", text: "Moved to the <strong>6:25 departure</strong>. You'll land with a 42-minute buffer before the car ride." }
+          ]},
+          { label: "Keep original 7:10", detail: "Riskier — buffer shrinks to ~18 minutes if delays hold", userText: "Keep the original flight.", steps: [
+            { type: "ai", text: "Staying on the <strong>7:10</strong>. I'll keep monitoring — if the buffer drops below 20 minutes I'll surface alternatives." }
+          ]}
+        ]},
+        { type: "options", text: "Your rental is booked at Terminal 1. Terminal 3 may be closer depending on where you land:", options: [
+          { label: "Shift pickup to Terminal 3", detail: "4-minute walk from arrivals — saves ~12 minutes", recommended: true, userText: "Shift rental to Terminal 3.", steps: [
+            { type: "ai", text: "Rental pickup moved to <strong>Terminal 3</strong>. Confirmation updated — no extra charge." }
+          ]},
+          { label: "Keep Terminal 1 pickup", detail: "Original booking — shuttle required from arrivals", userText: "Keep Terminal 1.", steps: [
+            { type: "ai", text: "Keeping <strong>Terminal 1</strong> pickup as booked. Shuttle runs every 8 minutes from arrivals." }
+          ]}
+        ]},
+        { type: "options", text: "Three coffee spots at gate E46, ranked:", options: [
+          { label: "Intelligentsia E46", detail: "At your gate — receipt-ready for expense reports", recommended: true, userText: "Intelligentsia.", steps: [
+            { type: "options", text: "Intelligentsia at E46. Confirm this order?", options: [
+              { label: "Your usual oat latte", detail: "Receipt-ready — 6:48 pickup", recommended: true, userText: "Usual oat latte.", steps: [
+                { type: "ai", text: "Order placed for <strong>6:48 pickup</strong>. Receipt-ready oat latte." }
+              ]},
+              { label: "Something different", detail: "Tell me what to change before I place it", userText: "Different order.", steps: [
+                { type: "ai", text: "Got it — what should I change? Tell me the drink and I'll confirm before placing." }
+              ]},
+              { label: "Skip — I'll grab it at the counter", detail: "No mobile order", userText: "I'll order in person.", steps: [
+                { type: "ai", text: "No order placed. Intelligentsia is right at E46 whenever you're through security." }
+              ]}
+            ]}
+          ]},
+          { label: "Starbucks E44", detail: "Two gates over — shorter line, mobile order", userText: "Starbucks.", steps: [
+            { type: "options", text: "Starbucks at E44. Confirm this order?", options: [
+              { label: "Grande dark roast, no room", detail: "Mobile order — 6:45 pickup", recommended: true, userText: "Dark roast, no room.", steps: [
+                { type: "ai", text: "Mobile order placed for <strong>6:45 pickup</strong>. Grande dark roast, no room." }
+              ]},
+              { label: "Something different", detail: "Tell me what to change before I place it", userText: "Different order.", steps: [
+                { type: "ai", text: "Got it — what should I change? Tell me the drink and I'll confirm before placing." }
+              ]},
+              { label: "Skip — I'll grab it at the counter", detail: "No mobile order", userText: "I'll order in person.", steps: [
+                { type: "ai", text: "No order placed. Starbucks is a short walk from E46 whenever you're ready." }
+              ]}
+            ]}
+          ]},
+          { label: "Skip coffee", detail: "Focus on security — lounge has espresso if you need it", userText: "Skip coffee today.", steps: [
+            { type: "ai", text: "No order placed. Your lounge pass includes espresso if you want it after security." }
+          ]}
+        ]},
+        { type: "options", text: "Before security — your 9:00 host and presentation:", options: [
+          { label: "Send ETA + surface deck", detail: "Host gets updated arrival; presentation link on lock screen", recommended: true, userText: "Send ETA and load the deck.", steps: [
+            { type: "ai", text: "ETA sent to your 9:00 host. Presentation link is on your lock screen in case Wi-Fi gets spotty." }
+          ]},
+          { label: "Send ETA only", detail: "Skip the deck — you'll handle presentation access", userText: "Just send the ETA.", steps: [
+            { type: "ai", text: "Updated ETA sent to your host. I'll hold off on the presentation link unless you ask." }
+          ]},
+          { label: "I'll handle both", detail: "No messages sent until you ask", userText: "I'll text them myself.", steps: [
+            { type: "ai", text: "Got it — no messages sent. Say the word if you want either later." }
+          ]}
+        ]},
+        { type: "event", label: "6:01 AM · Cleared", text: "Security in 7 minutes. Coffee timed for pickup." },
+        { type: "ai",   text: "You're ahead of the disruption now. Walk straight to E46 and everything else will meet you there." }
       ]
     }
   };
@@ -442,10 +793,19 @@
     var indicator = document.querySelector(".glide__tab-indicator");
     var tabs     = document.querySelectorAll(".glide__tab");
     var runId    = 0;
-    var autoCycle = true;
+    var defaultFlight = "Choose a scenario";
+
+    function usesGridTabs() {
+      return window.matchMedia("(max-width: 980px)").matches;
+    }
 
     function updateTabIndicator(activeTab) {
-      if (!indicator || !activeTab || !tablist) return;
+      if (!indicator || !tablist) return;
+      if (!activeTab || usesGridTabs()) {
+        indicator.style.width = "0";
+        indicator.style.transform = "translateX(0)";
+        return;
+      }
       indicator.style.width = activeTab.offsetWidth + "px";
       indicator.style.transform = "translateX(" + activeTab.offsetLeft + "px)";
     }
@@ -481,18 +841,29 @@
     function stepDelay(step) {
       if (step.type === "event") return 900;
       if (step.type === "user")  return 1100;
+      if (step.type === "options") return 400;
       return 600; // ai: typing indicator adds its own time
     }
     function typingTime(step) {
       return Math.min(2000, 800 + step.text.length * 6);
     }
+    function branchSteps(option) {
+      return option && option.steps ? option.steps : [];
+    }
     function scenarioDuration(sc) {
-      var t = 400;
-      sc.steps.forEach(function (s) {
-        t += stepDelay(s);
-        if (s.type === "ai") t += typingTime(s);
-      });
-      return t;
+      function walk(steps) {
+        var t = 0;
+        steps.forEach(function (s) {
+          t += stepDelay(s);
+          if (s.type === "ai") t += typingTime(s);
+          if (s.type === "options") {
+            t += 6000;
+            t += walk(branchSteps(s.options.filter(function (o) { return o.recommended; })[0] || s.options[0]));
+          }
+        });
+        return t;
+      }
+      return walk(sc.steps) + 400;
     }
 
     function el(html) {
@@ -500,13 +871,62 @@
       d.innerHTML = html;
       return d.firstElementChild;
     }
+    function renderChooser() {
+      var buttons = Object.keys(SCENARIOS).map(function (key) {
+        var tab = document.querySelector('.glide__tab[data-scenario="' + key + '"]');
+        var label = tab ? tab.childNodes[0].textContent.trim() : key;
+        return '<button class="scenario-choice" type="button" data-scenario-choice="' + key + '">' + label + '</button>';
+      }).join("");
+      return el(
+        '<div class="msg msg--prompt">' +
+          '<div class="scenario-picker">' +
+            '<div class="scenario-picker__eyebrow">Pick a scenario</div>' +
+            '<div class="scenario-picker__title">Choose a travel moment to preview Glide.</div>' +
+            '<div class="scenario-picker__body">See how it handles a smooth departure, a cancellation, a tight connection, or a business trip morning.</div>' +
+            '<div class="scenario-picker__choices">' + buttons + '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }
     function render(step) {
       if (step.type === "event") {
         return el('<div class="msg msg--event"><span class="msg__event-label">' + step.label + '</span><span>' + step.text + '</span></div>');
       }
       return el('<div class="msg msg--' + step.type + '">' + step.text + '</div>');
     }
+    function renderOptions(step, onSelect) {
+      var optionsHtml = step.options.map(function (opt, idx) {
+        var rec = opt.recommended ? '<span class="msg__option-rec">Recommended</span>' : "";
+        return '<button class="msg__option" type="button" data-option-idx="' + idx + '">' +
+          '<span class="msg__option-label"><span class="msg__option-name">' + opt.label + '</span>' + rec + '</span>' +
+          '<span class="msg__option-detail">' + opt.detail + '</span>' +
+        '</button>';
+      }).join("");
+      var node = el(
+        '<div class="msg msg--ai msg--options">' +
+          (step.text ? '<div class="msg__options-intro">' + step.text + '</div>' : '') +
+          '<div class="msg__options">' + optionsHtml + '</div>' +
+        '</div>'
+      );
+      node.querySelectorAll(".msg__option").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          if (btn.disabled) return;
+          node.querySelectorAll(".msg__option").forEach(function (b) { b.disabled = true; });
+          btn.classList.add("is-selected");
+          onSelect(step.options[parseInt(btn.dataset.optionIdx, 10)]);
+        });
+      });
+      return node;
+    }
     function scrollDown() { log.scrollTop = log.scrollHeight; }
+    function resetDemo() {
+      runId += 1;
+      log.innerHTML = "";
+      log.appendChild(renderChooser());
+      flightEl.textContent = defaultFlight;
+      setActiveTab("", 0);
+      scrollDown();
+    }
 
     function play(name) {
       var sc = SCENARIOS[name];
@@ -516,29 +936,33 @@
 
       if (REDUCED_MOTION) {
         setActiveTab(name, 0);
-        sc.steps.forEach(function (s) { log.appendChild(render(s)); });
-        scrollDown();
+        playSteps(sc.steps, id, null, true);
         return;
       }
 
       setActiveTab(name, scenarioDuration(sc));
+      playSteps(sc.steps, id);
+    }
 
+    function playSteps(steps, id, onComplete, instant) {
       var i = 0;
       function next() {
         if (id !== runId) return;
-        if (i >= sc.steps.length) {
-          if (autoCycle) {
-            setTimeout(function () {
-              if (id !== runId) return;
-              play(name === "vacation" ? "save" : "vacation");
-            }, 4200);
-          }
+        if (i >= steps.length) {
+          if (onComplete) onComplete();
           return;
         }
-        var step = sc.steps[i++];
+        var step = steps[i++];
+        var delay = instant ? 0 : stepDelay(step);
         setTimeout(function () {
           if (id !== runId) return;
           if (step.type === "ai") {
+            if (instant) {
+              log.appendChild(render(step));
+              scrollDown();
+              next();
+              return;
+            }
             var typing = el('<div class="msg msg--typing"><i></i><i></i><i></i></div>');
             log.appendChild(typing);
             scrollDown();
@@ -549,35 +973,36 @@
               scrollDown();
               next();
             }, typingTime(step));
+          } else if (step.type === "options") {
+            var optionsNode = renderOptions(step, function (opt) {
+              log.appendChild(el('<div class="msg msg--user">' + opt.userText + '</div>'));
+              scrollDown();
+              playSteps(branchSteps(opt), id, next, instant);
+            });
+            log.appendChild(optionsNode);
+            scrollDown();
           } else {
             log.appendChild(render(step));
             scrollDown();
             next();
           }
-        }, stepDelay(step));
+        }, delay);
       }
       next();
     }
 
     tabs.forEach(function (t) {
       t.addEventListener("click", function () {
-        autoCycle = false;
         play(t.dataset.scenario);
       });
     });
+    log.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-scenario-choice]");
+      if (!btn) return;
+      play(btn.getAttribute("data-scenario-choice"));
+    });
 
-    // start when the phone scrolls into view
-    var phone = document.querySelector(".phone");
-    if (!("IntersectionObserver" in window)) { play("vacation"); return; }
-    var started = false;
-    var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting && !started) {
-        started = true;
-        io.disconnect();
-        play("vacation");
-      }
-    }, { threshold: 0.35 });
-    io.observe(phone);
+    resetDemo();
   })();
 
   // ── Waitlist submit ────────────────────────────────────────────────────

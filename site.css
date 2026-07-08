@@ -59,6 +59,10 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; color: var(--fg-1); fon
 
 * { box-sizing: border-box; }
 
+html.gateiq-locked body > *:not(#password-gate) {
+  display: none !important;
+}
+
 /* Side nav + password gate keep the warm beige (dark: dark canvas) */
 .side-nav { background: var(--bg); }
 .password-gate { background: var(--bg); }

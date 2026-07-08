@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Gate IQ Black is the premium airport command layer. When travel gets complicated, Gate IQ tells you exactly what to do next.">
   <link rel="stylesheet" href="site.css">
+  <script src="site-gate.js"></script>
   <script src="theme-toggle.js" defer></script>
 </head>
 <body>
@@ -71,32 +72,6 @@
       </div>
     </div>
   </nav>
-
-  <!-- ─── Password gate ─────────────────────────────────── -->
-  <div id="password-gate" class="password-gate">
-    <div>
-      <div class="password-gate__brand">
-        Gate<span class="iq">IQ</span><span class="dot"></span>
-      </div>
-    </div>
-    <div class="password-gate__label">Private preview · Enter access code</div>
-    <div class="password-gate__row">
-      <div class="password-gate__input-wrap">
-        <input
-          id="gate-password"
-          class="password-gate__input"
-          type="password"
-          placeholder="Access code"
-          autocomplete="off"
-        >
-        <button class="password-gate__eye" type="button" aria-label="Toggle visibility" onclick="(function(){var i=document.getElementById('gate-password');var b=document.querySelector('.password-gate__eye');i.type=i.type==='password'?'text':'password';b.innerHTML=i.type==='password'?'<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z\'/><circle cx=\'12\' cy=\'12\' r=\'3\'/></svg>':'<svg width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><path d=\'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24\'/><line x1=\'1\' y1=\'1\' x2=\'23\' y2=\'23\'/></svg>';})()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-      </div>
-      <button class="password-gate__btn" onclick="checkPassword()">Enter →</button>
-    </div>
-    <div class="password-gate__error" id="gate-error"></div>
-  </div>
 
   <div class="site" id="site-content" style="display:none">
 
@@ -548,33 +523,6 @@
   </div>
 
   <script>
-    // ── Password gate ─────────────────────────────────────────────────────
-    (function initGate() {
-      var unlocked = sessionStorage.getItem("gateiq_unlocked");
-      if (unlocked === "1") {
-        document.getElementById("password-gate").classList.add("password-gate--hidden");
-        document.getElementById("site-content").style.display = "";
-      }
-      document.getElementById("gate-password").addEventListener("keydown", function(e) {
-        if (e.key === "Enter") checkPassword();
-      });
-    })();
-
-    function checkPassword() {
-      var input = document.getElementById("gate-password").value;
-      var error = document.getElementById("gate-error");
-      if (input === "Nashville2026!") {
-        sessionStorage.setItem("gateiq_unlocked", "1");
-        document.getElementById("password-gate").classList.add("password-gate--hidden");
-        document.getElementById("site-content").style.display = "";
-        error.textContent = "";
-      } else {
-        error.textContent = "Incorrect access code.";
-        document.getElementById("gate-password").value = "";
-        document.getElementById("gate-password").focus();
-      }
-    }
-
     // ── Side nav ─────────────────────────────────────────────────────────
     (function initSideNav() {
       var toggle   = document.getElementById("side-nav-toggle");
@@ -623,13 +571,7 @@
         if (window.innerWidth < 1100) toggle.style.display = "";
       }
 
-      // observe password gate hiding
-      var observer = new MutationObserver(function() {
-        if (document.getElementById("password-gate").classList.contains("password-gate--hidden")) {
-          showToggle();
-        }
-      });
-      observer.observe(document.getElementById("password-gate"), { attributes: true });
+      document.addEventListener("gateiq-unlocked", showToggle);
 
       // if already unlocked
       if (sessionStorage.getItem("gateiq_unlocked") === "1") showToggle();
