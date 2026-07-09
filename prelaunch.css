@@ -475,32 +475,52 @@ html.gateiq-locked body > *:not(#password-gate) {
 
 /* ── Glide section ───────────────────────────────────────────── */
 .glide__meet {
+  --meet-bubble-bg: var(--surface-1);
+  --meet-bubble-stroke: rgba(21, 35, 63, 0.34);
+  --meet-bubble-shadow: 0 12px 36px rgba(21, 35, 63, 0.16);
   display: inline-block;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(22px, 2.8vw, 30px);
   letter-spacing: -0.02em;
   color: var(--fg-1);
-  background: var(--surface-2);
+  background: var(--meet-bubble-bg);
   padding: 16px 22px;
   border-radius: 22px;
   border-bottom-left-radius: 6px;
-  box-shadow: 0 8px 28px rgba(21, 35, 63, 0.08);
+  border: 2px solid var(--meet-bubble-stroke);
+  box-shadow: var(--meet-bubble-shadow);
   position: relative;
+  isolation: isolate;
+}
+.glide__meet::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 15px;
+  bottom: -9px;
+  width: 16px;
+  height: 16px;
+  background: var(--meet-bubble-stroke);
+  border-radius: 0 0 0 3px;
+  transform: rotate(45deg);
 }
 .glide__meet::after {
   content: "";
   position: absolute;
-  left: 18px;
-  bottom: -7px;
-  width: 14px;
-  height: 14px;
-  background: var(--surface-2);
-  border-radius: 0 0 0 4px;
+  z-index: -1;
+  left: 17px;
+  bottom: -6px;
+  width: 12px;
+  height: 12px;
+  background: var(--meet-bubble-bg);
+  border-radius: 0 0 0 2px;
   transform: rotate(45deg);
 }
 [data-theme="dark"] .glide__meet {
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+  --meet-bubble-bg: #3C3C44;
+  --meet-bubble-stroke: rgba(201, 171, 122, 0.58);
+  --meet-bubble-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
 }
 .glide {
   padding: 130px 0 120px;
