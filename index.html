@@ -221,7 +221,7 @@
             <div class="perk__num">03</div>
             <div>
               <h3 class="perk__title">First through the door</h3>
-              <p class="perk__body">First to try Gate IQ at Nashville airport before it opens to everyone — your travel days get easier first.</p>
+              <p class="perk__body">First to try Gate IQ at Nashville International Airport (<span class="t-mono">BNA</span>) before it opens to everyone — your travel days get easier first.</p>
             </div>
           </div>
           <div class="perk" data-reveal style="--reveal-delay: 180ms">
@@ -612,7 +612,7 @@
       flight: "GIQ 001 · BNA → CUN",
       steps: [
         { type: "event", label: "6:02 AM · Trip day", text: "Cancun vacation begins." },
-        { type: "ai",   text: "Good morning — Cancun day. Traffic is clear and BNA security is a <strong>9-minute</strong> wait with your PreCheck." },
+        { type: "ai",   text: "Good morning — Cancun day. Traffic is clear and Nashville International Airport (<span class=\"t-mono\">BNA</span>) security is a <strong>9-minute</strong> wait with your PreCheck." },
         { type: "options", text: "Boarding passes aren't in your wallet yet. Check everyone in?", options: [
           { label: "Check in all four now", detail: "Boarding passes land in Apple Wallet", recommended: true, userText: "Check us all in.", steps: [
             { type: "ai", text: "All four checked in — boarding passes are in your wallet." }
@@ -686,10 +686,10 @@
       flight: "WN 443 · BNA → ORD",
       steps: [
         { type: "event", label: "9:47 PM · Alert", text: "WN 443 is cancelled." },
-        { type: "ai",   text: "Your flight was cancelled. It's late and hotels near the airport are filling up fast. Three options, best first:" },
+        { type: "ai",   text: "Your flight was cancelled. It's late and hotels near Nashville International Airport (<span class=\"t-mono\">BNA</span>) are filling up fast. Three options, best first:" },
         { type: "options", options: [
           { label: "Hold Marriott + AA 2341", detail: "7:12 AM direct, two aisle seats — room 2 min from your gate", recommended: true, userText: "Book the hotel and morning flight.", steps: [
-            { type: "ai", text: "Holding room 412 at Marriott Courtyard BNA. Booking AA 2341 for <strong>7:12 AM</strong>. Wake-up call set for 5:45 and bags re-tagged. Sleep well." }
+            { type: "ai", text: "Holding room 412 at Marriott Courtyard <span class=\"t-mono\">BNA</span>. Booking AA 2341 for <strong>7:12 AM</strong>. Wake-up call set for 5:45 and bags re-tagged. Sleep well." }
           ]},
           { label: "Rebook AA 2341 only", detail: "7:12 AM direct — you find your own hotel tonight", userText: "Just rebook the flight.", steps: [
             { type: "ai", text: "Booking AA 2341 for <strong>7:12 AM</strong>, two aisle seats together. Bags re-tagged. I can show you hotel options whenever you're ready." }
@@ -1320,7 +1320,7 @@
       : "You're in.<br>Spot reserved.";
     document.getElementById("signup-fine").innerHTML = savingPayment
       ? '<span class="dot"></span><span>Your founding spot and payment method are saved. You won\'t be charged until launch — $' + FOUNDING_MONTHLY_PRICE + '/month when Gate IQ goes live.</span>'
-      : '<span class="dot"></span><span>Your special gift is reserved. We\'ll reach out before Gate IQ opens in Nashville.</span>';
+      : '<span class="dot"></span><span>Your special gift is reserved. We\'ll reach out before Gate IQ opens at Nashville International Airport (<span class="t-mono">BNA</span>).</span>';
     document.getElementById("signup-payment").hidden = true;
   }
   document.getElementById("waitlist-form").addEventListener("submit", submitInvite);
