@@ -433,7 +433,7 @@ html.gateiq-locked body > *:not(#password-gate) {
   line-height: 1.0;
   letter-spacing: -0.03em;
   margin: 0;
-  max-width: 14ch;
+  max-width: 18ch;
 }
 .manifesto__big em {
   font-style: normal;
@@ -474,6 +474,34 @@ html.gateiq-locked body > *:not(#password-gate) {
 }
 
 /* ── Glide section ───────────────────────────────────────────── */
+.glide__meet {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(22px, 2.8vw, 30px);
+  letter-spacing: -0.02em;
+  color: var(--fg-1);
+  background: var(--surface-2);
+  padding: 16px 22px;
+  border-radius: 22px;
+  border-bottom-left-radius: 6px;
+  box-shadow: 0 8px 28px rgba(21, 35, 63, 0.08);
+  position: relative;
+}
+.glide__meet::after {
+  content: "";
+  position: absolute;
+  left: 18px;
+  bottom: -7px;
+  width: 14px;
+  height: 14px;
+  background: var(--surface-2);
+  border-radius: 0 0 0 4px;
+  transform: rotate(45deg);
+}
+[data-theme="dark"] .glide__meet {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+}
 .glide {
   padding: 130px 0 120px;
 }

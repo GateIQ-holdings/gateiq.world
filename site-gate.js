@@ -1,12 +1,5 @@
 (function () {
-  var PASSWORDS = ["Nashville", "gateiq"];
-
-  function isValidPassword(value) {
-    var v = value.trim();
-    return PASSWORDS.some(function (p) {
-      return v.toLowerCase() === p.toLowerCase();
-    });
-  }
+  var PASSWORD = "Nashville";
   var STORAGE_KEY = "gateiq_unlocked";
 
   function isUnlocked() {
@@ -28,7 +21,7 @@
     var error = document.getElementById("gate-error");
     if (!input || !error) return;
 
-    if (isValidPassword(input.value)) {
+    if (input.value === PASSWORD) {
       error.textContent = "";
       unlock();
     } else {
