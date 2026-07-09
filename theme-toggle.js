@@ -23,6 +23,7 @@
     root.setAttribute("data-theme", t);
     try { localStorage.setItem(KEY, t); } catch {}
     updateIcon();
+    document.dispatchEvent(new CustomEvent("gateiq-theme-change", { detail: { theme: t } }));
   }
 
   function toggle() {

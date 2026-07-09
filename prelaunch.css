@@ -536,18 +536,26 @@ html.gateiq-locked body > *:not(#password-gate) {
 }
 .glide__tab-indicator {
   position: absolute;
-  top: 4px;
+  top: 0;
   left: 0;
-  height: calc(100% - 8px);
+  height: 0;
   border-radius: var(--r-pill);
   background: var(--surface-dark);
   z-index: 0;
   pointer-events: none;
-  transform: translateX(0);
+  transform: translate(0, 0);
   width: 0;
   transition:
     transform 420ms cubic-bezier(0.33, 1, 0.32, 1),
-    width 420ms cubic-bezier(0.33, 1, 0.32, 1);
+    width 420ms cubic-bezier(0.33, 1, 0.32, 1),
+    height 420ms cubic-bezier(0.33, 1, 0.32, 1);
+}
+@media (min-width: 981px) {
+  .glide__tabs--wrapped .glide__tab-indicator { display: none; }
+  .glide__tabs--wrapped .glide__tab.is-active {
+    background: var(--surface-dark);
+    color: var(--fg-on-dark);
+  }
 }
 .glide__tab {
   border: none;
@@ -578,7 +586,9 @@ html.gateiq-locked body > *:not(#password-gate) {
   z-index: 2;
 }
 @media (prefers-reduced-motion: reduce) {
-  .glide__tab-indicator { transition: none; }
+  .glide__tab-indicator {
+    transition: none;
+  }
 }
 
 .glide__hint {
@@ -1095,6 +1105,108 @@ html.gateiq-locked body > *:not(#password-gate) {
   transform: translateY(-2px);
 }
 
+/* optional Stripe payment */
+.signup__payment {
+  margin-top: 4px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--navy) 12%, transparent);
+  background: color-mix(in srgb, var(--cream) 72%, transparent);
+}
+.signup__payment-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+.signup__payment-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+.signup__payment-toggle-box {
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 6px;
+  border: 1.5px solid color-mix(in srgb, var(--navy) 22%, transparent);
+  background: var(--cream);
+  flex-shrink: 0;
+  position: relative;
+  transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+.signup__payment-checkbox:focus-visible + .signup__payment-toggle-box {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.signup__payment-checkbox:checked + .signup__payment-toggle-box {
+  border-color: var(--accent-deep);
+  background: var(--accent);
+}
+.signup__payment-checkbox:checked + .signup__payment-toggle-box::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--surface-dark);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.signup__payment-toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--fg-on-grey);
+}
+.signup__payment-price {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+}
+.signup__payment-panel {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid color-mix(in srgb, var(--navy) 10%, transparent);
+}
+.signup__payment-copy {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--fg-on-grey-2);
+}
+.signup__payment-copy strong {
+  color: var(--fg-on-grey);
+  font-weight: 600;
+}
+.signup__payment-element {
+  min-height: 44px;
+}
+.signup__payment-legal {
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--fg-on-grey-2);
+}
+.signup__payment-legal a {
+  color: var(--accent-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.signup__payment-error {
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #B33A3A;
+}
+
 /* airport autocomplete */
 .airport-wrap { position: relative; }
 .airport-dropdown {
@@ -1403,6 +1515,7 @@ html.gateiq-locked body > *:not(#password-gate) {
   .founding { padding: 90px 0 96px; }
   .signup-card { padding: 34px 26px 30px; border-radius: 28px; }
   .signup__row2 { grid-template-columns: 1fr; }
+  .signup__payment { padding: 14px 14px; }
   .story { padding: 96px 0 104px; }
   .story__inner { padding: 0 22px; }
   .story__body { font-size: 16.5px; }
@@ -1413,4 +1526,42 @@ html.gateiq-locked body > *:not(#password-gate) {
   .password-gate__input-wrap { width: 100%; }
   .password-gate__input { width: 100%; }
   .password-gate__btn { width: 100%; justify-content: center; }
+}
+
+/* checkout success */
+.checkout-success {
+  min-height: calc(100vh - 120px);
+  display: grid;
+  place-items: center;
+  padding: 120px 24px 80px;
+}
+.checkout-success__card {
+  width: min(100%, 560px);
+  background: var(--surface-grey);
+  color: var(--fg-on-grey);
+  border-radius: var(--r-xl);
+  padding: 48px 42px;
+  box-shadow:
+    inset 0 0 0 1px var(--accent),
+    inset 0 0 0 2px color-mix(in srgb, var(--brass-light) 40%, transparent),
+    0 24px 64px color-mix(in srgb, var(--navy) 10%, transparent);
+}
+.checkout-success__title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 12px 0 16px;
+}
+.checkout-success__body {
+  margin: 0 0 28px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--fg-on-grey-2);
+}
+.checkout-success__body strong {
+  color: var(--fg-on-grey);
+}
+.checkout-success__body a {
+  color: var(--accent-deep);
 }

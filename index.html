@@ -8,7 +8,8 @@
   <meta property="og:title" content="Gate IQ · The airport bends to you">
   <meta property="og:description" content="More vacation. Less airport. Meet Glide, your personal AI travel agent. Founding list now open — first 5,000 only.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="prelaunch.css?v=10">
+  <link rel="stylesheet" href="prelaunch.css?v=12">
+  <script src="https://js.stripe.com/v3/" defer></script>
   <script src="site-gate.js"></script>
   <script src="theme-toggle.js" defer></script>
 </head>
@@ -237,7 +238,7 @@
         </div>
 
         <form class="signup-card" id="waitlist-form" data-reveal style="--reveal-delay: 120ms">
-          <div class="signup-card__label">Founding list · No card required</div>
+          <div class="signup-card__label">Founding list · Card optional</div>
           <h3 class="signup-card__title" id="signup-title">Reserve your spot.<br>Take back your travel days.</h3>
           <div class="signup__fields">
             <input class="signup__input" type="text" name="name" placeholder="Full name" required autocomplete="name">
@@ -256,6 +257,28 @@
                 <option value="corporate">Corporate</option>
               </select>
             </div>
+
+            <div class="signup__payment" id="signup-payment">
+              <label class="signup__payment-toggle">
+                <input class="signup__payment-checkbox" type="checkbox" id="save-payment-toggle" name="savePayment" value="yes">
+                <span class="signup__payment-toggle-box" aria-hidden="true"></span>
+                <span class="signup__payment-toggle-text">
+                  Save time at launch — add payment now
+                  <span class="signup__payment-price">$49.99/mo · not charged today</span>
+                </span>
+              </label>
+              <div class="signup__payment-panel" id="payment-panel" hidden>
+                <p class="signup__payment-copy">
+                  Enter your card, Apple Pay, Google Pay, or PayPal to save time when we launch.
+                  <strong>You will not be charged today.</strong> Founding membership is
+                  <strong>$49.99/month</strong> — billing starts only when Gate IQ goes live.
+                </p>
+                <div class="signup__payment-element" id="payment-element"></div>
+                <p class="signup__payment-legal">By saving a payment method, you agree to our <a href="privacy.html#payment-terms">Privacy &amp; Terms</a>. You will not be charged until Gate IQ launches.</p>
+                <p class="signup__payment-error" id="payment-message" hidden role="alert"></p>
+              </div>
+            </div>
+
             <button class="signup__cta" type="submit">Claim my founding spot →</button>
           </div>
           <div class="signup__fine" id="signup-fine">
@@ -343,6 +366,11 @@
   var SPOTS_TOTAL   = 5000;
   var SPOTS_CLAIMED = 47;   // update as the real list grows
   var WAITLIST_ENDPOINT = "https://formspree.io/f/xojblngy";
+
+  // Stripe — set publishable key; deploy netlify/functions for the setup endpoint.
+  var STRIPE_PUBLISHABLE_KEY = "";
+  var STRIPE_SETUP_ENDPOINT = "/.netlify/functions/create-setup-intent";
+  var FOUNDING_MONTHLY_PRICE = "49.99";
 
   var REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -799,15 +827,43 @@
       return window.matchMedia("(max-width: 980px)").matches;
     }
 
+    function tabsAreWrapped() {
+      if (!tabs.length) return false;
+      var firstTop = tabs[0].offsetTop;
+      for (var i = 1; i < tabs.length; i++) {
+        if (tabs[i].offsetTop !== firstTop) return true;
+      }
+      return false;
+    }
+
+    function syncTabLayout() {
+      if (!tablist) return;
+      tablist.classList.toggle("glide__tabs--wrapped", !usesGridTabs() && tabsAreWrapped());
+    }
+
     function updateTabIndicator(activeTab) {
       if (!indicator || !tablist) return;
-      if (!activeTab || usesGridTabs()) {
+      syncTabLayout();
+      if (!activeTab || usesGridTabs() || tablist.classList.contains("glide__tabs--wrapped")) {
         indicator.style.width = "0";
-        indicator.style.transform = "translateX(0)";
+        indicator.style.height = "0";
+        indicator.style.transform = "translate(0, 0)";
         return;
       }
-      indicator.style.width = activeTab.offsetWidth + "px";
-      indicator.style.transform = "translateX(" + activeTab.offsetLeft + "px)";
+      var tabRect = activeTab.getBoundingClientRect();
+      var listRect = tablist.getBoundingClientRect();
+      indicator.style.width = tabRect.width + "px";
+      indicator.style.height = tabRect.height + "px";
+      indicator.style.transform = "translate(" +
+        (tabRect.left - listRect.left) + "px, " +
+        (tabRect.top - listRect.top) + "px)";
+    }
+
+    function refreshTabIndicator() {
+      var active = document.querySelector(".glide__tab.is-active");
+      requestAnimationFrame(function () {
+        updateTabIndicator(active);
+      });
     }
 
     function setActiveTab(name, dur) {
@@ -829,14 +885,24 @@
           });
         }
       });
-      updateTabIndicator(activeTab);
+      refreshTabIndicator();
     }
 
-    updateTabIndicator(document.querySelector(".glide__tab.is-active"));
-    window.addEventListener("resize", function () {
-      var active = document.querySelector(".glide__tab.is-active");
-      if (active) updateTabIndicator(active);
-    });
+    refreshTabIndicator();
+    window.addEventListener("resize", refreshTabIndicator);
+    if (tablist && "ResizeObserver" in window) {
+      new ResizeObserver(refreshTabIndicator).observe(tablist);
+    }
+    if (tablist) {
+      tablist.addEventListener("transitionend", function (e) {
+        if (e.propertyName === "transform" || e.propertyName === "opacity") {
+          refreshTabIndicator();
+        }
+      });
+    }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(refreshTabIndicator);
+    }
 
     function stepDelay(step) {
       if (step.type === "event") return 900;
@@ -1005,6 +1071,199 @@
     resetDemo();
   })();
 
+  // ── Stripe optional payment (save card for launch) ───────────────────
+  (function () {
+    var toggle = document.getElementById("save-payment-toggle");
+    var panel = document.getElementById("payment-panel");
+    var paymentMount = document.getElementById("payment-element");
+    var paymentMessage = document.getElementById("payment-message");
+    var form = document.getElementById("waitlist-form");
+    if (!toggle || !panel || !form) return;
+
+    var stripeInstance = null;
+    var stripeElements = null;
+    var paymentElement = null;
+    var setupClientSecret = null;
+    var setupLoading = false;
+
+    function paymentEnabled() {
+      return Boolean(STRIPE_PUBLISHABLE_KEY && STRIPE_SETUP_ENDPOINT);
+    }
+
+    function showPaymentError(msg) {
+      if (!paymentMessage) return;
+      paymentMessage.textContent = msg || "";
+      paymentMessage.hidden = !msg;
+    }
+
+    function getStripeAppearance() {
+      var dark = document.documentElement.getAttribute("data-theme") === "dark";
+      return {
+        theme: dark ? "night" : "stripe",
+        variables: {
+          colorPrimary: "#B89968",
+          colorBackground: dark ? "#1E2D4A" : "#FAF7EE",
+          colorText: dark ? "#F2ECDD" : "#15233F",
+          colorDanger: "#C44B4B",
+          borderRadius: "14px",
+          fontFamily: "Sora, system-ui, sans-serif",
+          spacingUnit: "4px"
+        },
+        rules: {
+          ".Input": {
+            border: "1px solid rgba(21, 35, 63, 0.14)",
+            boxShadow: "none"
+          }
+        }
+      };
+    }
+
+    function destroyPaymentElement() {
+      if (paymentElement) {
+        paymentElement.unmount();
+        paymentElement.destroy();
+        paymentElement = null;
+      }
+      stripeElements = null;
+      setupClientSecret = null;
+      if (paymentMount) paymentMount.innerHTML = "";
+    }
+
+    function formSignupData() {
+      return {
+        name:         form.querySelector('[name="name"]').value.trim(),
+        email:        form.querySelector('[name="email"]').value.trim(),
+        phone:        form.querySelector('[name="phone"]').value.trim(),
+        homeAirport:  form.querySelector('[name="homeAirport"]').value.trim(),
+        travelerType: form.querySelector('[name="travelerType"]').value,
+        source:       "prelaunch"
+      };
+    }
+
+    async function ensureSetupIntent() {
+      if (!paymentEnabled()) {
+        throw new Error("Payment setup is not configured yet.");
+      }
+      if (typeof Stripe !== "function") {
+        throw new Error("Payment form is still loading. Try again in a moment.");
+      }
+
+      var data = formSignupData();
+      if (!data.email) {
+        throw new Error("Enter your email before saving a payment method.");
+      }
+
+      if (setupClientSecret && stripeElements) return;
+
+      setupLoading = true;
+      showPaymentError("");
+
+      var res = await fetch(STRIPE_SETUP_ENDPOINT, {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      var payload = await res.json().catch(function () { return {}; });
+      setupLoading = false;
+
+      if (!res.ok || !payload.clientSecret) {
+        throw new Error(payload.error || "Could not start secure payment setup.");
+      }
+
+      destroyPaymentElement();
+      setupClientSecret = payload.clientSecret;
+      stripeInstance = Stripe(STRIPE_PUBLISHABLE_KEY);
+      stripeElements = stripeInstance.elements({
+        clientSecret: setupClientSecret,
+        appearance: getStripeAppearance()
+      });
+      paymentElement = stripeElements.create("payment");
+      paymentElement.mount(paymentMount);
+    }
+
+    async function onToggleChange() {
+      if (!toggle.checked) {
+        panel.hidden = true;
+        showPaymentError("");
+        destroyPaymentElement();
+        return;
+      }
+
+      if (!paymentEnabled()) {
+        toggle.checked = false;
+        showPaymentError("Payment setup is coming soon — your founding spot does not require a card.");
+        panel.hidden = false;
+        return;
+      }
+
+      panel.hidden = false;
+      try {
+        await ensureSetupIntent();
+      } catch (err) {
+        toggle.checked = false;
+        panel.hidden = true;
+        destroyPaymentElement();
+        showPaymentError(err.message || "Could not load payment options.");
+      }
+    }
+
+    toggle.addEventListener("change", onToggleChange);
+
+    form.querySelector('[name="email"]').addEventListener("change", function () {
+      if (!toggle.checked) return;
+      destroyPaymentElement();
+      ensureSetupIntent().catch(function (err) {
+        showPaymentError(err.message || "Could not refresh payment setup.");
+      });
+    });
+
+    document.addEventListener("gateiq-theme-change", function () {
+      if (!toggle.checked || !setupClientSecret) return;
+      var secret = setupClientSecret;
+      destroyPaymentElement();
+      setupClientSecret = secret;
+      stripeInstance = Stripe(STRIPE_PUBLISHABLE_KEY);
+      stripeElements = stripeInstance.elements({
+        clientSecret: setupClientSecret,
+        appearance: getStripeAppearance()
+      });
+      paymentElement = stripeElements.create("payment");
+      paymentElement.mount(paymentMount);
+    });
+
+    window.__gateiqStripe = {
+      isSavingPayment: function () { return toggle.checked; },
+      isReady: function () { return Boolean(toggle.checked && stripeElements && setupClientSecret && !setupLoading); },
+      confirmPayment: async function () {
+        if (!toggle.checked) return { ok: true };
+        await ensureSetupIntent();
+        if (!stripeInstance || !stripeElements) {
+          throw new Error("Payment form is not ready yet.");
+        }
+        var data = formSignupData();
+        var result = await stripeInstance.confirmSetup({
+          elements: stripeElements,
+          confirmParams: {
+            return_url: window.location.origin + "/checkout-success.html",
+            payment_method_data: {
+              billing_details: {
+                name: data.name,
+                email: data.email,
+                phone: data.phone || undefined
+              }
+            }
+          },
+          redirect: "if_required"
+        });
+        if (result.error) {
+          throw new Error(result.error.message || "Payment could not be saved.");
+        }
+        return { ok: true };
+      }
+    };
+  })();
+
   // ── Waitlist submit ────────────────────────────────────────────────────
   async function submitInvite(e) {
     e.preventDefault();
@@ -1016,10 +1275,12 @@
       phone:        form.querySelector('[name="phone"]').value,
       homeAirport:  form.querySelector('[name="homeAirport"]').value,
       travelerType: form.querySelector('[name="travelerType"]').value,
-      source:       "prelaunch"
+      source:       "prelaunch",
+      savePayment:  document.getElementById("save-payment-toggle").checked ? "yes" : "no"
     };
+    var savingPayment = data.savePayment === "yes";
 
-    btn.textContent = "Reserving…";
+    btn.textContent = savingPayment ? "Reserving & saving payment…" : "Reserving…";
     btn.disabled = true;
 
     try {
@@ -1030,11 +1291,34 @@
       });
     } catch (_) { /* fail silently — confirmation shows regardless */ }
 
+    if (savingPayment && window.__gateiqStripe) {
+      try {
+        await window.__gateiqStripe.confirmPayment();
+      } catch (err) {
+        btn.textContent = "Founding spot reserved ✓";
+        btn.disabled = true;
+        document.getElementById("signup-title").innerHTML = "You're in.<br>Spot reserved.";
+        document.getElementById("signup-fine").innerHTML =
+          '<span class="dot"></span><span>Your spot is saved, but we couldn\'t store your payment method. You can add it at launch — $' + FOUNDING_MONTHLY_PRICE + '/month.</span>';
+        var paymentMessage = document.getElementById("payment-message");
+        if (paymentMessage) {
+          paymentMessage.textContent = err.message || "Payment could not be saved.";
+          paymentMessage.hidden = false;
+        }
+        if (window.__gateiqCounter) window.__gateiqCounter.decrement();
+        return;
+      }
+    }
+
     if (window.__gateiqCounter) window.__gateiqCounter.decrement();
-    btn.textContent = "Founding spot reserved ✓";
-    document.getElementById("signup-title").innerHTML = "You're in.<br>Spot reserved.";
-    document.getElementById("signup-fine").innerHTML =
-      '<span class="dot"></span><span>Your special gift is reserved. We\'ll reach out before the BNA pilot opens.</span>';
+    btn.textContent = savingPayment ? "Spot reserved · payment saved ✓" : "Founding spot reserved ✓";
+    document.getElementById("signup-title").innerHTML = savingPayment
+      ? "You're in.<br>Spot reserved &amp; payment saved."
+      : "You're in.<br>Spot reserved.";
+    document.getElementById("signup-fine").innerHTML = savingPayment
+      ? '<span class="dot"></span><span>Your founding spot and payment method are saved. You won\'t be charged until launch — $' + FOUNDING_MONTHLY_PRICE + '/month when Gate IQ goes live.</span>'
+      : '<span class="dot"></span><span>Your special gift is reserved. We\'ll reach out before the BNA pilot opens.</span>';
+    document.getElementById("signup-payment").hidden = true;
   }
   document.getElementById("waitlist-form").addEventListener("submit", submitInvite);
 
