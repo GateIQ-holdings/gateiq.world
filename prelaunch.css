@@ -32,15 +32,10 @@ html.gateiq-locked body > *:not(#password-gate) {
   gap: 24px;
 }
 .password-gate__brand {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 28px;
-  letter-spacing: -0.03em;
-  color: var(--fg-1);
+  display: flex;
+  justify-content: center;
   margin-bottom: 8px;
 }
-.password-gate__brand .iq { color: var(--accent); }
-.password-gate__brand .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; margin-left: 4px; transform: translateY(-14px); }
 .password-gate__label {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -144,23 +139,7 @@ html.gateiq-locked body > *:not(#password-gate) {
 }
 
 .brand {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 22px;
-  letter-spacing: -0.03em;
-  color: var(--fg-1);
   text-decoration: none;
-  display: inline-flex;
-  align-items: baseline;
-}
-.brand .iq { color: var(--accent); letter-spacing: -0.035em; }
-.brand .dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  display: inline-block;
-  margin-left: 4px;
-  transform: translateY(-12px);
 }
 
 /* ── Scroll reveal ───────────────────────────────────────────── */
@@ -1351,6 +1330,12 @@ html.gateiq-locked body > *:not(#password-gate) {
 .foot__left { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .foot__line { color: rgba(242, 236, 221, 0.45); }
 .foot__divider { color: var(--brass); margin: 12px 0; }
+.foot__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  justify-content: center;
+}
 .foot__link { color: rgba(242, 236, 221, 0.45); text-decoration: none; }
 .foot__link:hover { color: rgba(242, 236, 221, 0.85); }
 .foot__link--credit { color: var(--accent); text-decoration: none; }
@@ -1526,6 +1511,8 @@ html.gateiq-locked body > *:not(#password-gate) {
   .password-gate__input-wrap { width: 100%; }
   .password-gate__input { width: 100%; }
   .password-gate__btn { width: 100%; justify-content: center; }
+  .foot { padding: 32px 20px 48px; }
+  .foot__links { gap: 12px 20px; }
 }
 
 /* checkout success */

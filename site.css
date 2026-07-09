@@ -85,15 +85,10 @@ html.gateiq-locked body > *:not(#password-gate) {
   gap: 24px;
 }
 .password-gate__brand {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 28px;
-  letter-spacing: -0.03em;
-  color: var(--fg-1);
+  display: flex;
+  justify-content: center;
   margin-bottom: 8px;
 }
-.password-gate__brand .iq { color: var(--accent); }
-.password-gate__brand .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; margin-left: 4px; transform: translateY(-14px); }
 .password-gate__label {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -170,17 +165,9 @@ html.gateiq-locked body > *:not(#password-gate) {
   padding-bottom: 80px;
 }
 .site-nav__brand {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 22px;
-  letter-spacing: -0.025em;
-  color: var(--fg-1);
   display: inline-flex;
-  align-items: baseline;
-  gap: 2px;
+  align-items: center;
 }
-.site-nav__brand .iq { color: var(--accent); letter-spacing: -0.035em; }
-.site-nav__brand .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; margin-left: 4px; transform: translateY(-12px); }
 .site-nav__cta {
   background: var(--navy);
   color: var(--ivory);
@@ -753,6 +740,12 @@ html.gateiq-locked body > *:not(#password-gate) {
 .foot__divider {
   color: var(--brass);
   margin: 12px 0;
+}
+.foot__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  justify-content: center;
 }
 
 /* ── Concierge AI spotlight ─────────────────────────────── */

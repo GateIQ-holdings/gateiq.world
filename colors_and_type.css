@@ -3,7 +3,7 @@
    Light-first (paper background) with dark-grey dark-mode support.
    ───────────────────────────────────────────────────────────────────────────── */
 
-@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Limelight&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Limelight&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap");
 
 :root {
   /* ── Brand palette ─────────────────────────────────────────────
@@ -47,11 +47,13 @@
 
   /* ── Type families ──────────────────────────────────────────
      Display: geometric grotesque (Sora subbing for likely Cabinet Grotesk).
-     Mono: JetBrains Mono. Deco: Limelight — monogram only. */
+     Mono: JetBrains Mono. Deco: Limelight — monogram only.
+     Wordmark: Source Serif 4 — footer signature only. */
   --font-display: "Sora", "Cabinet Grotesk", "PP Neue Montreal", "Inter", system-ui, sans-serif;
   --font-body:    "Sora", "Inter", system-ui, sans-serif;
   --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --font-deco:    "Limelight", "Bodoni Moda", "Playfair Display", Georgia, serif;
+  --font-wordmark: "Source Serif 4", "Libre Baskerville", Georgia, serif;
 
   /* ── Type scale ─────────────────────────────────────────────
      Heavy bias to extremes — display giants and tiny helpers. */
@@ -256,4 +258,68 @@ html, body {
 [data-theme="dark"] .theme-toggle {
   background: var(--surface-1);
   box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+}
+
+/* ─── Brand mark (logo icon — header, gate, etc.) ─────────────── */
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  line-height: 1;
+}
+.brand-mark__logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+}
+.brand-mark__logo--lg {
+  width: 48px;
+  height: 48px;
+}
+.brand-mark__name {
+  font-family: var(--font-wordmark);
+  font-weight: 600;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  color: var(--fg-1);
+  line-height: 1;
+}
+.brand-mark__name .iq { color: var(--accent); }
+
+/* ─── Footer brand lockup (logo + wordmark) ───────────────────── */
+.foot__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.foot__brand-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  display: block;
+}
+.foot__brand-name {
+  font-family: var(--font-wordmark);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ivory);
+  text-transform: none;
+}
+.foot__brand-name .iq { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .brand-mark { gap: 10px; }
+  .brand-mark__logo { width: 40px; height: 40px; }
+  .brand-mark__logo--lg { width: 44px; height: 44px; }
+  .brand-mark__name { font-size: 21px; }
+  .foot__brand { gap: 8px; margin-bottom: 16px; }
+  .foot__brand-logo { width: 44px; height: 44px; }
+  .foot__brand-name { font-size: 20px; }
 }

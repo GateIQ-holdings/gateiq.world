@@ -1,5 +1,12 @@
 (function () {
-  var PASSWORD = "Nashville";
+  var PASSWORDS = ["Nashville", "gateiq"];
+
+  function isValidPassword(value) {
+    var v = value.trim();
+    return PASSWORDS.some(function (p) {
+      return v.toLowerCase() === p.toLowerCase();
+    });
+  }
   var STORAGE_KEY = "gateiq_unlocked";
 
   function isUnlocked() {
@@ -21,7 +28,7 @@
     var error = document.getElementById("gate-error");
     if (!input || !error) return;
 
-    if (input.value === PASSWORD) {
+    if (isValidPassword(input.value)) {
       error.textContent = "";
       unlock();
     } else {
@@ -45,7 +52,10 @@
 
   var GATE_HTML =
     '<div id="password-gate" class="password-gate">' +
-      '<div><div class="password-gate__brand">Gate<span class="iq">IQ</span><span class="dot"></span></div></div>' +
+      '<div><div class="password-gate__brand brand-mark">' +
+        '<img class="brand-mark__logo brand-mark__logo--lg" src="/assets/gateiq-logo-glide.png" alt="" width="48" height="48">' +
+        '<span class="brand-mark__name">Gate<span class="iq">IQ</span></span>' +
+      '</div></div>' +
       '<div class="password-gate__label">Private preview · Enter access code</div>' +
       '<div class="password-gate__row">' +
         '<div class="password-gate__input-wrap">' +
