@@ -91,15 +91,14 @@
       <div class="glide__grid">
 
         <div class="glide__copy">
-          <div class="glide__meet" data-reveal>Meet Glide</div>
+          <button class="glide__meet" type="button" data-reveal aria-label="Start Glide demo — vacation morning">Meet Glide</button>
           <h2 class="glide__title" data-reveal style="--reveal-delay: 80ms">
             Because being taken care of should feel <span class="accent">this easy.</span>
           </h2>
           <p class="glide__body" data-reveal style="--reveal-delay: 160ms">
-            Glide knows your flight, your status, your family, and your plans — and shows you
-            the best choices before anything gets booked. Ask anything. When it's time to
+            Glide is your intelligent travel concierge — always a step ahead with the right
+            options before anything gets booked. Ask anything. When it's time to
             book or pay, <strong>you choose — Glide handles the rest.</strong>
-            Explore the tabs below to discover how GateIQ works.
           </p>
 
           <div class="glide__hint" data-reveal style="--reveal-delay: 240ms">Interactive demo · Tap options to choose</div>
@@ -175,7 +174,18 @@
         </div>
       </div>
     </div>
-    <div class="manifesto__glyph" aria-hidden="true">g</div>
+    <div class="manifesto__glyph" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <!-- knob -->
+        <circle cx="12" cy="4.5" r="1.75"/>
+        <!-- dome -->
+        <path d="M12 7.5C9.2 7.5 6.5 10.4 6.5 15H17.5C17.5 10.4 14.8 7.5 12 7.5Z"/>
+        <!-- inner bar -->
+        <rect x="5.5" y="15" width="13" height="2" rx="1"/>
+        <!-- base bar -->
+        <rect x="4" y="18" width="16" height="2.5" rx="1.25"/>
+      </svg>
+    </div>
   </section>
 
   <!-- ─── Founding: countdown + perks + signup ──────────── -->
@@ -657,6 +667,23 @@
       }, 240);
     }, { threshold: 0.25 });
     io.observe(meetEl);
+  })();
+
+  // ── Bell ding on scroll ────────────────────────────────────────────────
+  (function () {
+    var bell = document.querySelector(".manifesto__glyph");
+    if (!bell || REDUCED_MOTION || !("IntersectionObserver" in window)) return;
+    var fired = false;
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting || fired) return;
+      fired = true;
+      io.disconnect();
+      bell.classList.add("is-dinging");
+      bell.addEventListener("animationend", function () {
+        bell.classList.remove("is-dinging");
+      }, { once: true });
+    }, { threshold: 0.3 });
+    io.observe(bell);
   })();
 
   // ── Phone message typewriter ───────────────────────────────────────────
@@ -1193,6 +1220,15 @@
       if (!btn) return;
       play(btn.getAttribute("data-scenario-choice"));
     });
+
+    var meetBtn = document.querySelector(".glide__meet");
+    if (meetBtn) {
+      meetBtn.addEventListener("click", function () {
+        var phone = document.querySelector(".phone");
+        if (phone) phone.scrollIntoView({ behavior: "smooth", block: "center" });
+        play("vacation");
+      });
+    }
 
     resetDemo();
   })();
