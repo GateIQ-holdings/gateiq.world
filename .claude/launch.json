@@ -4,8 +4,8 @@
     {
       "name": "gateiq-site",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4173"],
-      "port": 4173
+      "runtimeArgs": ["-m", "http.server", "8000"],
+      "port": 8000
     }
   ]
 }

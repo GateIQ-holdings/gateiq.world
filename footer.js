@@ -4,7 +4,6 @@
   el.innerHTML =
     '<div class="foot">' +
       '<div class="foot__brand">' +
-        '<img class="foot__brand-logo" src="/assets/gateiq-logo-glide.png" alt="" width="52" height="52">' +
         '<div class="foot__brand-name">Gate<span class="iq">IQ</span></div>' +
       '</div>' +
       '<div class="foot__left">' +

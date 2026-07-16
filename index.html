@@ -10,7 +10,7 @@
   <meta property="og:title" content="Gate IQ · The airport bends to you">
   <meta property="og:description" content="More vacation. Less airport. Meet Glide, your personal AI travel agent. Founding list now open — first 5,000 only.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="prelaunch.css?v=17">
+  <link rel="stylesheet" href="prelaunch.css?v=21">
   <script src="https://js.stripe.com/v3/" defer></script>
   <script src="site-gate.js"></script>
   <script src="theme-toggle.js" defer></script>
@@ -69,9 +69,10 @@
         The airport <span class="accent">bends</span> to&nbsp;you.
       </h1>
       <p class="hero__sub" data-reveal style="--reveal-delay: 160ms">
-        Gate IQ turns travel days into vacation days. <strong>Glide</strong> — your personal
-        AI travel agent — handles check-in, timing, and surprises, so the
-        trip begins when you close your front door. Not when the wheels leave the runway.
+        GateIQ is your pre-trip intelligence membership, delivering everything you need to know
+        before you go. We anticipate what's ahead, eliminate travel friction, and support you
+        through every stage of your journey, from the moment you leave home until the moment
+        you return and everything in between.
       </p>
       <div class="hero__ctas" data-reveal style="--reveal-delay: 240ms">
         <a href="#signup" class="btn btn--brass">Claim a founding spot →</a>
@@ -90,19 +91,19 @@
       <div class="glide__grid">
 
         <div class="glide__copy">
-          <div class="eyebrow" data-reveal>Meet Glide</div>
+          <button class="glide__meet" type="button" data-reveal aria-label="Start Glide demo — vacation morning">Meet Glide</button>
           <h2 class="glide__title" data-reveal style="--reveal-delay: 80ms">
-            Your own travel agent.<br>
-            <span class="accent">Never off duty.</span>
+            Because being taken care of should feel <span class="accent">this easy.</span>
           </h2>
           <p class="glide__body" data-reveal style="--reveal-delay: 160ms">
-            Glide knows your flight, your status, your family, and your plans — and shows you
-            the best choices before anything gets booked. Ask anything. When it's time to
-            book or pay, <strong>you choose — Glide handles the rest.</strong> Pick a
-            travel moment and see how it works.
+            Glide is your intelligent travel concierge — always a step ahead with the right
+            options before anything gets booked. Ask anything. When it's time to
+            book or pay, <strong>you choose — Glide handles the rest.</strong>
           </p>
 
-          <div class="glide__tabs" role="tablist" aria-label="Glide scenarios" data-reveal style="--reveal-delay: 240ms">
+          <div class="glide__hint" data-reveal style="--reveal-delay: 240ms">Interactive demo · Tap options to choose</div>
+
+          <div class="glide__tabs" role="tablist" aria-label="Glide scenarios" data-reveal style="--reveal-delay: 320ms">
             <span class="glide__tab-indicator" aria-hidden="true"></span>
             <button class="glide__tab" id="tab-vacation" role="tab" aria-selected="false" data-scenario="vacation">
               A vacation morning
@@ -121,8 +122,6 @@
               <span class="glide__tab-progress"></span>
             </button>
           </div>
-
-          <div class="glide__hint" data-reveal style="--reveal-delay: 320ms">Interactive demo · Tap options to choose</div>
         </div>
 
         <div class="phone" data-reveal style="--reveal-delay: 160ms" aria-label="Glide chat demo">
@@ -142,7 +141,7 @@
   <section class="manifesto">
     <div class="wrap">
       <h2 class="manifesto__big" data-reveal>
-        More vacation.<br><em>Less airport.</em>
+        We help solve painful travel problems <em>luxuriously well.</em>
       </h2>
       <div class="manifesto__grid">
         <div data-reveal>
@@ -155,27 +154,38 @@
         <div data-reveal style="--reveal-delay: 80ms">
           <div class="manifesto__cell-label">Time back</div>
           <p class="manifesto__cell-body">
-            Built for people who hate wasting time. No lines you didn't need to stand in,
-            no apps to juggle, no hold music. Ever.
+            This app isn't just about saving time, it's about valuing time. I know your time
+            is worth more than standing in line.
           </p>
         </div>
         <div data-reveal style="--reveal-delay: 160ms">
-          <div class="manifesto__cell-label">Order ahead at your gate</div>
+          <div class="manifesto__cell-label">Order Ahead &amp; Skip the Wait</div>
           <p class="manifesto__cell-body">
-            Partner spots near your gate, ordered ahead and timed to your day —
-            so the meal is ready when you are, not after another line.
+            We've partnered with airport restaurants so your meal is ready when you are.
+            Order ahead, skip the wait because lines are for other people.
           </p>
         </div>
         <div data-reveal style="--reveal-delay: 240ms">
-          <div class="manifesto__cell-label">It bends to you</div>
+          <div class="manifesto__cell-label">The Airport Bends to You</div>
           <p class="manifesto__cell-body">
-            Your status, your kids, your coffee order. When plans change,
-            everything shifts to fit your day — not the other way around.
+            We are an ecosystem of service. Your plans change. We change with them.
+            Our goal is to eliminate friction in travel, every step of the way.
           </p>
         </div>
       </div>
     </div>
-    <div class="manifesto__glyph" aria-hidden="true">g</div>
+    <div class="manifesto__glyph" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <!-- knob -->
+        <circle cx="12" cy="4.5" r="1.75"/>
+        <!-- dome -->
+        <path d="M12 7.5C9.2 7.5 6.5 10.4 6.5 15H17.5C17.5 10.4 14.8 7.5 12 7.5Z"/>
+        <!-- inner bar -->
+        <rect x="5.5" y="15" width="13" height="2" rx="1"/>
+        <!-- base bar -->
+        <rect x="4" y="18" width="16" height="2.5" rx="1.25"/>
+      </svg>
+    </div>
   </section>
 
   <!-- ─── Founding: countdown + perks + signup ──────────── -->
@@ -195,7 +205,7 @@
         <div class="counter__num" id="counter-num">5,000</div>
         <div class="counter__label">Founding spots remaining</div>
         <div class="counter__bar"><div class="counter__fill" id="counter-fill"></div></div>
-        <div class="counter__caption"><strong id="counter-claimed">47</strong> already claimed · every founding member receives a special gift with signup</div>
+        <div class="counter__caption"><strong id="counter-claimed">47</strong> already claimed · every founding member receives a special gift with paid subscription</div>
       </div>
 
       <div class="founding__grid">
@@ -206,7 +216,7 @@
           <div class="perk" data-reveal>
             <div class="perk__num">01</div>
             <div>
-              <h3 class="perk__title">Special gift with signup</h3>
+              <h3 class="perk__title">Special gift with paid subscription</h3>
               <p class="perk__body">A founding gift reserved for everyone on the list — yours the moment you claim your spot.</p>
             </div>
           </div>
@@ -229,13 +239,6 @@
             <div>
               <h3 class="perk__title">Glide, at full priority</h3>
               <p class="perk__body">Founding members' requests jump the queue — flight changes, reservations, and requests are handled first, every time.</p>
-            </div>
-          </div>
-          <div class="perk" data-reveal style="--reveal-delay: 240ms">
-            <div class="perk__num">05</div>
-            <div>
-              <h3 class="perk__title">A say in what we build</h3>
-              <p class="perk__body">A direct line to the founder, and a real say in what we build next.</p>
             </div>
           </div>
         </div>
@@ -299,7 +302,8 @@
     <div class="story__inner">
       <div class="eyebrow" data-reveal>A note from the founder</div>
       <h2 class="story__title" data-reveal style="--reveal-delay: 80ms">
-        Your time is valuable. So is mine.<br>
+        Your time is valuable.<br>
+        So is mine.<br>
         Wasting time in today's world seems completely backward.
       </h2>
       <div class="story__body" data-reveal style="--reveal-delay: 160ms">
@@ -324,7 +328,9 @@
         </p>
       </div>
       <div class="story__sig" data-reveal>
-        <div class="story__sig-glyph">g</div>
+        <div class="story__sig-glyph">
+          <img src="/assets/gateiq-logo-glide.png" alt="Gate IQ" width="68" height="68">
+        </div>
         <div>
           <div class="story__sig-name">Joy Yarkoni</div>
           <div class="story__sig-role">Founder, Gate IQ · Nashville, TN</div>
@@ -335,6 +341,7 @@
 
   <!-- ─── Finale ────────────────────────────────────────── -->
   <section class="finale">
+    <div class="finale__bg" aria-hidden="true"></div>
     <h2 class="finale__title" data-reveal>Your next trip could feel like this.</h2>
     <p class="finale__sub" data-reveal style="--reveal-delay: 80ms">
       <span id="finale-remaining">4,953</span> founding spots left. Then the door closes.
@@ -606,6 +613,116 @@
     };
   })();
 
+  // ── Finale parallax ───────────────────────────────────────────────────
+  (function () {
+    var section = document.querySelector(".finale");
+    var bg = section ? section.querySelector(".finale__bg") : null;
+    if (!section || !bg || REDUCED_MOTION) return;
+    function update() {
+      var rect = section.getBoundingClientRect();
+      var vh = window.innerHeight;
+      var progress = (vh - rect.top) / (vh + rect.height);
+      var offset = (progress - 0.5) * 80;
+      bg.style.transform = "translateY(" + offset.toFixed(2) + "px)";
+    }
+    var ticking = false;
+    window.addEventListener("scroll", function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { ticking = false; update(); });
+    }, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  })();
+
+  // ── Meet Glide typewriter ──────────────────────────────────────────────
+  (function () {
+    var meetEl = document.querySelector(".glide__meet");
+    if (!meetEl || REDUCED_MOTION) return;
+    var text = meetEl.textContent.trim();
+    meetEl.innerHTML = "";
+    var fired = false;
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting || fired) return;
+      fired = true;
+      io.disconnect();
+      setTimeout(function () {
+        var cursor = document.createElement("span");
+        cursor.className = "typewriter-cursor";
+        meetEl.appendChild(cursor);
+        var i = 0;
+        function type() {
+          if (i < text.length) {
+            meetEl.insertBefore(document.createTextNode(text[i++]), cursor);
+            setTimeout(type, 88);
+          } else {
+            setTimeout(function () {
+              cursor.style.transition = "opacity 400ms ease";
+              cursor.style.opacity = "0";
+              setTimeout(function () { cursor.remove(); }, 420);
+            }, 540);
+          }
+        }
+        type();
+      }, 240);
+    }, { threshold: 0.25 });
+    io.observe(meetEl);
+  })();
+
+  // ── Bell ding on scroll ────────────────────────────────────────────────
+  (function () {
+    var bell = document.querySelector(".manifesto__glyph");
+    if (!bell || REDUCED_MOTION || !("IntersectionObserver" in window)) return;
+    var fired = false;
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting || fired) return;
+      fired = true;
+      io.disconnect();
+      bell.classList.add("is-dinging");
+      bell.addEventListener("animationend", function () {
+        bell.classList.remove("is-dinging");
+      }, { once: true });
+    }, { threshold: 0.3 });
+    io.observe(bell);
+  })();
+
+  // ── Phone message typewriter ───────────────────────────────────────────
+  function typeHTML(container, html, checkAlive, onDone) {
+    var temp = document.createElement("div");
+    temp.innerHTML = html;
+    container.innerHTML = "";
+    var seq = [];
+    function walk(src, dest) {
+      for (var i = 0; i < src.childNodes.length; i++) {
+        var node = src.childNodes[i];
+        if (node.nodeType === 3) {
+          var tn = document.createTextNode("");
+          dest.appendChild(tn);
+          var chars = node.textContent;
+          for (var j = 0; j < chars.length; j++) {
+            seq.push({ tn: tn, ch: chars[j] });
+          }
+        } else if (node.nodeType === 1) {
+          var clone = node.cloneNode(false);
+          dest.appendChild(clone);
+          walk(node, clone);
+        }
+      }
+    }
+    walk(temp, container);
+    if (!seq.length) { if (onDone) onDone(); return; }
+    var delay = Math.max(10, Math.min(24, Math.floor(2000 / seq.length)));
+    var idx = 0;
+    function tick() {
+      if (!checkAlive()) return;
+      if (idx >= seq.length) { if (onDone) onDone(); return; }
+      seq[idx].tn.textContent += seq[idx].ch;
+      idx++;
+      setTimeout(tick, delay);
+    }
+    tick();
+  }
+
   // ── Glide chat demo ────────────────────────────────────────────────────
   var SCENARIOS = {
     vacation: {
@@ -827,7 +944,7 @@
     var defaultFlight = "Choose a scenario";
 
     function usesGridTabs() {
-      return window.matchMedia("(max-width: 980px)").matches;
+      return true;
     }
 
     function tabsAreWrapped() {
@@ -940,6 +1057,9 @@
       d.innerHTML = html;
       return d.firstElementChild;
     }
+    var CHOOSER_TITLE = "Choose a travel moment to preview Glide.";
+    var CHOOSER_BODY  = "See how it handles a smooth departure, a cancellation, a tight connection, or a business trip morning.";
+
     function renderChooser() {
       var buttons = Object.keys(SCENARIOS).map(function (key) {
         var tab = document.querySelector('.glide__tab[data-scenario="' + key + '"]');
@@ -950,9 +1070,9 @@
         '<div class="msg msg--prompt">' +
           '<div class="scenario-picker">' +
             '<div class="scenario-picker__eyebrow">Pick a scenario</div>' +
-            '<div class="scenario-picker__title">Choose a travel moment to preview Glide.</div>' +
-            '<div class="scenario-picker__body">See how it handles a smooth departure, a cancellation, a tight connection, or a business trip morning.</div>' +
-            '<div class="scenario-picker__choices">' + buttons + '</div>' +
+            '<div class="scenario-picker__title"></div>' +
+            '<div class="scenario-picker__body"></div>' +
+            '<div class="scenario-picker__choices" style="opacity:0;pointer-events:none">' + buttons + '</div>' +
           '</div>' +
         '</div>'
       );
@@ -990,11 +1110,41 @@
     function scrollDown() { log.scrollTop = log.scrollHeight; }
     function resetDemo() {
       runId += 1;
+      var id = runId;
       log.innerHTML = "";
-      log.appendChild(renderChooser());
+      var chooser = renderChooser();
+      log.appendChild(chooser);
       flightEl.textContent = defaultFlight;
       setActiveTab("", 0);
       scrollDown();
+
+      var titleEl   = chooser.querySelector(".scenario-picker__title");
+      var bodyEl    = chooser.querySelector(".scenario-picker__body");
+      var choicesEl = chooser.querySelector(".scenario-picker__choices");
+
+      if (REDUCED_MOTION) {
+        titleEl.textContent   = CHOOSER_TITLE;
+        bodyEl.textContent    = CHOOSER_BODY;
+        choicesEl.style.opacity      = "1";
+        choicesEl.style.pointerEvents = "";
+        return;
+      }
+
+      setTimeout(function () {
+        if (id !== runId) return;
+        typeHTML(titleEl, CHOOSER_TITLE, function () { return id === runId; }, function () {
+          if (id !== runId) return;
+          setTimeout(function () {
+            if (id !== runId) return;
+            typeHTML(bodyEl, CHOOSER_BODY, function () { return id === runId; }, function () {
+              if (id !== runId) return;
+              choicesEl.style.transition    = "opacity 360ms ease";
+              choicesEl.style.opacity       = "1";
+              choicesEl.style.pointerEvents = "";
+            });
+          }, 80);
+        });
+      }, 180);
     }
 
     function play(name) {
@@ -1070,6 +1220,15 @@
       if (!btn) return;
       play(btn.getAttribute("data-scenario-choice"));
     });
+
+    var meetBtn = document.querySelector(".glide__meet");
+    if (meetBtn) {
+      meetBtn.addEventListener("click", function () {
+        var phone = document.querySelector(".phone");
+        if (phone) phone.scrollIntoView({ behavior: "smooth", block: "center" });
+        play("vacation");
+      });
+    }
 
     resetDemo();
   })();
