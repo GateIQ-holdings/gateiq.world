@@ -273,6 +273,10 @@
                   <span class="signup__payment-price">$49.99/mo · not charged today</span>
                 </span>
               </label>
+              <div class="signup__payment-nudge" id="payment-nudge" hidden>
+                <span class="signup__payment-nudge-star" aria-hidden="true">✦</span>
+                Founding gift included when you save payment
+              </div>
               <div class="signup__payment-panel" id="payment-panel">
                 <p class="signup__payment-copy">
                   Enter your card, Apple Pay, Google Pay, or PayPal to save time when we launch.
@@ -289,7 +293,7 @@
           </div>
           <div class="signup__fine" id="signup-fine">
             <span class="dot"></span>
-            <span>Founding list only. No newsletter, no spam, and we never sell your data. Ever.</span>
+            <span>Founding list only. No spam, and we never sell your data. Ever. <a href="privacy.html" style="color:inherit;opacity:.7;text-decoration:underline">Privacy policy</a>.</span>
           </div>
         </form>
 
@@ -1237,10 +1241,19 @@
   (function () {
     var toggle = document.getElementById("save-payment-toggle");
     var panel = document.getElementById("payment-panel");
+    var nudge = document.getElementById("payment-nudge");
     var paymentMount = document.getElementById("payment-element");
     var paymentMessage = document.getElementById("payment-message");
     var form = document.getElementById("waitlist-form");
     if (!toggle || !panel || !form) return;
+
+    function setNudge(visible) {
+      if (!nudge) return;
+      nudge.hidden = false;
+      // force reflow so transition fires on first show
+      nudge.getBoundingClientRect();
+      nudge.classList.toggle("is-visible", visible);
+    }
 
     var stripeInstance = null;
     var stripeElements = null;
@@ -1349,8 +1362,10 @@
         panel.hidden = true;
         showPaymentError("");
         destroyPaymentElement();
+        setNudge(true);
         return;
       }
+      setNudge(false);
 
       if (!paymentEnabled()) {
         toggle.checked = false;

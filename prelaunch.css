@@ -1296,6 +1296,42 @@ html.gateiq-locked body > *:not(#password-gate) {
   color: #B33A3A;
 }
 
+.signup__payment-nudge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg-on-grey);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  overflow: hidden;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  border-width: 0;
+  opacity: 0;
+  transition: max-height 0.28s ease, opacity 0.22s ease, padding 0.28s ease, margin-top 0.28s ease, border-width 0s 0.28s;
+}
+.signup__payment-nudge.is-visible {
+  max-height: 60px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  border-width: 1px;
+  opacity: 1;
+  transition: max-height 0.28s ease, opacity 0.22s ease 0.04s, padding 0.28s ease, margin-top 0.28s ease, border-width 0s;
+}
+.signup__payment-nudge-star {
+  color: var(--accent);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
 /* airport autocomplete */
 .airport-wrap { position: relative; }
 .airport-dropdown {
