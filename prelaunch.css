@@ -620,6 +620,18 @@ html.gateiq-locked body > *:not(#password-gate) {
   max-width: 520px;
 }
 
+.glide__disclaimer {
+  margin-top: 28px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  text-align: center;
+  width: 100%;
+  opacity: 0.7;
+}
+
 .glide__tabs {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
