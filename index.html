@@ -273,7 +273,7 @@
                   <span class="signup__payment-price">$49.99/mo · not charged today</span>
                 </span>
               </label>
-              <div class="signup__payment-panel" id="payment-panel" hidden>
+              <div class="signup__payment-panel" id="payment-panel">
                 <p class="signup__payment-copy">
                   Enter your card, Apple Pay, Google Pay, or PayPal to save time when we launch.
                   <strong>You will not be charged today.</strong> Founding membership is
@@ -1363,8 +1363,6 @@
       try {
         await ensureSetupIntent();
       } catch (err) {
-        toggle.checked = false;
-        panel.hidden = true;
         destroyPaymentElement();
         showPaymentError(err.message || "Could not load payment options.");
       }
