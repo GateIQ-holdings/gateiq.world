@@ -1,7 +1,0 @@
-{
-  "name": "gateiq-netlify-functions",
-  "private": true,
-  "dependencies": {
-    "stripe": "^18.0.0"
-  }
-}
