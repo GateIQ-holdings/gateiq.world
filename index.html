@@ -134,6 +134,8 @@
         </div>
 
       </div>
+
+      <p class="glide__disclaimer">Demo for illustration only · UI shown may differ from final app</p>
     </div>
   </section>
 
@@ -266,18 +268,23 @@
 
             <div class="signup__payment" id="signup-payment">
               <label class="signup__payment-toggle">
-                <input class="signup__payment-checkbox" type="checkbox" id="save-payment-toggle" name="savePayment" value="yes">
+                <input class="signup__payment-checkbox" type="checkbox" id="save-payment-toggle" name="savePayment" value="yes" checked>
                 <span class="signup__payment-toggle-box" aria-hidden="true"></span>
                 <span class="signup__payment-toggle-text">
                   Save time at launch — add payment now
                   <span class="signup__payment-price">$49.99/mo · not charged today</span>
                 </span>
               </label>
-              <div class="signup__payment-panel" id="payment-panel" hidden>
+              <div class="signup__payment-nudge" id="payment-nudge" hidden>
+                <span class="signup__payment-nudge-star" aria-hidden="true">✦</span>
+                Founding gift included when you save payment
+              </div>
+              <div class="signup__payment-panel" id="payment-panel">
                 <p class="signup__payment-copy">
                   Enter your card, Apple Pay, Google Pay, or PayPal to save time when we launch.
                   <strong>You will not be charged today.</strong> Founding membership is
                   <strong>$49.99/month</strong> — billing starts only when Gate IQ goes live.
+                  We'll send you an email announcement with a link to the app before we charge your card.
                 </p>
                 <div class="signup__payment-element" id="payment-element"></div>
                 <p class="signup__payment-legal">By saving a payment method, you agree to our <a href="privacy.html#payment-terms">Privacy &amp; Terms</a>. You will not be charged until Gate IQ launches.</p>
@@ -289,7 +296,7 @@
           </div>
           <div class="signup__fine" id="signup-fine">
             <span class="dot"></span>
-            <span>Founding list only. No newsletter, no spam, and we never sell your data. Ever.</span>
+            <span>Founding list only. No spam, and we never sell your data. Ever. <a href="privacy.html" style="color:inherit;opacity:.7;text-decoration:underline">Privacy policy</a>.</span>
           </div>
         </form>
 
@@ -378,7 +385,7 @@
   var WAITLIST_ENDPOINT = "https://formspree.io/f/xojblngy";
 
   // Stripe — set publishable key; deploy netlify/functions for the setup endpoint.
-  var STRIPE_PUBLISHABLE_KEY = "";
+  var STRIPE_PUBLISHABLE_KEY = "pk_test_51TtqCsRw0O6OM7ER9qwtzk12gkMqjQf7w2k0R4CJtRsGMZXQc3IruPw4O3DTtzk2o72vRil7LFXG280uLuIh4CKB00FcblRb4Q";
   var STRIPE_SETUP_ENDPOINT = "/api/create-setup-intent";
   var FOUNDING_MONTHLY_PRICE = "49.99";
 
@@ -1237,10 +1244,19 @@
   (function () {
     var toggle = document.getElementById("save-payment-toggle");
     var panel = document.getElementById("payment-panel");
+    var nudge = document.getElementById("payment-nudge");
     var paymentMount = document.getElementById("payment-element");
     var paymentMessage = document.getElementById("payment-message");
     var form = document.getElementById("waitlist-form");
     if (!toggle || !panel || !form) return;
+
+    function setNudge(visible) {
+      if (!nudge) return;
+      nudge.hidden = false;
+      // force reflow so transition fires on first show
+      nudge.getBoundingClientRect();
+      nudge.classList.toggle("is-visible", visible);
+    }
 
     var stripeInstance = null;
     var stripeElements = null;
@@ -1349,8 +1365,10 @@
         panel.hidden = true;
         showPaymentError("");
         destroyPaymentElement();
+        setNudge(true);
         return;
       }
+      setNudge(false);
 
       if (!paymentEnabled()) {
         toggle.checked = false;
@@ -1363,8 +1381,6 @@
       try {
         await ensureSetupIntent();
       } catch (err) {
-        toggle.checked = false;
-        panel.hidden = true;
         destroyPaymentElement();
         showPaymentError(err.message || "Could not load payment options.");
       }
