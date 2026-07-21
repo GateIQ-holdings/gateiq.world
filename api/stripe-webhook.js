@@ -18,6 +18,14 @@ module.exports = async function handler(req, res) {
 
   const sig = req.headers["stripe-signature"];
   const rawBody = await readRawBody(req);
+  console.log("DIAG", JSON.stringify({
+    sigHeaderPresent: Boolean(sig),
+    rawBodyLength: rawBody.length,
+    rawBodyFirst40: rawBody.toString("utf8", 0, 40),
+    rawBodyLast10: rawBody.toString("utf8", Math.max(0, rawBody.length - 10)),
+    contentType: req.headers["content-type"],
+    contentLengthHeader: req.headers["content-length"]
+  }));
 
   let event;
   try {
