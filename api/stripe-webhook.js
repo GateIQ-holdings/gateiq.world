@@ -1,9 +1,5 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-module.exports.config = {
-  api: { bodyParser: false }
-};
-
 function readRawBody(req) {
   return new Promise((resolve, reject) => {
     const chunks = [];
@@ -47,4 +43,8 @@ module.exports = async function handler(req, res) {
   }
 
   return res.status(200).json({ received: true });
+};
+
+module.exports.config = {
+  api: { bodyParser: false }
 };
