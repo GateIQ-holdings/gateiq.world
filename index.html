@@ -11,6 +11,7 @@
   <meta property="og:description" content="More vacation. Less airport. Meet Glide, your personal AI travel agent. Founding list now open — first 5,000 only.">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="prelaunch.css?v=21">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <script src="https://js.stripe.com/v3/" defer></script>
   <script src="site-gate.js"></script>
   <script src="theme-toggle.js" defer></script>
@@ -201,6 +202,11 @@
           Gate IQ opens with exactly 5,000 founding spots. When they're gone,
           they're gone — and so is everything that comes with them.
         </p>
+      </div>
+
+      <div class="founding__gift-badge" data-reveal>
+        <i class="fa-solid fa-gift" aria-hidden="true"></i>
+        <span>Every founding member gets a free welcome gift — on us.</span>
       </div>
 
       <div class="counter" data-reveal>
@@ -1296,7 +1302,13 @@
       };
     }
 
+    function setCtaCardReady(ready) {
+      var btn = form.querySelector(".signup__cta");
+      if (btn) btn.classList.toggle("signup__cta--card-ready", ready);
+    }
+
     function destroyPaymentElement() {
+      setCtaCardReady(false);
       if (paymentElement) {
         paymentElement.unmount();
         paymentElement.destroy();
@@ -1362,6 +1374,9 @@
         }
       });
       paymentElement.mount(paymentMount);
+      paymentElement.on("change", function (event) {
+        setCtaCardReady(Boolean(event.complete));
+      });
     }
 
     async function onToggleChange() {
@@ -1416,6 +1431,9 @@
         }
       });
       paymentElement.mount(paymentMount);
+      paymentElement.on("change", function (event) {
+        setCtaCardReady(Boolean(event.complete));
+      });
     });
 
     window.__gateiqStripe = {
