@@ -272,9 +272,9 @@
               </select>
             </div>
 
-            <div class="founding__gift-badge">
+            <div class="founding__gift-badge" id="founding-gift-badge">
               <i class="fa-solid fa-gift" aria-hidden="true"></i>
-              <span>Save your card now to lock in your founding gift — it ships the moment we launch.</span>
+              <span id="founding-gift-badge-text">Save your card now to lock in your founding gift — it ships the moment we launch.</span>
             </div>
 
             <div class="signup__payment" id="signup-payment">
@@ -1536,6 +1536,8 @@
           paymentMessage.textContent = err.message || "Payment could not be saved.";
           paymentMessage.hidden = false;
         }
+        var giftBadgeFail = document.getElementById("founding-gift-badge");
+        if (giftBadgeFail) giftBadgeFail.hidden = true;
         if (window.__gateiqCounter) window.__gateiqCounter.decrement();
         return;
       }
@@ -1550,6 +1552,15 @@
       ? '<span class="dot"></span><span>Your founding spot and payment method are saved. You won\'t be charged until launch — $' + FOUNDING_MONTHLY_PRICE + '/month when Gate IQ goes live.</span>'
       : '<span class="dot"></span><span>Your special gift is reserved. We\'ll reach out before Gate IQ opens at Nashville International Airport (<span class="t-mono">BNA</span>).</span>';
     document.getElementById("signup-payment").hidden = true;
+    var giftBadge = document.getElementById("founding-gift-badge");
+    if (giftBadge) {
+      if (savingPayment) {
+        document.getElementById("founding-gift-badge-text").textContent =
+          "Your card is saved — your founding gift is locked in and ships the moment we launch.";
+      } else {
+        giftBadge.hidden = true;
+      }
+    }
   }
   document.getElementById("waitlist-form").addEventListener("submit", submitInvite);
 
