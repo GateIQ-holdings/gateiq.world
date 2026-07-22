@@ -252,11 +252,6 @@
           <div class="signup__fields">
             <input class="signup__input" type="text" name="name" placeholder="Full name" required autocomplete="name">
             <input class="signup__input" type="email" name="email" placeholder="you@youremail.com" required autocomplete="email">
-            <label class="signup__consent">
-              <input class="signup__consent-checkbox" type="checkbox" name="emailOptIn" value="yes" checked>
-              <span class="signup__consent-box" aria-hidden="true"></span>
-              <span>Send me email updates — founding perks, launch news, and travel intel worth reading.</span>
-            </label>
             <input class="signup__input" type="tel" name="phone" placeholder="Phone number" required autocomplete="tel">
             <label class="signup__consent">
               <input class="signup__consent-checkbox" type="checkbox" name="smsOptIn" value="yes" checked>
@@ -1490,7 +1485,6 @@
       travelerType: form.querySelector('[name="travelerType"]').value,
       source:       "prelaunch",
       savePayment:  document.getElementById("save-payment-toggle").checked ? "yes" : "no",
-      emailOptIn:   form.querySelector('[name="emailOptIn"]').checked ? "yes" : "no",
       smsOptIn:     form.querySelector('[name="smsOptIn"]').checked ? "yes" : "no"
     };
     var savingPayment = data.savePayment === "yes";
