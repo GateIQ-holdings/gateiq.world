@@ -1219,6 +1219,55 @@ html.gateiq-locked body > *:not(#password-gate) {
   border: 1px solid color-mix(in srgb, var(--navy) 12%, transparent);
   background: color-mix(in srgb, var(--cream) 72%, transparent);
 }
+.signup__consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: -2px;
+  padding: 0 2px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--fg-on-grey-2);
+}
+.signup__consent-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+.signup__consent-box {
+  width: 15px;
+  height: 15px;
+  margin-top: 1px;
+  border-radius: 4px;
+  border: 1.5px solid color-mix(in srgb, var(--navy) 22%, transparent);
+  background: var(--cream);
+  flex-shrink: 0;
+  position: relative;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+.signup__consent-checkbox:focus-visible + .signup__consent-box {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.signup__consent-checkbox:checked + .signup__consent-box {
+  border-color: var(--accent-deep);
+  background: var(--accent);
+}
+.signup__consent-checkbox:checked + .signup__consent-box::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--surface-dark);
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+}
+
 .signup__payment-toggle {
   display: flex;
   align-items: flex-start;
