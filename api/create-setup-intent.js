@@ -48,7 +48,7 @@ module.exports = async function handler(req, res) {
 
     const setupIntent = await stripe.setupIntents.create({
       customer: customer.id,
-      payment_method_types: ["card", "paypal"],
+      payment_method_types: ["card"],
       metadata: {
         homeAirport,
         travelerType,
