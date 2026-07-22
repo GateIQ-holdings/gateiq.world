@@ -1356,7 +1356,11 @@
         clientSecret: setupClientSecret,
         appearance: getStripeAppearance()
       });
-      paymentElement = stripeElements.create("payment");
+      paymentElement = stripeElements.create("payment", {
+        defaultValues: {
+          billingDetails: { name: data.name, email: data.email, phone: data.phone }
+        }
+      });
       paymentElement.mount(paymentMount);
     }
 
@@ -1406,7 +1410,12 @@
         clientSecret: setupClientSecret,
         appearance: getStripeAppearance()
       });
-      paymentElement = stripeElements.create("payment");
+      var data = formSignupData();
+      paymentElement = stripeElements.create("payment", {
+        defaultValues: {
+          billingDetails: { name: data.name, email: data.email, phone: data.phone }
+        }
+      });
       paymentElement.mount(paymentMount);
     });
 
