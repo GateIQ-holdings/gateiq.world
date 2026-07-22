@@ -1,4 +1,5 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const crypto = require("crypto");
 
 function readRawBody(req) {
   return new Promise((resolve, reject) => {
@@ -18,6 +19,12 @@ module.exports = async function handler(req, res) {
 
   const sig = req.headers["stripe-signature"];
   const rawBody = await readRawBody(req);
+
+  const secretVal = process.env.STRIPE_WEBHOOK_SECRET || "";
+  console.log("DIAG", JSON.stringify({
+    secretLength: secretVal.length,
+    secretFingerprint: crypto.createHash("sha256").update(secretVal).digest("hex").slice(0, 8)
+  }));
 
   let event;
   try {
