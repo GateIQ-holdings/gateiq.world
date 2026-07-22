@@ -1357,8 +1357,8 @@
         appearance: getStripeAppearance()
       });
       paymentElement = stripeElements.create("payment", {
-        defaultValues: {
-          billingDetails: { name: data.name, email: data.email, phone: data.phone }
+        fields: {
+          billingDetails: { name: "never", email: "never", phone: "never" }
         }
       });
       paymentElement.mount(paymentMount);
@@ -1410,10 +1410,9 @@
         clientSecret: setupClientSecret,
         appearance: getStripeAppearance()
       });
-      var data = formSignupData();
       paymentElement = stripeElements.create("payment", {
-        defaultValues: {
-          billingDetails: { name: data.name, email: data.email, phone: data.phone }
+        fields: {
+          billingDetails: { name: "never", email: "never", phone: "never" }
         }
       });
       paymentElement.mount(paymentMount);
