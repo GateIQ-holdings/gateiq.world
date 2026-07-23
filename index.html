@@ -1519,12 +1519,13 @@
       x:         { name: "X",         icon: "fa-brands fa-x-twitter", host: /(^|\.)(x|twitter)\.com$/,  url: function (h) { return "https://x.com/" + h; } },
       youtube:   { name: "YouTube",   icon: "fa-brands fa-youtube",   host: /(youtube\.com|youtu\.be)$/, url: function (h) { return "https://youtube.com/@" + h; } },
       facebook:  { name: "Facebook",  icon: "fa-brands fa-facebook",  host: /facebook\.com$/,           url: function (h) { return "https://facebook.com/" + h; } },
+      reddit:    { name: "Reddit",    icon: "fa-brands fa-reddit",    host: /reddit\.com$/,             url: function (h) { return "https://reddit.com/user/" + h; } },
       linkedin:  { name: "LinkedIn",  icon: "fa-brands fa-linkedin",  host: /linkedin\.com$/,           url: function (h) { return "https://linkedin.com/in/" + h; } },
       threads:   { name: "Threads",   icon: "fa-brands fa-threads",   host: /threads\.(net|com)$/ },
       snapchat:  { name: "Snapchat",  icon: "fa-brands fa-snapchat",  host: /snapchat\.com$/ },
       github:    { name: "GitHub",    icon: "fa-brands fa-github",    host: /github\.com$/ }
     };
-    var PICK = ["instagram", "tiktok", "x", "youtube", "facebook", "linkedin"]; // toggle row
+    var PICK = ["instagram", "tiktok", "x", "facebook", "reddit"]; // toggle row
 
     var selected = {};   // platform key -> true
     var chips = [];      // { platform, icon, label, value }
