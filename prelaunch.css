@@ -1642,6 +1642,12 @@ html.gateiq-locked body > *:not(#password-gate) {
 }
 .signup__payment-element {
   min-height: 44px;
+  border-radius: 14px;
+  transition: box-shadow 160ms ease, outline-color 160ms ease;
+}
+.signup__payment-element--invalid {
+  outline: 1.5px solid var(--card-error, #B33A3A);
+  outline-offset: 4px;
 }
 .signup__payment-legal {
   margin: 12px 0 0;
@@ -1658,6 +1664,7 @@ html.gateiq-locked body > *:not(#password-gate) {
   margin: 12px 0 0;
   font-size: 13px;
   line-height: 1.45;
+  font-weight: 500;
   color: var(--card-error, #B33A3A);
 }
 

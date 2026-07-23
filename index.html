@@ -10,7 +10,7 @@
   <meta property="og:title" content="Gate IQ · The airport bends to you">
   <meta property="og:description" content="More vacation. Less airport. Meet Glide, your personal AI travel agent. Founding list now open — first 5,000 only.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="prelaunch.css?v=33">
+  <link rel="stylesheet" href="prelaunch.css?v=34">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <script src="https://js.stripe.com/v3/" defer></script>
   <script src="site-gate.js"></script>
@@ -322,8 +322,8 @@
                   Add your name, email, and phone above and we'll pull up secure payment.
                 </p>
                 <div class="signup__payment-element" id="payment-element"></div>
-                <p class="signup__payment-legal">By saving a payment method, you agree to our <a href="privacy.html#payment-terms">Privacy &amp; Terms</a>.<br>You will not be charged until Gate IQ launches.</p>
                 <p class="signup__payment-error" id="payment-message" hidden role="alert"></p>
+                <p class="signup__payment-legal">By saving a payment method, you agree to our <a href="privacy.html#payment-terms">Privacy &amp; Terms</a>.<br>You will not be charged until Gate IQ launches.</p>
               </div>
             </div>
 
@@ -1309,6 +1309,62 @@
       if (!paymentMessage) return;
       paymentMessage.textContent = msg || "";
       paymentMessage.hidden = !msg;
+      if (paymentMount) paymentMount.classList.toggle("signup__payment-element--invalid", Boolean(msg));
+      if (stripeElements) {
+        var appearance = getStripeAppearance();
+        if (msg) {
+          appearance.rules = appearance.rules || {};
+          appearance.rules[".Input"] = {
+            border: "1.5px solid #C44B4B",
+            boxShadow: "none"
+          };
+          appearance.rules[".Input:focus"] = {
+            border: "1.5px solid #C44B4B",
+            boxShadow: "none"
+          };
+        }
+        try { stripeElements.update({ appearance: appearance }); } catch (_) {}
+      }
+    }
+
+    function clearPaymentError() {
+      showPaymentError("");
+    }
+
+    // Map Stripe card errors to copy that never implies a charge/decline.
+    function friendlyCardError(err) {
+      var code = (err && (err.code || err.decline_code)) || "";
+      var msg = (err && err.message) || "";
+      if (code === "incorrect_cvc" || /cvc|security code/i.test(msg)) {
+        return {
+          message: "That security code looks invalid. Check the CVC and try again.",
+          fields: ["cvc"]
+        };
+      }
+      if (code === "expired_card" || /expir/i.test(msg)) {
+        return {
+          message: "That expiry date looks invalid. Check the date or try a different card.",
+          fields: ["expiry"]
+        };
+      }
+      if (code === "incorrect_number" || code === "invalid_number" || /card number/i.test(msg)) {
+        return {
+          message: "That card number looks invalid. Check the number and try again.",
+          fields: ["number"]
+        };
+      }
+      if (code === "incomplete_number" || code === "incomplete_expiry" || code === "incomplete_cvc" || code === "incomplete_zip") {
+        return {
+          message: "Your card details look incomplete. Fill in every field and try again.",
+          fields: ["number", "expiry", "cvc"]
+        };
+      }
+      // card_declined / generic_decline / processing_error / catch-all —
+      // never say "declined" or imply we ran a payment.
+      return {
+        message: "This card looks invalid or can’t be saved. Check the number, expiry, and CVC — or try a different card.",
+        fields: ["number", "expiry", "cvc"]
+      };
     }
 
     function getStripeAppearance() {
@@ -1351,6 +1407,7 @@
 
     function destroyPaymentElement() {
       setCtaCardReady(false);
+      clearPaymentError();
       if (paymentElement) {
         paymentElement.unmount();
         paymentElement.destroy();
@@ -1420,13 +1477,14 @@
       paymentElement.mount(paymentMount);
       paymentElement.on("change", function (event) {
         setCtaCardReady(Boolean(event.complete));
+        if (event.complete || event.empty === false) clearPaymentError();
       });
     }
 
     async function onToggleChange() {
       if (!toggle.checked) {
         panel.hidden = true;
-        showPaymentError("");
+        clearPaymentError();
         destroyPaymentElement();
         setNudge(true);
         return;
@@ -1482,14 +1540,27 @@
       paymentElement.mount(paymentMount);
       paymentElement.on("change", function (event) {
         setCtaCardReady(Boolean(event.complete));
+        if (event.complete || event.empty === false) clearPaymentError();
       });
     });
 
     window.__gateiqStripe = {
       isSavingPayment: function () { return toggle.checked; },
       isReady: function () { return Boolean(toggle.checked && stripeElements && setupClientSecret && !setupLoading); },
+      showInvalidCard: function (stripeErr) {
+        var friendly = friendlyCardError(stripeErr || {});
+        showPaymentError(friendly.message);
+        if (paymentElement && typeof paymentElement.focus === "function") {
+          try { paymentElement.focus(); } catch (_) {}
+        }
+        if (paymentMessage) {
+          paymentMessage.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        }
+        return friendly.message;
+      },
       confirmPayment: async function () {
         if (!toggle.checked) return { ok: true };
+        clearPaymentError();
         await ensureSetupIntent();
         if (!stripeInstance || !stripeElements) {
           throw new Error("Payment form is not ready yet.");
@@ -1497,7 +1568,11 @@
         // Payment Element requires submit() before confirmSetup (validation + wallets).
         var submitted = await stripeElements.submit();
         if (submitted.error) {
-          throw new Error(submitted.error.message || "Check your payment details and try again.");
+          var submitFriendly = friendlyCardError(submitted.error);
+          showPaymentError(submitFriendly.message);
+          var submitErr = new Error(submitFriendly.message);
+          submitErr.stripe = submitted.error;
+          throw submitErr;
         }
         var data = formSignupData();
         var result = await stripeInstance.confirmSetup({
@@ -1522,7 +1597,11 @@
             message: result.error.message,
             payment_method: result.error.payment_method && result.error.payment_method.id
           });
-          throw new Error(result.error.message || "Payment could not be saved.");
+          var confirmFriendly = friendlyCardError(result.error);
+          showPaymentError(confirmFriendly.message);
+          var confirmErr = new Error(confirmFriendly.message);
+          confirmErr.stripe = result.error;
+          throw confirmErr;
         }
         return { ok: true };
       }
@@ -1899,33 +1978,13 @@
       try {
         await window.__gateiqStripe.confirmPayment();
       } catch (err) {
-        var stripeMsg = (err && err.message) || "Payment could not be saved.";
-        console.error("[GateIQ] payment save failed:", stripeMsg, err);
-        btn.textContent = "Retry saving payment →";
-        btn.disabled = false;
-        keepAnchored(function () {
-          document.getElementById("signup-title").innerHTML = "You're in.<br>Spot reserved.";
-          document.getElementById("signup-fine").innerHTML =
-            '<span class="dot"></span><span>Your spot is saved. We couldn\'t store your card yet — fix the payment details below and retry, or add it at launch ($' + FOUNDING_MONTHLY_PRICE + '/month).</span>';
-          var paymentMessage = document.getElementById("payment-message");
-          if (paymentMessage) {
-            paymentMessage.textContent = stripeMsg;
-            paymentMessage.hidden = false;
-          }
-          var giftBadgeFail = document.getElementById("founding-gift-badge");
-          if (giftBadgeFail) giftBadgeFail.hidden = true;
-          // Keep payment panel open so they can fix the card and retry.
-          var paymentPanel = document.getElementById("payment-panel");
-          if (paymentPanel) paymentPanel.hidden = false;
-          document.getElementById("signup-socials").hidden = true;
-        });
-        if (!alreadyCounted && window.__gateiqCounter) {
-          window.__gateiqCounter.decrement();
-          form.dataset.spotCounted = "1";
+        // Stay on the form — never open the success overlay when the card can't be saved.
+        // confirmPayment already paints the inline invalid-card error + field stroke.
+        if (window.__gateiqStripe.showInvalidCard) {
+          window.__gateiqStripe.showInvalidCard(err.stripe || err);
         }
-        showToast("Spot reserved — card not saved yet");
-        showSuccessOverlay(SPOTS_CLAIMED,
-          "Your spot is saved, but we couldn't store your payment method: " + stripeMsg + " You can fix it on the form or add a card at launch — $" + FOUNDING_MONTHLY_PRICE + "/month.");
+        btn.textContent = "Claim my founding spot →";
+        btn.disabled = false;
         return;
       }
     }
