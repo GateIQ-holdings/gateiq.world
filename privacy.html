@@ -72,6 +72,7 @@
         <li>Home airport IATA code (optional)</li>
         <li>Traveler type (optional)</li>
         <li>Whether you opted to save a payment method (optional)</li>
+        <li>Social media handles or links, if you choose to add them (optional)</li>
       </ul>
       <p><strong>Optional payment method</strong> — if you choose to save a payment method at signup, payment details (such as card number, Apple Pay, Google Pay, or PayPal account information) are collected and processed directly by <strong>Stripe, Inc.</strong> Gate IQ does not receive or store your full payment card number or wallet credentials. Stripe may retain a payment method token, billing details you provide, and limited card metadata (such as card brand and last four digits) on our behalf so we can charge your saved method when Gate IQ launches, if you become a member.</p>
       <p>Saving a payment method is entirely optional. You can join the founding list without providing any payment information.</p>
@@ -96,11 +97,10 @@
       <h2>Sharing &amp; Processors</h2>
       <p>We share data only with processors necessary to operate the service:</p>
       <ul>
-        <li><strong>Formspree</strong> — processes founding list form submissions on our behalf. Data is transmitted securely and subject to Formspree's data processing agreement.</li>
-        <li><strong>Stripe</strong> — processes optional payment method setup when you choose to save a card, Apple Pay, Google Pay, or PayPal for launch. Stripe stores payment credentials and related billing data as our payment processor. Stripe's handling of your data is governed by the <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe Privacy Policy</a> and <a href="https://stripe.com/legal" target="_blank" rel="noopener">Stripe Services Agreement</a>.</li>
-        <li><strong>Netlify</strong> — may host serverless functions that securely create Stripe setup sessions on our behalf. These functions receive your signup information only when you initiate optional payment setup.</li>
+        <li><strong>Stripe</strong> — stores your founding-list record (name, email, phone, and traveler preferences) as a customer profile on our behalf, and processes optional payment method setup when you choose to save a card, Apple Pay, or Google Pay for launch. Stripe stores payment credentials and related billing data as our payment processor. Stripe's handling of your data is governed by the <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe Privacy Policy</a> and <a href="https://stripe.com/legal" target="_blank" rel="noopener">Stripe Services Agreement</a>.</li>
+        <li><strong>Email delivery provider</strong> — sends founding-list notification emails to the Gate IQ team so we can follow up with you. It receives the details you submit for that purpose.</li>
+        <li><strong>Vercel</strong> — hosts the site and the serverless functions that securely record your founding-list sign-up and create Stripe setup sessions on our behalf. Standard access logs apply.</li>
         <li><strong>Google Analytics</strong> — receives anonymized usage data only if you accept cookies. Governed by Google's data processing terms.</li>
-        <li><strong>GitHub Pages / Cloudflare</strong> — hosts the static site. Standard access logs apply.</li>
       </ul>
       <p>We do not share your data with airlines, airports, hotel chains, or any commercial partner without your explicit consent at the time of a future product feature.</p>
     </div>

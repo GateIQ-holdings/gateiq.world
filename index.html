@@ -10,7 +10,7 @@
   <meta property="og:title" content="Gate IQ · The airport bends to you">
   <meta property="og:description" content="More vacation. Less airport. Meet Glide, your personal AI travel agent. Founding list now open — first 5,000 only.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="prelaunch.css?v=21">
+  <link rel="stylesheet" href="prelaunch.css?v=22">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <script src="https://js.stripe.com/v3/" defer></script>
   <script src="site-gate.js"></script>
@@ -272,6 +272,14 @@
               </select>
             </div>
 
+            <div class="signup__socials" id="signup-socials">
+              <div class="signup__social-chips" id="social-chips" aria-live="polite"></div>
+              <input class="signup__input" id="social-input" type="text"
+                     placeholder="Add your socials — paste a link or @handle (optional)"
+                     autocomplete="off" spellcheck="false" inputmode="url"
+                     aria-label="Add a social link or handle">
+            </div>
+
             <div class="founding__gift-badge" id="founding-gift-badge">
               <i class="fa-solid fa-gift" aria-hidden="true"></i>
               <span id="founding-gift-badge-text">Save your card now to lock in your founding gift — it ships the moment we launch.</span>
@@ -396,7 +404,7 @@
   // ── Config ─────────────────────────────────────────────────────────────
   var SPOTS_TOTAL   = 5000;
   var SPOTS_CLAIMED = 47;   // update as the real list grows
-  var WAITLIST_ENDPOINT = "https://formspree.io/f/xojblngy";
+  var WAITLIST_ENDPOINT = "/api/waitlist";
 
   // Stripe — set publishable key; deploy netlify/functions for the setup endpoint.
   var STRIPE_PUBLISHABLE_KEY = "pk_test_51TtqCsRw0O6OM7ER9qwtzk12gkMqjQf7w2k0R4CJtRsGMZXQc3IruPw4O3DTtzk2o72vRil7LFXG280uLuIh4CKB00FcblRb4Q";
@@ -1347,6 +1355,7 @@
         phone:        form.querySelector('[name="phone"]').value.trim(),
         homeAirport:  form.querySelector('[name="homeAirport"]').value.trim(),
         travelerType: form.querySelector('[name="travelerType"]').value,
+        socials:      window.__gateiqSocials ? window.__gateiqSocials.serialize() : "",
         source:       "prelaunch"
       };
     }
@@ -1494,6 +1503,111 @@
     };
   })();
 
+  // ── Socials: paste a link/@handle → auto-detected chip ─────────────────
+  (function () {
+    var input = document.getElementById("social-input");
+    var wrap  = document.getElementById("social-chips");
+    if (!input || !wrap) return;
+
+    // host regex → brand icon. Order matters (x before generics).
+    var PLATFORMS = [
+      { key: "instagram", icon: "fa-brands fa-instagram", test: /instagram\.com$/ },
+      { key: "tiktok",    icon: "fa-brands fa-tiktok",    test: /tiktok\.com$/ },
+      { key: "x",         icon: "fa-brands fa-x-twitter", test: /(^|\.)(x|twitter)\.com$/ },
+      { key: "linkedin",  icon: "fa-brands fa-linkedin",  test: /linkedin\.com$/ },
+      { key: "facebook",  icon: "fa-brands fa-facebook",  test: /facebook\.com$/ },
+      { key: "youtube",   icon: "fa-brands fa-youtube",   test: /(youtube\.com|youtu\.be)$/ },
+      { key: "threads",   icon: "fa-brands fa-threads",   test: /threads\.(net|com)$/ },
+      { key: "snapchat",  icon: "fa-brands fa-snapchat",  test: /snapchat\.com$/ },
+      { key: "github",    icon: "fa-brands fa-github",    test: /github\.com$/ }
+    ];
+
+    function detect(raw) {
+      var s = String(raw || "").trim();
+      if (!s) return null;
+      var hasProto = /^https?:\/\//i.test(s);
+      var looksUrl = hasProto || /[a-z0-9-]+\.[a-z]{2,}/i.test(s);
+      var url = "", host = "";
+      if (looksUrl) {
+        try {
+          var u = new URL(hasProto ? s : "https://" + s.replace(/^\/+/, ""));
+          url = u.href; host = u.hostname.replace(/^www\./, "");
+        } catch (_) { url = ""; host = ""; }
+      }
+      var plat = null;
+      for (var i = 0; host && i < PLATFORMS.length; i++) {
+        if (PLATFORMS[i].test.test(host)) { plat = PLATFORMS[i]; break; }
+      }
+      var label;
+      if (url) {
+        var seg = new URL(url).pathname.split("/").filter(Boolean);
+        label = (seg.length ? seg[seg.length - 1] : host).replace(/^@/, "");
+      } else {
+        label = s.replace(/^@/, "");   // bare handle → unknown platform
+        url = s;
+      }
+      return {
+        platform: plat ? plat.key : "link",
+        icon:     plat ? plat.icon : "fa-solid fa-link",
+        label:    label,
+        value:    url
+      };
+    }
+
+    var chips = [];
+
+    function render() {
+      wrap.innerHTML = chips.map(function (c, i) {
+        return '<span class="social-chip" data-platform="' + c.platform + '">' +
+          '<i class="' + c.icon + '" aria-hidden="true"></i>' +
+          '<span class="social-chip__label"></span>' +
+          '<button type="button" class="social-chip__x" data-i="' + i +
+          '" aria-label="Remove ' + c.label + '">&times;</button></span>';
+      }).join("");
+      // set labels via textContent to avoid HTML injection from handles
+      wrap.querySelectorAll(".social-chip__label").forEach(function (el, i) {
+        el.textContent = chips[i].label;
+      });
+    }
+
+    function add() {
+      var d = detect(input.value);
+      if (!d) return;
+      if (!chips.some(function (c) { return c.value === d.value; })) chips.push(d);
+      input.value = "";
+      render();
+    }
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); add(); }
+    });
+    input.addEventListener("blur", add);
+    wrap.addEventListener("click", function (e) {
+      var btn = e.target.closest(".social-chip__x");
+      if (!btn) return;
+      chips.splice(Number(btn.getAttribute("data-i")), 1);
+      render();
+    });
+
+    window.__gateiqSocials = {
+      serialize: function () {
+        add(); // fold any unsubmitted text in the box
+        return chips.map(function (c) { return c.platform + ":" + c.value; }).join(" , ");
+      },
+      clear: function () { chips = []; input.value = ""; render(); }
+    };
+
+    // Runnable self-check: open the page with ?socialtest and read the console.
+    if (location.search.indexOf("socialtest") > -1) {
+      console.assert(detect("instagram.com/jane").platform === "instagram", "instagram host");
+      console.assert(detect("https://x.com/j").platform === "x", "x host");
+      console.assert(detect("twitter.com/j").platform === "x", "twitter→x");
+      console.assert(detect("@jane").platform === "link", "bare handle = link");
+      console.assert(detect("  ") === null, "empty = null");
+      console.log("socialtest done");
+    }
+  })();
+
   // ── Waitlist submit ────────────────────────────────────────────────────
   async function submitInvite(e) {
     e.preventDefault();
@@ -1505,6 +1619,7 @@
       phone:        form.querySelector('[name="phone"]').value,
       homeAirport:  form.querySelector('[name="homeAirport"]').value,
       travelerType: form.querySelector('[name="travelerType"]').value,
+      socials:      window.__gateiqSocials ? window.__gateiqSocials.serialize() : "",
       source:       "prelaunch",
       savePayment:  document.getElementById("save-payment-toggle").checked ? "yes" : "no",
       smsOptIn:     form.querySelector('[name="smsOptIn"]').checked ? "yes" : "no"
@@ -1514,13 +1629,24 @@
     btn.textContent = savingPayment ? "Reserving & saving payment…" : "Reserving…";
     btn.disabled = true;
 
+    var waitlistOk = false;
     try {
-      await fetch(WAITLIST_ENDPOINT, {
+      var wres = await fetch(WAITLIST_ENDPOINT, {
         method: "POST",
         headers: { "Accept": "application/json", "Content-Type": "application/json" },
         body: JSON.stringify(data)
       });
-    } catch (_) { /* fail silently — confirmation shows regardless */ }
+      waitlistOk = wres.ok;
+    } catch (_) { waitlistOk = false; }
+
+    // Payers are already stored via the setup-intent customer upsert, so a failed
+    // waitlist write there is only a missed notification — proceed. Non-payers are
+    // stored ONLY here, so don't fake success: let them retry.
+    if (!waitlistOk && !savingPayment) {
+      btn.textContent = "Something went wrong — try again";
+      btn.disabled = false;
+      return;
+    }
 
     if (savingPayment && window.__gateiqStripe) {
       try {
@@ -1538,6 +1664,8 @@
         }
         var giftBadgeFail = document.getElementById("founding-gift-badge");
         if (giftBadgeFail) giftBadgeFail.hidden = true;
+        document.getElementById("signup-payment").hidden = true;
+        document.getElementById("signup-socials").hidden = true;
         if (window.__gateiqCounter) window.__gateiqCounter.decrement();
         return;
       }
@@ -1552,6 +1680,7 @@
       ? '<span class="dot"></span><span>Your founding spot and payment method are saved. You won\'t be charged until launch — $' + FOUNDING_MONTHLY_PRICE + '/month when Gate IQ goes live.</span>'
       : '<span class="dot"></span><span>Your special gift is reserved. We\'ll reach out before Gate IQ opens at Nashville International Airport (<span class="t-mono">BNA</span>).</span>';
     document.getElementById("signup-payment").hidden = true;
+    document.getElementById("signup-socials").hidden = true;
     var giftBadge = document.getElementById("founding-gift-badge");
     if (giftBadge) {
       if (savingPayment) {

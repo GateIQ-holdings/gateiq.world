@@ -3,3 +3,4 @@ node_modules/
 .netlify/
 .vercel
 .env*
+.DS_Store

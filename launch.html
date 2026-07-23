@@ -8,6 +8,7 @@
   <link rel="apple-touch-icon" href="/favicon.png">
   <meta name="description" content="Gate IQ Black is the premium airport command layer. When travel gets complicated, Gate IQ tells you exactly what to do next.">
   <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <script src="site-gate.js"></script>
   <script src="theme-toggle.js" defer></script>
 </head>
@@ -490,6 +491,15 @@
               <option value="corporate">Corporate</option>
             </select>
           </div>
+
+          <div class="signup__socials" id="signup-socials">
+            <div class="signup__social-chips" id="social-chips" aria-live="polite"></div>
+            <input class="signup__input" id="social-input" type="text"
+                   placeholder="Add your socials — paste a link or @handle (optional)"
+                   autocomplete="off" spellcheck="false" inputmode="url"
+                   aria-label="Add a social link or handle">
+          </div>
+
           <button class="signup__cta" type="submit">Request invite →</button>
         </div>
         <div class="signup__fine">
@@ -627,8 +637,110 @@
       });
     })();
 
+    // ── Socials: paste a link/@handle → auto-detected chip ─────────────────
+    (function () {
+      var input = document.getElementById("social-input");
+      var wrap  = document.getElementById("social-chips");
+      if (!input || !wrap) return;
+
+      var PLATFORMS = [
+        { key: "instagram", icon: "fa-brands fa-instagram", test: /instagram\.com$/ },
+        { key: "tiktok",    icon: "fa-brands fa-tiktok",    test: /tiktok\.com$/ },
+        { key: "x",         icon: "fa-brands fa-x-twitter", test: /(^|\.)(x|twitter)\.com$/ },
+        { key: "linkedin",  icon: "fa-brands fa-linkedin",  test: /linkedin\.com$/ },
+        { key: "facebook",  icon: "fa-brands fa-facebook",  test: /facebook\.com$/ },
+        { key: "youtube",   icon: "fa-brands fa-youtube",   test: /(youtube\.com|youtu\.be)$/ },
+        { key: "threads",   icon: "fa-brands fa-threads",   test: /threads\.(net|com)$/ },
+        { key: "snapchat",  icon: "fa-brands fa-snapchat",  test: /snapchat\.com$/ },
+        { key: "github",    icon: "fa-brands fa-github",    test: /github\.com$/ }
+      ];
+
+      function detect(raw) {
+        var s = String(raw || "").trim();
+        if (!s) return null;
+        var hasProto = /^https?:\/\//i.test(s);
+        var looksUrl = hasProto || /[a-z0-9-]+\.[a-z]{2,}/i.test(s);
+        var url = "", host = "";
+        if (looksUrl) {
+          try {
+            var u = new URL(hasProto ? s : "https://" + s.replace(/^\/+/, ""));
+            url = u.href; host = u.hostname.replace(/^www\./, "");
+          } catch (_) { url = ""; host = ""; }
+        }
+        var plat = null;
+        for (var i = 0; host && i < PLATFORMS.length; i++) {
+          if (PLATFORMS[i].test.test(host)) { plat = PLATFORMS[i]; break; }
+        }
+        var label;
+        if (url) {
+          var seg = new URL(url).pathname.split("/").filter(Boolean);
+          label = (seg.length ? seg[seg.length - 1] : host).replace(/^@/, "");
+        } else {
+          label = s.replace(/^@/, "");
+          url = s;
+        }
+        return {
+          platform: plat ? plat.key : "link",
+          icon:     plat ? plat.icon : "fa-solid fa-link",
+          label:    label,
+          value:    url
+        };
+      }
+
+      var chips = [];
+
+      function render() {
+        wrap.innerHTML = chips.map(function (c, i) {
+          return '<span class="social-chip" data-platform="' + c.platform + '">' +
+            '<i class="' + c.icon + '" aria-hidden="true"></i>' +
+            '<span class="social-chip__label"></span>' +
+            '<button type="button" class="social-chip__x" data-i="' + i +
+            '" aria-label="Remove ' + c.label + '">&times;</button></span>';
+        }).join("");
+        wrap.querySelectorAll(".social-chip__label").forEach(function (el, i) {
+          el.textContent = chips[i].label;
+        });
+      }
+
+      function add() {
+        var d = detect(input.value);
+        if (!d) return;
+        if (!chips.some(function (c) { return c.value === d.value; })) chips.push(d);
+        input.value = "";
+        render();
+      }
+
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); add(); }
+      });
+      input.addEventListener("blur", add);
+      wrap.addEventListener("click", function (e) {
+        var btn = e.target.closest(".social-chip__x");
+        if (!btn) return;
+        chips.splice(Number(btn.getAttribute("data-i")), 1);
+        render();
+      });
+
+      window.__gateiqSocials = {
+        serialize: function () {
+          add();
+          return chips.map(function (c) { return c.platform + ":" + c.value; }).join(" , ");
+        },
+        clear: function () { chips = []; input.value = ""; render(); }
+      };
+
+      if (location.search.indexOf("socialtest") > -1) {
+        console.assert(detect("instagram.com/jane").platform === "instagram", "instagram host");
+        console.assert(detect("https://x.com/j").platform === "x", "x host");
+        console.assert(detect("twitter.com/j").platform === "x", "twitter->x");
+        console.assert(detect("@jane").platform === "link", "bare handle = link");
+        console.assert(detect("  ") === null, "empty = null");
+        console.log("socialtest done");
+      }
+    })();
+
     // ── Waitlist endpoint ─────────────────────────────────────────────────
-    const WAITLIST_ENDPOINT = "https://formspree.io/f/xojblngy";
+    const WAITLIST_ENDPOINT = "/api/waitlist";
 
     async function submitInvite(e) {
       e.preventDefault();
@@ -640,18 +752,27 @@
         phone:        form.querySelector('[name="phone"]').value,
         homeAirport:  form.querySelector('[name="homeAirport"]').value,
         travelerType: form.querySelector('[name="travelerType"]').value,
+        socials:      window.__gateiqSocials ? window.__gateiqSocials.serialize() : "",
       };
 
       btn.textContent = "Sending…";
       btn.disabled = true;
 
+      let ok = false;
       try {
-        await fetch(WAITLIST_ENDPOINT, {
+        const r = await fetch(WAITLIST_ENDPOINT, {
           method: "POST",
           headers: { "Accept": "application/json", "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
-      } catch (_) { /* fail silently — confirmation shows regardless */ }
+        ok = r.ok;
+      } catch (_) { ok = false; }
+
+      if (!ok) {
+        btn.textContent = "Something went wrong — try again";
+        btn.disabled = false;
+        return;
+      }
 
       btn.textContent = "On the list";
       btn.style.background = "#B89968";
