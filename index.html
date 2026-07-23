@@ -1723,24 +1723,24 @@
 
     function spawnConfetti() {
       confettiEl.innerHTML = "";
-      var count = window.innerWidth < 520 ? 34 : 60;
+      var count = window.innerWidth < 520 ? 70 : 130;
       var frag = document.createDocumentFragment();
       for (var i = 0; i < count; i++) {
         var piece = document.createElement("i");
         piece.className = "confetti-piece";
-        var duration = 2.4 + Math.random() * 1.6;
-        var size = 6 + Math.random() * 5;
+        var duration = 3.5 + Math.random() * 3.5;
+        var size = 6 + Math.random() * 6;
         piece.style.left = (Math.random() * 100) + "%";
         piece.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
         piece.style.width = size + "px";
         piece.style.height = (size * 1.6) + "px";
         piece.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
         piece.style.animationDuration = duration + "s";
-        piece.style.animationDelay = (Math.random() * 0.5) + "s";
+        piece.style.animationDelay = (Math.random() * 2.5) + "s";
         frag.appendChild(piece);
       }
       confettiEl.appendChild(frag);
-      setTimeout(function () { confettiEl.innerHTML = ""; }, 4500);
+      setTimeout(function () { confettiEl.innerHTML = ""; }, 9000);
     }
 
     function hide() { overlay.hidden = true; }
