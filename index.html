@@ -2013,7 +2013,7 @@
         : "You're in.<br>Spot reserved.";
       document.getElementById("signup-fine").innerHTML = savingPayment
         ? '<span class="dot"></span><span>Your founding gift is locked in — it ships when Gate IQ launches. Your card is saved; you won\'t be charged until launch — $' + FOUNDING_MONTHLY_PRICE + '/month.</span>'
-        : '<span class="dot"></span><span>Your founding spot is reserved. We\'ll reach out before Gate IQ opens at Nashville International Airport (<span class="t-mono">BNA</span>).</span>';
+        : '<span class="dot"></span><span>Your founding spot is reserved. We\'ll reach out when Gate IQ launches.</span>';
       document.getElementById("signup-payment").hidden = true;
       document.getElementById("signup-socials").hidden = true;
       var giftBadge = document.getElementById("founding-gift-badge");
@@ -2029,7 +2029,7 @@
     showToast(savingPayment ? "You're on the founding list — gift locked in!" : "You're on the founding list!");
     showSuccessOverlay(SPOTS_CLAIMED, savingPayment
       ? "Your founding gift is locked in — it ships when Gate IQ launches. Your card is saved; you won't be charged until launch — $" + FOUNDING_MONTHLY_PRICE + "/month."
-      : "Your founding spot is reserved. We'll reach out before Gate IQ opens at Nashville International Airport (BNA).");
+      : "Your founding spot is reserved. We'll reach out when Gate IQ launches.");
   }
   document.getElementById("waitlist-form").addEventListener("submit", submitInvite);
 
