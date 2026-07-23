@@ -757,10 +757,9 @@
       input.addEventListener("keydown", function (e) {
         if (e.key === "Enter" || e.key === ",") { e.preventDefault(); commit(); }
       });
-      input.addEventListener("blur", function (e) {
-        if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest("#signup-socials")) return;
-        commit();
-      });
+      // No commit-on-blur: clicking away must not prematurely turn a
+      // half-typed handle into a generic chip. Enter/comma commits
+      // explicitly; leftovers still get folded in at submit via serialize().
       wrap.addEventListener("click", function (e) {
         var btn = e.target.closest(".social-chip__x");
         if (!btn) return;

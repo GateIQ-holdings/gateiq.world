@@ -386,17 +386,33 @@ html.gateiq-locked body > *:not(#password-gate) {
 
 /* ── Signup card — sits on the page, lifts via surface-grey ─── */
 .signup {
-  background: var(--surface-grey);
-  color: var(--fg-on-grey);
+  --card-bg: var(--surface-grey);
+  --card-fg: var(--fg-on-grey);
+  --card-fg-2: var(--fg-on-grey-2);
+  --card-input-bg: var(--cream);
+  --card-input-fg: var(--navy);
+  --card-line: var(--navy);
+  background: var(--card-bg);
+  color: var(--card-fg);
   border-radius: 32px;
   padding: 36px 36px 32px;
+}
+/* Dark mode: match the navy used elsewhere instead of staying the light
+   "document" surface. */
+[data-theme="dark"] .signup {
+  --card-bg: var(--surface-dark);
+  --card-fg: var(--fg-on-dark);
+  --card-fg-2: var(--fg-on-dark-2);
+  --card-input-bg: #1E2D4A;
+  --card-input-fg: var(--fg-on-dark);
+  --card-line: var(--fg-on-dark);
 }
 .signup__label {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--fg-on-grey-2);
+  color: var(--card-fg-2);
 }
 .signup__title {
   font-family: var(--font-display);
@@ -413,8 +429,8 @@ html.gateiq-locked body > *:not(#password-gate) {
 }
 .signup__input {
   flex: 1;
-  background: var(--cream);
-  color: var(--navy);
+  background: var(--card-input-bg);
+  color: var(--card-input-fg);
   border: none;
   border-radius: 999px;
   padding: 14px 20px;
@@ -423,7 +439,7 @@ html.gateiq-locked body > *:not(#password-gate) {
   outline: none;
   letter-spacing: -0.005em;
 }
-.signup__input::placeholder { color: rgba(21, 35, 63, 0.45); }
+.signup__input::placeholder { color: color-mix(in srgb, var(--card-fg) 45%, transparent); }
 .signup__cta {
   background: var(--navy);
   color: var(--ivory);
@@ -439,12 +455,21 @@ html.gateiq-locked body > *:not(#password-gate) {
 }
 .signup__cta:hover { background: var(--navy-soft); }
 .signup__cta:active { transform: scale(0.97); }
+/* Card bg is --surface-dark in dark mode, close enough to --navy that the
+   button nearly disappears into it — lift it and add a brass edge. */
+[data-theme="dark"] .signup .signup__cta {
+  background: #1E2D4A;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+[data-theme="dark"] .signup .signup__cta:hover {
+  background: color-mix(in srgb, #1E2D4A 80%, white 20%);
+}
 
 .signup__fine {
   font-family: var(--font-body);
   font-size: 12.5px;
   margin-top: 18px;
-  color: var(--fg-on-grey-2);
+  color: var(--card-fg-2);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -453,7 +478,7 @@ html.gateiq-locked body > *:not(#password-gate) {
   width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
 }
 .signup__strip {
-  border-top: 1px solid rgba(21,35,63,0.12);
+  border-top: 1px solid color-mix(in srgb, var(--card-line) 12%, transparent);
   margin-top: 22px;
   padding-top: 18px;
   display: flex;
@@ -462,9 +487,9 @@ html.gateiq-locked body > *:not(#password-gate) {
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--fg-on-grey-2);
+  color: var(--card-fg-2);
 }
-.signup__strip strong { color: var(--navy); font-weight: 600; }
+.signup__strip strong { color: var(--card-fg); font-weight: 600; }
 
 /* ── Signup extra fields ───────────────────────────────── */
 .signup__fields {
@@ -485,22 +510,30 @@ html.gateiq-locked body > *:not(#password-gate) {
   -webkit-appearance: none;
   cursor: pointer;
 }
-.signup__select option { background: var(--cream); color: var(--navy); }
+.signup__select option { background: var(--card-input-bg); color: var(--card-input-fg); }
 .signup__socials { display: flex; flex-direction: column; gap: 10px; }
 .signup__social-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .signup__social-chips:empty { display: none; }
+@keyframes chip-in {
+  from { opacity: 0; transform: translateY(4px) scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
 .social-chip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 7px 10px 7px 12px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--accent) 12%, var(--cream));
+  background: color-mix(in srgb, var(--accent) 12%, var(--card-bg));
   border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-  color: var(--navy);
+  color: var(--card-fg);
   font-size: 13.5px;
   line-height: 1;
   max-width: 100%;
+  animation: chip-in 220ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .social-chip { animation: none; }
 }
 .social-chip > i { font-size: 14px; color: var(--accent); }
 .social-chip__label {
@@ -512,14 +545,14 @@ html.gateiq-locked body > *:not(#password-gate) {
 .social-chip__x {
   border: none;
   background: none;
-  color: color-mix(in srgb, var(--navy) 55%, transparent);
+  color: color-mix(in srgb, var(--card-fg) 55%, transparent);
   font-size: 17px;
   line-height: 1;
   cursor: pointer;
   padding: 0 2px;
   transition: color 140ms ease;
 }
-.social-chip__x:hover { color: var(--navy); }
+.social-chip__x:hover { color: var(--card-fg); }
 .social-picker {
   display: flex;
   flex-wrap: wrap;
@@ -534,14 +567,14 @@ html.gateiq-locked body > *:not(#password-gate) {
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  border: 1px solid color-mix(in srgb, var(--navy) 16%, transparent);
-  background: var(--cream);
-  color: color-mix(in srgb, var(--navy) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--card-line) 16%, transparent);
+  background: var(--card-input-bg);
+  color: color-mix(in srgb, var(--card-fg) 55%, transparent);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: background 140ms ease, border-color 140ms ease, color 140ms ease, transform 120ms ease;
 }
-.social-pick:hover { border-color: var(--accent); color: var(--navy); }
+.social-pick:hover { border-color: var(--accent); color: var(--card-fg); }
 .social-pick:active { transform: scale(0.92); }
 .social-pick.is-on {
   background: var(--accent);
@@ -552,7 +585,7 @@ html.gateiq-locked body > *:not(#password-gate) {
   font-size: 12.5px;
   line-height: 1.4;
   font-weight: 700;
-  color: var(--navy);
+  color: var(--card-fg);
 }
 .toast {
   position: fixed;
@@ -596,10 +629,10 @@ html.gateiq-locked body > *:not(#password-gate) {
   top: calc(100% + 6px);
   left: 0;
   right: 0;
-  background: var(--cream);
+  background: var(--card-input-bg);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(21,35,63,0.14);
+  box-shadow: 0 8px 32px color-mix(in srgb, var(--card-line) 14%, transparent);
   z-index: 100;
 }
 .airport-dropdown--open { display: block; }
@@ -612,22 +645,22 @@ html.gateiq-locked body > *:not(#password-gate) {
   transition: background 100ms ease-out;
 }
 .airport-option:not(:last-child) {
-  border-bottom: 1px solid rgba(21,35,63,0.07);
+  border-bottom: 1px solid color-mix(in srgb, var(--card-line) 7%, transparent);
 }
 .airport-option--active,
-.airport-option:hover { background: rgba(184,153,104,0.14); }
+.airport-option:hover { background: color-mix(in srgb, var(--accent) 14%, var(--card-input-bg)); }
 .airport-option__code {
   font-family: var(--font-mono);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.06em;
-  color: var(--navy);
+  color: var(--card-fg);
   min-width: 34px;
 }
 .airport-option__name {
   font-family: var(--font-body);
   font-size: 13px;
-  color: rgba(21,35,63,0.6);
+  color: var(--card-fg-2);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

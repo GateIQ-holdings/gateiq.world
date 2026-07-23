@@ -10,7 +10,7 @@
   <meta property="og:title" content="Gate IQ · The airport bends to you">
   <meta property="og:description" content="More vacation. Less airport. Meet Glide, your personal AI travel agent. Founding list now open — first 5,000 only.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="prelaunch.css?v=26">
+  <link rel="stylesheet" href="prelaunch.css?v=30">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <script src="https://js.stripe.com/v3/" defer></script>
   <script src="site-gate.js"></script>
@@ -1626,11 +1626,10 @@
     input.addEventListener("keydown", function (e) {
       if (e.key === "Enter" || e.key === ",") { e.preventDefault(); commit(); }
     });
-    input.addEventListener("blur", function (e) {
-      // ignore blur caused by clicking a platform toggle inside the widget
-      if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest("#signup-socials")) return;
-      commit();
-    });
+    // No commit-on-blur: clicking away (to a platform toggle, or any other
+    // field like Name) must not prematurely turn a half-typed handle into a
+    // generic chip. Enter/comma commits explicitly; anything left in the box
+    // still gets folded in at submit time via serialize() -> commit().
     wrap.addEventListener("click", function (e) {
       var btn = e.target.closest(".social-chip__x");
       if (!btn) return;
