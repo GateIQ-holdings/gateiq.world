@@ -1206,6 +1206,39 @@ html.gateiq-locked body > *:not(#password-gate) {
   transition: color 140ms ease;
 }
 .social-chip__x:hover { color: var(--navy); }
+.social-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.social-pick {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  border: 1px solid color-mix(in srgb, var(--navy) 16%, transparent);
+  background: var(--cream);
+  color: color-mix(in srgb, var(--navy) 55%, transparent);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease, transform 120ms ease;
+}
+.social-pick:hover { border-color: var(--accent); color: var(--navy); }
+.social-pick:active { transform: scale(0.92); }
+.social-pick.is-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.social-hint {
+  font-size: 12px;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--navy) 55%, transparent);
+}
 .signup__cta {
   margin-top: 6px;
   width: 100%;

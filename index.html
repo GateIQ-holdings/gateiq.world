@@ -10,7 +10,7 @@
   <meta property="og:title" content="Gate IQ · The airport bends to you">
   <meta property="og:description" content="More vacation. Less airport. Meet Glide, your personal AI travel agent. Founding list now open — first 5,000 only.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="prelaunch.css?v=22">
+  <link rel="stylesheet" href="prelaunch.css?v=23">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <script src="https://js.stripe.com/v3/" defer></script>
   <script src="site-gate.js"></script>
@@ -273,11 +273,13 @@
             </div>
 
             <div class="signup__socials" id="signup-socials">
-              <div class="signup__social-chips" id="social-chips" aria-live="polite"></div>
+              <div class="social-picker" id="social-picker" role="group" aria-label="Pick your social platforms"></div>
               <input class="signup__input" id="social-input" type="text"
-                     placeholder="Add your socials — paste a link or @handle (optional)"
-                     autocomplete="off" spellcheck="false" inputmode="url"
-                     aria-label="Add a social link or handle">
+                     placeholder="Type your handle, or paste a profile link (optional)"
+                     autocomplete="off" spellcheck="false"
+                     aria-label="Social handle or link">
+              <div class="signup__social-chips" id="social-chips" aria-live="polite"></div>
+              <div class="social-hint">Tap the platforms you're on, type your handle, then Enter or comma. Or paste a full link.</div>
             </div>
 
             <div class="founding__gift-badge" id="founding-gift-badge">
@@ -1503,25 +1505,37 @@
     };
   })();
 
-  // ── Socials: paste a link/@handle → auto-detected chip ─────────────────
+  // ── Socials: pick platform(s) + handle, or paste a link → chips ────────
   (function () {
-    var input = document.getElementById("social-input");
-    var wrap  = document.getElementById("social-chips");
-    if (!input || !wrap) return;
+    var input  = document.getElementById("social-input");
+    var wrap   = document.getElementById("social-chips");
+    var picker = document.getElementById("social-picker");
+    if (!input || !wrap || !picker) return;
 
-    // host regex → brand icon. Order matters (x before generics).
-    var PLATFORMS = [
-      { key: "instagram", icon: "fa-brands fa-instagram", test: /instagram\.com$/ },
-      { key: "tiktok",    icon: "fa-brands fa-tiktok",    test: /tiktok\.com$/ },
-      { key: "x",         icon: "fa-brands fa-x-twitter", test: /(^|\.)(x|twitter)\.com$/ },
-      { key: "linkedin",  icon: "fa-brands fa-linkedin",  test: /linkedin\.com$/ },
-      { key: "facebook",  icon: "fa-brands fa-facebook",  test: /facebook\.com$/ },
-      { key: "youtube",   icon: "fa-brands fa-youtube",   test: /(youtube\.com|youtu\.be)$/ },
-      { key: "threads",   icon: "fa-brands fa-threads",   test: /threads\.(net|com)$/ },
-      { key: "snapchat",  icon: "fa-brands fa-snapchat",  test: /snapchat\.com$/ },
-      { key: "github",    icon: "fa-brands fa-github",    test: /github\.com$/ }
-    ];
+    // host = detect a pasted URL; url(h) = build a link from a bare handle.
+    var PLATFORMS = {
+      instagram: { name: "Instagram", icon: "fa-brands fa-instagram", host: /instagram\.com$/,         url: function (h) { return "https://instagram.com/" + h; } },
+      tiktok:    { name: "TikTok",    icon: "fa-brands fa-tiktok",    host: /tiktok\.com$/,             url: function (h) { return "https://tiktok.com/@" + h; } },
+      x:         { name: "X",         icon: "fa-brands fa-x-twitter", host: /(^|\.)(x|twitter)\.com$/,  url: function (h) { return "https://x.com/" + h; } },
+      youtube:   { name: "YouTube",   icon: "fa-brands fa-youtube",   host: /(youtube\.com|youtu\.be)$/, url: function (h) { return "https://youtube.com/@" + h; } },
+      facebook:  { name: "Facebook",  icon: "fa-brands fa-facebook",  host: /facebook\.com$/,           url: function (h) { return "https://facebook.com/" + h; } },
+      linkedin:  { name: "LinkedIn",  icon: "fa-brands fa-linkedin",  host: /linkedin\.com$/ },
+      threads:   { name: "Threads",   icon: "fa-brands fa-threads",   host: /threads\.(net|com)$/ },
+      snapchat:  { name: "Snapchat",  icon: "fa-brands fa-snapchat",  host: /snapchat\.com$/ },
+      github:    { name: "GitHub",    icon: "fa-brands fa-github",    host: /github\.com$/ }
+    };
+    var PICK = ["instagram", "tiktok", "x", "youtube", "facebook"]; // top-5 toggle row
 
+    var selected = {};   // platform key -> true
+    var chips = [];      // { platform, icon, label, value }
+
+    picker.innerHTML = PICK.map(function (k) {
+      return '<button type="button" class="social-pick" data-k="' + k + '" aria-pressed="false"' +
+        ' title="' + PLATFORMS[k].name + '" aria-label="' + PLATFORMS[k].name + '">' +
+        '<i class="' + PLATFORMS[k].icon + '" aria-hidden="true"></i></button>';
+    }).join("");
+
+    // Paste-a-link / bare-handle fallback when no platform is toggled.
     function detect(raw) {
       var s = String(raw || "").trim();
       if (!s) return null;
@@ -1534,27 +1548,29 @@
           url = u.href; host = u.hostname.replace(/^www\./, "");
         } catch (_) { url = ""; host = ""; }
       }
-      var plat = null;
-      for (var i = 0; host && i < PLATFORMS.length; i++) {
-        if (PLATFORMS[i].test.test(host)) { plat = PLATFORMS[i]; break; }
+      var key = null;
+      for (var k in PLATFORMS) {
+        if (host && PLATFORMS[k].host.test(host)) { key = k; break; }
       }
       var label;
       if (url) {
         var seg = new URL(url).pathname.split("/").filter(Boolean);
         label = (seg.length ? seg[seg.length - 1] : host).replace(/^@/, "");
       } else {
-        label = s.replace(/^@/, "");   // bare handle → unknown platform
+        label = s.replace(/^@/, "");   // bare handle, no platform picked
         url = s;
       }
       return {
-        platform: plat ? plat.key : "link",
-        icon:     plat ? plat.icon : "fa-solid fa-link",
+        platform: key || "link",
+        icon:     key ? PLATFORMS[key].icon : "fa-solid fa-link",
         label:    label,
         value:    url
       };
     }
 
-    var chips = [];
+    function addChip(c) {
+      if (!chips.some(function (x) { return x.value === c.value; })) chips.push(c);
+    }
 
     function render() {
       wrap.innerHTML = chips.map(function (c, i) {
@@ -1564,24 +1580,55 @@
           '<button type="button" class="social-chip__x" data-i="' + i +
           '" aria-label="Remove ' + c.label + '">&times;</button></span>';
       }).join("");
-      // set labels via textContent to avoid HTML injection from handles
+      // labels via textContent to avoid HTML injection from handles
       wrap.querySelectorAll(".social-chip__label").forEach(function (el, i) {
         el.textContent = chips[i].label;
       });
     }
 
-    function add() {
-      var d = detect(input.value);
-      if (!d) return;
-      if (!chips.some(function (c) { return c.value === d.value; })) chips.push(d);
+    function clearSelected() {
+      selected = {};
+      picker.querySelectorAll(".social-pick").forEach(function (b) {
+        b.classList.remove("is-on"); b.setAttribute("aria-pressed", "false");
+      });
+    }
+
+    function commit() {
+      var raw = input.value.trim();
+      var keys = Object.keys(selected);
+      if (keys.length && raw) {
+        var h = raw.replace(/^@+/, "").replace(/\s+/g, "");   // one handle, N platforms
+        keys.forEach(function (k) {
+          addChip({ platform: k, icon: PLATFORMS[k].icon, label: h, value: PLATFORMS[k].url(h) });
+        });
+      } else if (raw) {
+        var d = detect(raw);
+        if (d) addChip(d);
+      } else {
+        return;
+      }
       input.value = "";
+      clearSelected();
       render();
     }
 
-    input.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") { e.preventDefault(); add(); }
+    picker.addEventListener("click", function (e) {
+      var b = e.target.closest(".social-pick");
+      if (!b) return;
+      var k = b.getAttribute("data-k");
+      if (selected[k]) { delete selected[k]; b.classList.remove("is-on"); b.setAttribute("aria-pressed", "false"); }
+      else { selected[k] = true; b.classList.add("is-on"); b.setAttribute("aria-pressed", "true"); }
+      input.focus();
     });
-    input.addEventListener("blur", add);
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === ",") { e.preventDefault(); commit(); }
+    });
+    input.addEventListener("blur", function (e) {
+      // ignore blur caused by clicking a platform toggle inside the widget
+      if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest("#signup-socials")) return;
+      commit();
+    });
     wrap.addEventListener("click", function (e) {
       var btn = e.target.closest(".social-chip__x");
       if (!btn) return;
@@ -1591,18 +1638,19 @@
 
     window.__gateiqSocials = {
       serialize: function () {
-        add(); // fold any unsubmitted text in the box
+        commit(); // fold any unsubmitted handle/link in the box
         return chips.map(function (c) { return c.platform + ":" + c.value; }).join(" , ");
       },
-      clear: function () { chips = []; input.value = ""; render(); }
+      clear: function () { chips = []; input.value = ""; clearSelected(); render(); }
     };
 
     // Runnable self-check: open the page with ?socialtest and read the console.
     if (location.search.indexOf("socialtest") > -1) {
       console.assert(detect("instagram.com/jane").platform === "instagram", "instagram host");
       console.assert(detect("https://x.com/j").platform === "x", "x host");
-      console.assert(detect("twitter.com/j").platform === "x", "twitter→x");
+      console.assert(detect("twitter.com/j").platform === "x", "twitter->x");
       console.assert(detect("@jane").platform === "link", "bare handle = link");
+      console.assert(PLATFORMS.tiktok.url("joy") === "https://tiktok.com/@joy", "tiktok handle url");
       console.assert(detect("  ") === null, "empty = null");
       console.log("socialtest done");
     }
