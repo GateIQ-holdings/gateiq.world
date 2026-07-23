@@ -1494,6 +1494,11 @@
         if (!stripeInstance || !stripeElements) {
           throw new Error("Payment form is not ready yet.");
         }
+        // Payment Element requires submit() before confirmSetup (validation + wallets).
+        var submitted = await stripeElements.submit();
+        if (submitted.error) {
+          throw new Error(submitted.error.message || "Check your payment details and try again.");
+        }
         var data = formSignupData();
         var result = await stripeInstance.confirmSetup({
           elements: stripeElements,
