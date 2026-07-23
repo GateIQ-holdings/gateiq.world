@@ -10,7 +10,7 @@
   <meta property="og:title" content="Gate IQ · The airport bends to you">
   <meta property="og:description" content="More vacation. Less airport. Meet Glide, your personal AI travel agent. Founding list now open — first 5,000 only.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="prelaunch.css?v=32">
+  <link rel="stylesheet" href="prelaunch.css?v=33">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <script src="https://js.stripe.com/v3/" defer></script>
   <script src="site-gate.js"></script>
@@ -1370,6 +1370,7 @@
         homeAirport:  form.querySelector('[name="homeAirport"]').value.trim(),
         travelerType: form.querySelector('[name="travelerType"]').value,
         socials:      window.__gateiqSocials ? window.__gateiqSocials.serialize() : "",
+        smsOptIn:     form.querySelector('[name="smsOptIn"]').checked ? "yes" : "no",
         source:       "prelaunch"
       };
     }
@@ -1591,11 +1592,12 @@
           '<i class="' + c.icon + '" aria-hidden="true"></i>' +
           '<span class="social-chip__label"></span>' +
           '<button type="button" class="social-chip__x" data-i="' + i +
-          '" aria-label="Remove ' + c.label + '">&times;</button></span>';
+          '" aria-label="Remove">&times;</button></span>';
       }).join("");
-      // labels via textContent to avoid HTML injection from handles
-      wrap.querySelectorAll(".social-chip__label").forEach(function (el, i) {
-        el.textContent = chips[i].label;
+      // labels and aria-labels via textContent/setAttribute to avoid HTML injection
+      wrap.querySelectorAll(".social-chip").forEach(function (el, i) {
+        el.querySelector(".social-chip__label").textContent = chips[i].label;
+        el.querySelector(".social-chip__x").setAttribute("aria-label", "Remove " + chips[i].label);
       });
     }
 
@@ -1834,6 +1836,19 @@
           "Your spot is saved, but we couldn't store your payment method. You can add it at launch — $" + FOUNDING_MONTHLY_PRICE + "/month.");
         return;
       }
+    }
+
+    // Payment succeeded — if the earlier waitlist call failed, retry once so the
+    // notification email still fires now that we know the signup is complete.
+    if (savingPayment && !waitlistOk) {
+      try {
+        var retry = await fetch(WAITLIST_ENDPOINT, {
+          method: "POST",
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        if (!retry.ok) console.warn("Waitlist retry failed", retry.status);
+      } catch (_) { console.warn("Waitlist retry threw"); }
     }
 
     if (window.__gateiqCounter) window.__gateiqCounter.decrement();

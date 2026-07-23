@@ -723,10 +723,11 @@
             '<i class="' + c.icon + '" aria-hidden="true"></i>' +
             '<span class="social-chip__label"></span>' +
             '<button type="button" class="social-chip__x" data-i="' + i +
-            '" aria-label="Remove ' + c.label + '">&times;</button></span>';
+            '" aria-label="Remove">&times;</button></span>';
         }).join("");
-        wrap.querySelectorAll(".social-chip__label").forEach(function (el, i) {
-          el.textContent = chips[i].label;
+        wrap.querySelectorAll(".social-chip").forEach(function (el, i) {
+          el.querySelector(".social-chip__label").textContent = chips[i].label;
+          el.querySelector(".social-chip__x").setAttribute("aria-label", "Remove " + chips[i].label);
         });
       }
 
@@ -900,6 +901,8 @@
         homeAirport:  form.querySelector('[name="homeAirport"]').value,
         travelerType: form.querySelector('[name="travelerType"]').value,
         socials:      window.__gateiqSocials ? window.__gateiqSocials.serialize() : "",
+        smsOptIn:     form.querySelector('[name="smsOptIn"]') ? (form.querySelector('[name="smsOptIn"]').checked ? "yes" : "no") : "no",
+        source:       "launch",
       };
 
       btn.textContent = "Sending…";

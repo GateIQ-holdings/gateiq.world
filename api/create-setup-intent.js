@@ -25,6 +25,8 @@ module.exports = async function handler(req, res) {
   const phone = String(body.phone || "").trim();
   const homeAirport = String(body.homeAirport || "").trim();
   const travelerType = String(body.travelerType || "").trim();
+  const socials = String(body.socials || "").trim().slice(0, 500);
+  const smsOptIn = body.smsOptIn === "yes" ? "yes" : "no";
   const source = String(body.source || "prelaunch").trim();
 
   try {
@@ -35,14 +37,14 @@ module.exports = async function handler(req, res) {
       customer = await stripe.customers.update(existing.data[0].id, {
         name: name || undefined,
         phone: phone || undefined,
-        metadata: { homeAirport, travelerType, source }
+        metadata: { homeAirport, travelerType, socials, smsOptIn, source }
       });
     } else {
       customer = await stripe.customers.create({
         email,
         name: name || undefined,
         phone: phone || undefined,
-        metadata: { homeAirport, travelerType, source }
+        metadata: { homeAirport, travelerType, socials, smsOptIn, source }
       });
     }
 
@@ -52,6 +54,8 @@ module.exports = async function handler(req, res) {
       metadata: {
         homeAirport,
         travelerType,
+        socials,
+        smsOptIn,
         source,
         founding_monthly_price: "49.99"
       }

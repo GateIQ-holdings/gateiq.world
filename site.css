@@ -625,6 +625,7 @@ html.gateiq-locked body > *:not(#password-gate) {
 }
 
 /* ── Success overlay ─────────────────────────────────────────── */
+.success-overlay[hidden] { display: none; }
 .success-overlay {
   position: fixed;
   inset: 0;

@@ -31,9 +31,9 @@ async function notify(fields) {
       })
     });
     if (!r.ok) {
-      // Surface the reason in Vercel function logs — mail stays best-effort
-      // (never fails the signup), but silent failures are otherwise undebuggable.
       console.error("Resend notify failed", r.status, await r.text().catch(() => ""));
+    } else {
+      console.log("Resend notify ok", r.status);
     }
   } catch (err) {
     console.error("Resend notify threw", err.message || err);
