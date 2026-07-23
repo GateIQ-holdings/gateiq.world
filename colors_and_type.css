@@ -314,6 +314,17 @@ html, body {
 }
 .foot__brand-name .iq { color: var(--accent); }
 
+/* Cents sit as superscript on prices like $49⁹⁹ */
+.price-cents {
+  font-size: 0.62em;
+  line-height: 0;
+  vertical-align: super;
+  font-weight: inherit;
+  letter-spacing: 0;
+  position: relative;
+  top: -0.1em;
+}
+
 @media (max-width: 640px) {
   .brand-mark { gap: 10px; }
   .brand-mark__logo { width: 40px; height: 40px; }

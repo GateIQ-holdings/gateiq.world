@@ -10,7 +10,7 @@
   <meta property="og:title" content="Gate IQ · The airport bends to you">
   <meta property="og:description" content="More vacation. Less airport. Meet Glide, your personal AI travel agent. Founding list now open — first 5,000 only.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="prelaunch.css?v=34">
+  <link rel="stylesheet" href="prelaunch.css?v=35">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <script src="https://js.stripe.com/v3/" defer></script>
   <script src="site-gate.js"></script>
@@ -304,7 +304,7 @@
                 <span class="signup__payment-toggle-box" aria-hidden="true"></span>
                 <span class="signup__payment-toggle-text">
                   Save time at launch — add payment now
-                  <span class="signup__payment-price">$49.99/mo · not charged today</span>
+                  <span class="signup__payment-price">$49<sup class="price-cents">99</sup>/mo · not charged today</span>
                 </span>
               </label>
               <div class="signup__payment-nudge" id="payment-nudge" hidden>
@@ -315,7 +315,7 @@
                 <p class="signup__payment-copy" id="payment-copy" hidden>
                   Enter your card, Apple Pay, or Google Pay to save time when we launch.
                   <strong>You will not be charged today.</strong> Founding membership is
-                  <strong>$49.99/month</strong> — billing starts only when Gate IQ goes live.
+                  <strong>$49<sup class="price-cents">99</sup>/month</strong> — billing starts only when Gate IQ goes live.
                   We'll send you an email announcement with a link to the app before we charge your card.
                 </p>
                 <p class="signup__payment-copy" id="payment-copy-placeholder">
@@ -423,6 +423,10 @@
   var STRIPE_PUBLISHABLE_KEY = "pk_live_51TtqCWRyr6hhZ1ZbTTuvy0bmBuC2J8rpWT8gwb7Zfy6DyVKSrTr7gckndYOn65chsnuLej6ZxlFOkAYwFGILpgqD00CsHhpgcq";
   var STRIPE_SETUP_ENDPOINT = "/api/create-setup-intent";
   var FOUNDING_MONTHLY_PRICE = "49.99";
+  function priceHtml(amount) {
+    var parts = String(amount == null ? FOUNDING_MONTHLY_PRICE : amount).split(".");
+    return "$" + parts[0] + "<sup class=\"price-cents\">" + (parts[1] || "00") + "</sup>";
+  }
 
   var REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -1906,9 +1910,9 @@
 
     function hide() { overlay.hidden = true; }
 
-    window.showSuccessOverlay = function (rank, body) {
+    window.showSuccessOverlay = function (rank, bodyHtml) {
       titleEl.textContent = "Congrats, you're #" + fmt(rank) + " in line.";
-      bodyEl.textContent = body;
+      bodyEl.innerHTML = bodyHtml;
       overlay.hidden = false;
       spawnConfetti();
     };
@@ -2012,7 +2016,7 @@
         ? "You're in.<br>Spot reserved &amp; gift locked in."
         : "You're in.<br>Spot reserved.";
       document.getElementById("signup-fine").innerHTML = savingPayment
-        ? '<span class="dot"></span><span>Your founding gift is locked in — it ships when Gate IQ launches. Your card is saved; you won\'t be charged until launch — $' + FOUNDING_MONTHLY_PRICE + '/month.</span>'
+        ? '<span class="dot"></span><span>Your founding gift is locked in — it ships when Gate IQ launches. Your card is saved; you won\'t be charged until launch — ' + priceHtml() + '/month.</span>'
         : '<span class="dot"></span><span>Your founding spot is reserved. We\'ll reach out when Gate IQ launches.</span>';
       document.getElementById("signup-payment").hidden = true;
       document.getElementById("signup-socials").hidden = true;
@@ -2028,7 +2032,7 @@
     });
     showToast(savingPayment ? "You're on the founding list — gift locked in!" : "You're on the founding list!");
     showSuccessOverlay(SPOTS_CLAIMED, savingPayment
-      ? "Your founding gift is locked in — it ships when Gate IQ launches. Your card is saved; you won't be charged until launch — $" + FOUNDING_MONTHLY_PRICE + "/month."
+      ? "Your founding gift is locked in — it ships when Gate IQ launches. Your card is saved; you won't be charged until launch — " + priceHtml() + "/month."
       : "Your founding spot is reserved. We'll reach out when Gate IQ launches.");
   }
   document.getElementById("waitlist-form").addEventListener("submit", submitInvite);
