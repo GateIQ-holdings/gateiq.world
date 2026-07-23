@@ -1150,7 +1150,9 @@ html.gateiq-locked body > *:not(#password-gate) {
 }
 .signup__input:focus {
   border-color: var(--accent);
-  background: var(--surface-1);
+  /* card is an always-light surface; #fff stays readable in dark mode
+     (var(--surface-1) flips to dark grey and hides the navy text). */
+  background: #fff;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 .signup__input::placeholder { color: rgba(21, 35, 63, 0.42); }
@@ -1235,9 +1237,10 @@ html.gateiq-locked body > *:not(#password-gate) {
   color: #fff;
 }
 .social-hint {
-  font-size: 12px;
+  font-size: 12.5px;
   line-height: 1.4;
-  color: color-mix(in srgb, var(--navy) 55%, transparent);
+  font-weight: 700;
+  color: var(--navy);
 }
 .signup__cta {
   margin-top: 6px;

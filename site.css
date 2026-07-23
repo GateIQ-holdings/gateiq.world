@@ -549,9 +549,10 @@ html.gateiq-locked body > *:not(#password-gate) {
   color: #fff;
 }
 .social-hint {
-  font-size: 12px;
+  font-size: 12.5px;
   line-height: 1.4;
-  color: color-mix(in srgb, var(--navy) 55%, transparent);
+  font-weight: 700;
+  color: var(--navy);
 }
 
 /* ── Airport autocomplete ──────────────────────────────── */
