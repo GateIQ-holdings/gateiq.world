@@ -1174,6 +1174,15 @@ html.gateiq-locked body > *:not(#password-gate) {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 .signup__input::placeholder { color: color-mix(in srgb, var(--card-fg) 42%, transparent); }
+.signup__input:-webkit-autofill,
+.signup__input:-webkit-autofill:hover,
+.signup__input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--card-input-fg);
+  -webkit-box-shadow: 0 0 0 1000px var(--card-input-bg) inset;
+  box-shadow: 0 0 0 1000px var(--card-input-bg) inset;
+  caret-color: var(--card-input-fg);
+  transition: background-color 9999s ease-in-out 0s;
+}
 .signup__row2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
