@@ -13,6 +13,7 @@
   <script src="theme-toggle.js" defer></script>
 </head>
 <body>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <!-- ─── Side nav toggle ──────────────────────────────── -->
   <button class="side-nav-toggle" id="side-nav-toggle" aria-label="Open navigation" style="display:none">
@@ -811,6 +812,18 @@
       }
     })();
 
+    // ── Success toast ───────────────────────────────────────────────────────
+    let toastTimer = null;
+    function showToast(msg) {
+      const el = document.getElementById("toast");
+      if (!el) return;
+      el.innerHTML = '<i class="fa-solid fa-circle-check" aria-hidden="true"></i><span></span>';
+      el.querySelector("span").textContent = msg;
+      el.classList.add("is-visible");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove("is-visible"), 4500);
+    }
+
     // ── Waitlist endpoint ─────────────────────────────────────────────────
     const WAITLIST_ENDPOINT = "/api/waitlist";
 
@@ -851,6 +864,7 @@
       btn.style.color = "#15233F";
       form.querySelector(".signup__strip").innerHTML =
         "<span><strong>You're on the list.</strong> Launch box reserved.</span><span>BNA pilot</span>";
+      showToast("You're on the list!");
     }
 
     // ── Airport autocomplete ───────────────────────────────────────────────

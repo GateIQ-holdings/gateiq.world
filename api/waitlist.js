@@ -17,7 +17,7 @@ async function notify(fields) {
   if (!process.env.RESEND_API_KEY || NOTIFY.length === 0) return;
   const lines = Object.entries(fields).map(([k, v]) => `${k}: ${v || "—"}`).join("\n");
   try {
-    await fetch("https://api.resend.com/emails", {
+    const r = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
@@ -30,7 +30,14 @@ async function notify(fields) {
         text: lines
       })
     });
-  } catch (_) { /* mail is best-effort */ }
+    if (!r.ok) {
+      // Surface the reason in Vercel function logs — mail stays best-effort
+      // (never fails the signup), but silent failures are otherwise undebuggable.
+      console.error("Resend notify failed", r.status, await r.text().catch(() => ""));
+    }
+  } catch (err) {
+    console.error("Resend notify threw", err.message || err);
+  }
 }
 
 module.exports = async function handler(req, res) {

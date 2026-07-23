@@ -10,13 +10,14 @@
   <meta property="og:title" content="Gate IQ · The airport bends to you">
   <meta property="og:description" content="More vacation. Less airport. Meet Glide, your personal AI travel agent. Founding list now open — first 5,000 only.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="prelaunch.css?v=25">
+  <link rel="stylesheet" href="prelaunch.css?v=26">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <script src="https://js.stripe.com/v3/" defer></script>
   <script src="site-gate.js"></script>
   <script src="theme-toggle.js" defer></script>
 </head>
 <body>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="site">
 
   <!-- ─── Nav ───────────────────────────────────────────── -->
@@ -1684,6 +1685,18 @@
     }
   })();
 
+  // ── Success toast ───────────────────────────────────────────────────────
+  var toastTimer = null;
+  function showToast(msg) {
+    var el = document.getElementById("toast");
+    if (!el) return;
+    el.innerHTML = '<i class="fa-solid fa-circle-check" aria-hidden="true"></i><span></span>';
+    el.querySelector("span").textContent = msg;
+    el.classList.add("is-visible");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove("is-visible"); }, 4500);
+  }
+
   // ── Waitlist submit ────────────────────────────────────────────────────
   async function submitInvite(e) {
     e.preventDefault();
@@ -1724,48 +1737,64 @@
       return;
     }
 
+    // Hiding the payment/socials blocks collapses height above the button,
+    // which shoves everything below it up into view — reads as an unwanted
+    // scroll. Keep the button's screen position fixed across the collapse.
+    function keepAnchored(mutate) {
+      var before = btn.getBoundingClientRect().top;
+      mutate();
+      var after = btn.getBoundingClientRect().top;
+      if (after !== before) window.scrollBy(0, after - before);
+    }
+
     if (savingPayment && window.__gateiqStripe) {
       try {
         await window.__gateiqStripe.confirmPayment();
       } catch (err) {
         btn.textContent = "Founding spot reserved ✓";
         btn.disabled = true;
-        document.getElementById("signup-title").innerHTML = "You're in.<br>Spot reserved.";
-        document.getElementById("signup-fine").innerHTML =
-          '<span class="dot"></span><span>Your spot is saved, but we couldn\'t store your payment method. You can add it at launch — $' + FOUNDING_MONTHLY_PRICE + '/month.</span>';
-        var paymentMessage = document.getElementById("payment-message");
-        if (paymentMessage) {
-          paymentMessage.textContent = err.message || "Payment could not be saved.";
-          paymentMessage.hidden = false;
-        }
-        var giftBadgeFail = document.getElementById("founding-gift-badge");
-        if (giftBadgeFail) giftBadgeFail.hidden = true;
-        document.getElementById("signup-payment").hidden = true;
-        document.getElementById("signup-socials").hidden = true;
+        keepAnchored(function () {
+          document.getElementById("signup-title").innerHTML = "You're in.<br>Spot reserved.";
+          document.getElementById("signup-fine").innerHTML =
+            '<span class="dot"></span><span>Your spot is saved, but we couldn\'t store your payment method. You can add it at launch — $' + FOUNDING_MONTHLY_PRICE + '/month.</span>';
+          var paymentMessage = document.getElementById("payment-message");
+          if (paymentMessage) {
+            paymentMessage.textContent = err.message || "Payment could not be saved.";
+            paymentMessage.hidden = false;
+          }
+          var giftBadgeFail = document.getElementById("founding-gift-badge");
+          if (giftBadgeFail) giftBadgeFail.hidden = true;
+          document.getElementById("signup-payment").hidden = true;
+          document.getElementById("signup-socials").hidden = true;
+        });
         if (window.__gateiqCounter) window.__gateiqCounter.decrement();
+        showToast("You're on the founding list!");
         return;
       }
     }
 
     if (window.__gateiqCounter) window.__gateiqCounter.decrement();
     btn.textContent = savingPayment ? "Spot reserved · payment saved ✓" : "Founding spot reserved ✓";
-    document.getElementById("signup-title").innerHTML = savingPayment
-      ? "You're in.<br>Spot reserved &amp; payment saved."
-      : "You're in.<br>Spot reserved.";
-    document.getElementById("signup-fine").innerHTML = savingPayment
-      ? '<span class="dot"></span><span>Your founding spot and payment method are saved. You won\'t be charged until launch — $' + FOUNDING_MONTHLY_PRICE + '/month when Gate IQ goes live.</span>'
-      : '<span class="dot"></span><span>Your special gift is reserved. We\'ll reach out before Gate IQ opens at Nashville International Airport (<span class="t-mono">BNA</span>).</span>';
-    document.getElementById("signup-payment").hidden = true;
-    document.getElementById("signup-socials").hidden = true;
-    var giftBadge = document.getElementById("founding-gift-badge");
-    if (giftBadge) {
-      if (savingPayment) {
-        document.getElementById("founding-gift-badge-text").textContent =
-          "Your card is saved — your founding gift is locked in and ships the moment we launch.";
-      } else {
-        giftBadge.hidden = true;
+    keepAnchored(function () {
+      document.getElementById("signup-title").innerHTML = savingPayment
+        ? "You're in.<br>Spot reserved &amp; payment saved."
+        : "You're in.<br>Spot reserved.";
+      document.getElementById("signup-fine").innerHTML = savingPayment
+        ? '<span class="dot"></span><span>Your founding spot and payment method are saved. You won\'t be charged until launch — $' + FOUNDING_MONTHLY_PRICE + '/month when Gate IQ goes live.</span>'
+        : '<span class="dot"></span><span>Your special gift is reserved. We\'ll reach out before Gate IQ opens at Nashville International Airport (<span class="t-mono">BNA</span>).</span>';
+      document.getElementById("signup-payment").hidden = true;
+      document.getElementById("signup-socials").hidden = true;
+      var giftBadge = document.getElementById("founding-gift-badge");
+      if (giftBadge) {
+        if (savingPayment) {
+          document.getElementById("founding-gift-badge-text").textContent =
+            "Your card is saved — your founding gift is locked in and ships the moment we launch.";
+        } else {
+          giftBadge.hidden = true;
+        }
       }
-    }
+    });
+    showToast(savingPayment ? "You're on the founding list — payment saved!" : "You're on the founding list!");
   }
   document.getElementById("waitlist-form").addEventListener("submit", submitInvite);
 
