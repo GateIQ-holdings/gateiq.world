@@ -477,7 +477,7 @@
         <div class="signup__fields">
           <input class="signup__input" type="text" name="name" placeholder="Full name" required autocomplete="name">
           <input class="signup__input" type="email" name="email" placeholder="you@youremail.com" required autocomplete="email">
-          <input class="signup__input" type="tel" name="phone" placeholder="Phone number" required autocomplete="tel">
+          <input class="signup__input" type="tel" name="phone" placeholder="(555) 123-4567" required autocomplete="tel" inputmode="numeric" maxlength="14" pattern="\(\d{3}\) \d{3}-\d{4}" title="Enter a 10-digit US phone number, e.g. (555) 123-4567">
           <div class="signup__row2">
             <div class="airport-wrap">
               <input class="signup__input signup__input--half" id="airport-input" type="text" name="homeAirport" placeholder="Home airport (optional)" maxlength="4" autocomplete="off" spellcheck="false">
@@ -494,11 +494,11 @@
 
           <div class="signup__socials" id="signup-socials">
             <div class="social-picker" id="social-picker" role="group" aria-label="Pick your social platforms"></div>
+            <div class="social-hint">Tap the platforms you're on, type your handle, then Enter or comma. Or paste a full link.</div>
             <input class="signup__input" id="social-input" type="text"
                    placeholder="@handle (optional)"
                    autocomplete="off" spellcheck="false"
                    aria-label="Social handle or link">
-            <div class="social-hint">Tap the platforms you're on, type your handle, then Enter or comma. Or paste a full link.</div>
             <div class="signup__social-chips" id="social-chips" aria-live="polite"></div>
           </div>
 
@@ -783,6 +783,31 @@
         console.assert(PLATFORMS.tiktok.url("joy") === "https://tiktok.com/@joy", "tiktok handle url");
         console.assert(detect("  ") === null, "empty = null");
         console.log("socialtest done");
+      }
+    })();
+
+    // ── US phone auto-format: (123) 456-7890 ──────────────────────────────
+    (function () {
+      var phone = document.querySelector('#waitlist-form [name="phone"]');
+      if (!phone) return;
+      function fmt(v) {
+        var d = String(v || "").replace(/\D/g, "");
+        if (d.length === 11 && d.charAt(0) === "1") d = d.slice(1);
+        d = d.slice(0, 10);
+        if (!d) return "";
+        if (d.length < 4) return "(" + d;
+        if (d.length < 7) return "(" + d.slice(0, 3) + ") " + d.slice(3);
+        return "(" + d.slice(0, 3) + ") " + d.slice(3, 6) + "-" + d.slice(6);
+      }
+      function apply() { phone.value = fmt(phone.value); }
+      phone.addEventListener("input", apply);
+      phone.addEventListener("change", apply);
+
+      if (location.search.indexOf("phonetest") > -1) {
+        console.assert(fmt("6155551234") === "(615) 555-1234", "full");
+        console.assert(fmt("615") === "(615", "area only");
+        console.assert(fmt("+1 615-555-1234") === "(615) 555-1234", "autofill +1 country code");
+        console.log("phonetest done");
       }
     })();
 
