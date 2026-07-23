@@ -1515,6 +1515,13 @@
           redirect: "if_required"
         });
         if (result.error) {
+          console.error("[GateIQ] Stripe confirmSetup failed", {
+            type: result.error.type,
+            code: result.error.code,
+            decline_code: result.error.decline_code,
+            message: result.error.message,
+            payment_method: result.error.payment_method && result.error.payment_method.id
+          });
           throw new Error(result.error.message || "Payment could not be saved.");
         }
         return { ok: true };
@@ -1852,8 +1859,11 @@
       smsOptIn:     form.querySelector('[name="smsOptIn"]').checked ? "yes" : "no"
     };
     var savingPayment = data.savePayment === "yes";
+    var alreadyCounted = form.dataset.spotCounted === "1";
 
-    btn.textContent = savingPayment ? "Reserving & saving payment…" : "Reserving…";
+    btn.textContent = savingPayment
+      ? (alreadyCounted ? "Saving payment…" : "Reserving & saving payment…")
+      : "Reserving…";
     btn.disabled = true;
 
     var waitlistOk = false;
@@ -1889,26 +1899,33 @@
       try {
         await window.__gateiqStripe.confirmPayment();
       } catch (err) {
-        btn.textContent = "Founding spot reserved ✓";
-        btn.disabled = true;
+        var stripeMsg = (err && err.message) || "Payment could not be saved.";
+        console.error("[GateIQ] payment save failed:", stripeMsg, err);
+        btn.textContent = "Retry saving payment →";
+        btn.disabled = false;
         keepAnchored(function () {
           document.getElementById("signup-title").innerHTML = "You're in.<br>Spot reserved.";
           document.getElementById("signup-fine").innerHTML =
-            '<span class="dot"></span><span>Your spot is saved, but we couldn\'t store your payment method. You can add it at launch — $' + FOUNDING_MONTHLY_PRICE + '/month.</span>';
+            '<span class="dot"></span><span>Your spot is saved. We couldn\'t store your card yet — fix the payment details below and retry, or add it at launch ($' + FOUNDING_MONTHLY_PRICE + '/month).</span>';
           var paymentMessage = document.getElementById("payment-message");
           if (paymentMessage) {
-            paymentMessage.textContent = err.message || "Payment could not be saved.";
+            paymentMessage.textContent = stripeMsg;
             paymentMessage.hidden = false;
           }
           var giftBadgeFail = document.getElementById("founding-gift-badge");
           if (giftBadgeFail) giftBadgeFail.hidden = true;
-          document.getElementById("signup-payment").hidden = true;
+          // Keep payment panel open so they can fix the card and retry.
+          var paymentPanel = document.getElementById("payment-panel");
+          if (paymentPanel) paymentPanel.hidden = false;
           document.getElementById("signup-socials").hidden = true;
         });
-        if (window.__gateiqCounter) window.__gateiqCounter.decrement();
-        showToast("You're on the founding list!");
+        if (!alreadyCounted && window.__gateiqCounter) {
+          window.__gateiqCounter.decrement();
+          form.dataset.spotCounted = "1";
+        }
+        showToast("Spot reserved — card not saved yet");
         showSuccessOverlay(SPOTS_CLAIMED,
-          "Your spot is saved, but we couldn't store your payment method. You can add it at launch — $" + FOUNDING_MONTHLY_PRICE + "/month.");
+          "Your spot is saved, but we couldn't store your payment method: " + stripeMsg + " You can fix it on the form or add a card at launch — $" + FOUNDING_MONTHLY_PRICE + "/month.");
         return;
       }
     }
@@ -1926,7 +1943,10 @@
       } catch (_) { console.warn("Waitlist retry threw"); }
     }
 
-    if (window.__gateiqCounter) window.__gateiqCounter.decrement();
+    if (!alreadyCounted && window.__gateiqCounter) {
+      window.__gateiqCounter.decrement();
+      form.dataset.spotCounted = "1";
+    }
     btn.textContent = savingPayment ? "Spot reserved · payment saved ✓" : "Founding spot reserved ✓";
     keepAnchored(function () {
       document.getElementById("signup-title").innerHTML = savingPayment
