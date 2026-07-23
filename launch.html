@@ -14,6 +14,17 @@
 </head>
 <body>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="success-overlay" id="success-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="success-overlay-title">
+  <div class="success-overlay__confetti" id="success-confetti" aria-hidden="true"></div>
+  <button class="success-overlay__close" id="success-overlay-close" type="button" aria-label="Close">&times;</button>
+  <div class="success-overlay__card">
+    <div class="success-overlay__eyebrow">You're in</div>
+    <h2 class="success-overlay__title" id="success-overlay-title">Congrats, you're #48 in line.</h2>
+    <p class="success-overlay__body" id="success-overlay-body">Your spot is reserved.</p>
+    <div class="success-overlay__envelope"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+    <button class="success-overlay__dismiss" id="success-overlay-dismiss" type="button">Got it</button>
+  </div>
+</div>
 
   <!-- ─── Side nav toggle ──────────────────────────────── -->
   <button class="side-nav-toggle" id="side-nav-toggle" aria-label="Open navigation" style="display:none">
@@ -495,7 +506,7 @@
 
           <div class="signup__socials" id="signup-socials">
             <div class="social-picker" id="social-picker" role="group" aria-label="Pick your social platforms"></div>
-            <div class="social-hint">Tap the platforms you're on, type your handle, then Enter or comma. Or paste a full link.</div>
+            <div class="social-hint">Tap the platforms you're on, type your handle, then Enter or comma.<br>Or paste a full link.</div>
             <input class="signup__input" id="social-input" type="text"
                    placeholder="@handle (optional)"
                    autocomplete="off" spellcheck="false"
@@ -823,6 +834,58 @@
       toastTimer = setTimeout(() => el.classList.remove("is-visible"), 4500);
     }
 
+    // ── Success overlay + confetti ────────────────────────────────────────
+    let CLAIMED_COUNT = 47; // matches the static "47 joined" strip below
+    (function () {
+      const overlay    = document.getElementById("success-overlay");
+      const closeBtn   = document.getElementById("success-overlay-close");
+      const dismissBtn = document.getElementById("success-overlay-dismiss");
+      const confettiEl = document.getElementById("success-confetti");
+      const titleEl    = document.getElementById("success-overlay-title");
+      const bodyEl     = document.getElementById("success-overlay-body");
+      if (!overlay) return;
+
+      const CONFETTI_COLORS = ["#C9AB7A", "#B89968", "#F2ECDD", "#8AA6C9", "#E8D9BE"];
+
+      function spawnConfetti() {
+        confettiEl.innerHTML = "";
+        const count = window.innerWidth < 520 ? 34 : 60;
+        const frag = document.createDocumentFragment();
+        for (let i = 0; i < count; i++) {
+          const piece = document.createElement("i");
+          piece.className = "confetti-piece";
+          const duration = 2.4 + Math.random() * 1.6;
+          const size = 6 + Math.random() * 5;
+          piece.style.left = (Math.random() * 100) + "%";
+          piece.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+          piece.style.width = size + "px";
+          piece.style.height = (size * 1.6) + "px";
+          piece.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+          piece.style.animationDuration = duration + "s";
+          piece.style.animationDelay = (Math.random() * 0.5) + "s";
+          frag.appendChild(piece);
+        }
+        confettiEl.appendChild(frag);
+        setTimeout(() => { confettiEl.innerHTML = ""; }, 4500);
+      }
+
+      function hide() { overlay.hidden = true; }
+
+      window.showSuccessOverlay = function (rank, body) {
+        titleEl.textContent = "Congrats, you're #" + rank.toLocaleString("en-US") + " in line.";
+        bodyEl.textContent = body;
+        overlay.hidden = false;
+        spawnConfetti();
+      };
+
+      closeBtn.addEventListener("click", hide);
+      dismissBtn.addEventListener("click", hide);
+      overlay.addEventListener("click", (e) => { if (e.target === overlay) hide(); });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !overlay.hidden) hide();
+      });
+    })();
+
     // ── Waitlist endpoint ─────────────────────────────────────────────────
     const WAITLIST_ENDPOINT = "/api/waitlist";
 
@@ -864,6 +927,8 @@
       form.querySelector(".signup__strip").innerHTML =
         "<span><strong>You're on the list.</strong> Launch box reserved.</span><span>BNA pilot</span>";
       showToast("You're on the list!");
+      CLAIMED_COUNT += 1;
+      showSuccessOverlay(CLAIMED_COUNT, "Your launch box is reserved. We'll reach out before Gate IQ opens at Nashville International Airport (BNA).");
     }
 
     // ── Airport autocomplete ───────────────────────────────────────────────
