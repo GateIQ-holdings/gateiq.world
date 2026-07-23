@@ -231,7 +231,7 @@
             <div class="perk__num">01</div>
             <div>
               <h3 class="perk__title">Special gift with paid subscription</h3>
-              <p class="perk__body">A founding gift reserved for everyone on the list — yours the moment you claim your spot.</p>
+              <p class="perk__body">A founding gift for members who save payment now — yours the moment your card is on file.</p>
             </div>
           </div>
           <div class="perk" data-reveal style="--reveal-delay: 60ms">
@@ -2006,14 +2006,14 @@
       window.__gateiqCounter.decrement();
       form.dataset.spotCounted = "1";
     }
-    btn.textContent = savingPayment ? "Spot reserved · payment saved ✓" : "Founding spot reserved ✓";
+    btn.textContent = savingPayment ? "Spot reserved · gift locked in ✓" : "Founding spot reserved ✓";
     keepAnchored(function () {
       document.getElementById("signup-title").innerHTML = savingPayment
-        ? "You're in.<br>Spot reserved &amp; payment saved."
+        ? "You're in.<br>Spot reserved &amp; gift locked in."
         : "You're in.<br>Spot reserved.";
       document.getElementById("signup-fine").innerHTML = savingPayment
-        ? '<span class="dot"></span><span>Your founding spot and payment method are saved. You won\'t be charged until launch — $' + FOUNDING_MONTHLY_PRICE + '/month when Gate IQ goes live.</span>'
-        : '<span class="dot"></span><span>Your special gift is reserved. We\'ll reach out before Gate IQ opens at Nashville International Airport (<span class="t-mono">BNA</span>).</span>';
+        ? '<span class="dot"></span><span>Your founding gift is locked in — it ships when Gate IQ launches. Your card is saved; you won\'t be charged until launch — $' + FOUNDING_MONTHLY_PRICE + '/month.</span>'
+        : '<span class="dot"></span><span>Your founding spot is reserved. We\'ll reach out before Gate IQ opens at Nashville International Airport (<span class="t-mono">BNA</span>).</span>';
       document.getElementById("signup-payment").hidden = true;
       document.getElementById("signup-socials").hidden = true;
       var giftBadge = document.getElementById("founding-gift-badge");
@@ -2026,10 +2026,10 @@
         }
       }
     });
-    showToast(savingPayment ? "You're on the founding list — payment saved!" : "You're on the founding list!");
+    showToast(savingPayment ? "You're on the founding list — gift locked in!" : "You're on the founding list!");
     showSuccessOverlay(SPOTS_CLAIMED, savingPayment
-      ? "Your founding spot and payment method are saved. You won't be charged until launch — $" + FOUNDING_MONTHLY_PRICE + "/month when Gate IQ goes live."
-      : "Your special gift is reserved. We'll reach out before Gate IQ opens at Nashville International Airport (BNA).");
+      ? "Your founding gift is locked in — it ships when Gate IQ launches. Your card is saved; you won't be charged until launch — $" + FOUNDING_MONTHLY_PRICE + "/month."
+      : "Your founding spot is reserved. We'll reach out before Gate IQ opens at Nashville International Airport (BNA).");
   }
   document.getElementById("waitlist-form").addEventListener("submit", submitInvite);
 
