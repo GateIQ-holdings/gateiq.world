@@ -125,12 +125,30 @@
   <script src="footer.js"></script>
 
   <script>
+    var GA_ID = "G-KZFFSK6QZX";
+    var analyticsLoaded = false;
+
+    function loadAnalytics() {
+      if (analyticsLoaded) return;
+      analyticsLoaded = true;
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag("js", new Date());
+      gtag("config", GA_ID, { anonymize_ip: true });
+    }
+
     function getConsent() {
       return localStorage.getItem("gateiq_cookie_consent");
     }
 
     function updateConsent(choice) {
       localStorage.setItem("gateiq_cookie_consent", choice);
+      if (choice === "accept") loadAnalytics();
       renderConsent();
     }
 
@@ -151,6 +169,7 @@
     }
 
     renderConsent();
+    if (getConsent() === "accept") loadAnalytics();
   </script>
 </body>
 </html>
