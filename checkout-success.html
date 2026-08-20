@@ -11,7 +11,14 @@
   <script src="site-gate.js"></script>
   <script src="theme-toggle.js" defer></script>
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
-  <script defer src="/_vercel/insights/script.js"></script>
+  <script>
+    if (localStorage.getItem("gateiq_cookie_consent") === "accept") {
+      var v = document.createElement("script");
+      v.defer = true;
+      v.src = "/_vercel/insights/script.js";
+      document.head.appendChild(v);
+    }
+  </script>
 </head>
 <body>
 <div class="site">

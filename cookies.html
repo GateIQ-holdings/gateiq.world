@@ -39,7 +39,14 @@
     @media (max-width: 700px) { .policy-wrap { padding: 48px 24px 80px; } .policy-title { font-size: 36px; } .cookie-table { display: block; overflow-x: auto; } }
   </style>
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
-  <script defer src="/_vercel/insights/script.js"></script>
+  <script>
+    if (localStorage.getItem("gateiq_cookie_consent") === "accept") {
+      var v = document.createElement("script");
+      v.defer = true;
+      v.src = "/_vercel/insights/script.js";
+      document.head.appendChild(v);
+    }
+  </script>
 </head>
 <body>
   <div class="policy-wrap">
