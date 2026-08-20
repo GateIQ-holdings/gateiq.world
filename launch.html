@@ -12,7 +12,6 @@
   <script src="site-gate.js"></script>
   <script src="theme-toggle.js" defer></script>
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
-  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -1123,6 +1122,11 @@
       window.gtag = gtag;
       gtag("js", new Date());
       gtag("config", GA_ID, { anonymize_ip: true });
+
+      var v = document.createElement("script");
+      v.defer = true;
+      v.src = "/_vercel/insights/script.js";
+      document.head.appendChild(v);
     }
 
     function cookieChoice(choice) {
